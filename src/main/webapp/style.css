@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #0F1A20;
+}
+
+ul.navigation-bar {
+    display: flex;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #0F1A20;
+    justify-content: center;
+}
+
+
+li.navigation-bar a.navigation-bar {
+    width: 100px;
+    margin: 0 5px 0 5px;
+    border-radius: 12px;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li.navigation-bar a.navigation-bar:hover {
+    background-color: #C92403;
+}
+
+div.login-form {
+    position: absolute;
+    transform: translate(-50%, -50%); /*non spiegato dal prof*/
+    top: 50%;
+    left: 50%;
+    display: inline-block;
+    padding: 20px 50px 20px 50px;
+    border: 2px solid #E5E5E5;
+    border-radius: 10px;
+}
+
+div.form-row {
+    margin: 0 0 0 0;
+    padding: 5px 0 5px 0;
+    display: flex;
+}
+
+div.form-group {
+    margin: 0 0 0 15px;
+    padding: 5px 0 5px 0;
+    width: 50%;
+}
+
+label.login-text, p.login-text {
+    display: block;
+    font-size: 14px;
+    color: #EEE5E9;
+}
+
+input#nome, input#cognome, input#email, input#password, input#città, input#provincia, input#codice-postale, input#indirizzo {
+    color: #EEE5E9;
+    border: solid 2px #E5E5E5;
+    border-radius: 10px;
+    padding: 10px;
+    height: 20px;
+    font-size: 16px;
+    width: 250px;
+    background: #0F1A20;
+}
+
+input.submit-login {
+    margin-top: 16px;
+    font-family: 'Poppins', sans-serif;
+    color: #EEE5E9;
+    border-radius: 10px;
+    padding: 10px;
+    height: 60px;
+    font-size: 16px;
+    width: 100%;
+    background: #0F1A20;
+}
+
+input.submit-login:hover {
+    color: #0F1A20;
+    background: #EEE5E9;
+}
+
+input.submit-register {
+    font-family: 'Poppins', sans-serif;
+    color: #0F1A20;
+    border-radius: 10px;
+    padding: 10px;
+    height: 60px;
+    font-size: 18px;
+    width: 100%;
+    background: #EEE5E9;
+}
+
+@media screen and (max-width: 850px) {
+
+}
