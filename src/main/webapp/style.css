@@ -69,6 +69,7 @@ input#nome, input#cognome, input#email, input#password, input#città, input#prov
     font-size: 16px;
     width: 250px;
     background: #0F1A20;
+    outline-style: none;
 }
 
 input.submit-login {
@@ -81,6 +82,7 @@ input.submit-login {
     font-size: 16px;
     width: 100%;
     background: #0F1A20;
+    cursor: pointer;
 }
 
 input.submit-login:hover {
@@ -97,6 +99,11 @@ input.submit-register {
     font-size: 18px;
     width: 100%;
     background: #EEE5E9;
+    cursor: pointer;
+}
+
+.login-text a{
+    color: turquoise;
 }
 
 @media screen and (max-width: 850px) {
