@@ -81,6 +81,7 @@ input.submit-login {
     font-size: 16px;
     width: 100%;
     background: #0F1A20;
+    cursor: pointer;
 }
 
 input.submit-login:hover {
@@ -97,6 +98,7 @@ input.submit-register {
     font-size: 18px;
     width: 100%;
     background: #EEE5E9;
+    cursor: pointer;
 }
 
 @media screen and (max-width: 850px) {
