@@ -1,0 +1,61 @@
+CREATE DATABASE ecommerce;
+
+USE ecommerce;
+
+CREATE TABLE Utente (
+	ID INT PRIMARY KEY AUTO_INCREMENT,
+	Nome VARCHAR(30) NOT NULL,
+	Cognome VARCHAR(30) NOT NULL,
+	Email VARCHAR(30) NOT NULL,
+	Pass VARCHAR(30) NOT NULL,
+	Telefono VARCHAR(10) NOT NULL,
+	Via VARCHAR(30) NOT NULL,
+	Numero_Civico VARCHAR(3) NOT NULL,
+	CAP VARCHAR(3) NOT NULL,
+	Città VARCHAR(30) NOT NULL,
+    Data_Registrazione DATE NOT NULL,
+	Stato_Account INT DEFAULT 1 NOT NULL
+);
+
+CREATE TABLE Ordine (
+	ID INT PRIMARY KEY AUTO_INCREMENT,
+	Totale DOUBLE,
+	Stato VARCHAR(10),
+	Data_Ordine DATE,
+	ID_Cliente INT,
+	FOREIGN KEY (ID_Cliente) REFERENCES Utente(ID)
+);
+
+CREATE TABLE Spedizione (
+	ID_Spedizione INT PRIMARY KEY AUTO_INCREMENT,
+	Nome_Corriere VARCHAR(30),
+	URL_Monitoraggio VARCHAR(30)
+);
+
+CREATE TABLE Prodotto (
+	ID INT PRIMARY KEY AUTO_INCREMENT,
+	Nome VARCHAR(30),
+	Descrizione VARCHAR(256),
+	Prezzo DOUBLE,
+	Sconto DOUBLE,
+	Categoria VARCHAR(30),
+	Data_Aggiunto DATE,
+	Data_Aggiorna DATE,
+	Quantità INT
+);
+
+CREATE TABLE C_P(
+	ID INT PRIMARY KEY AUTO_INCREMENT,
+	ID_Carrello INT,
+	ID_Prodotto INT,
+	FOREIGN KEY (ID_Carrello) REFERENCES Carrello(ID),
+	FOREIGN KEY (ID_Prodotto) REFERENCES Prodotto(ID)
+);
+
+CREATE TABLE O_P(
+	ID INT PRIMARY KEY AUTO_INCREMENT,
+	ID_Ordine INT,
+	ID_prodotto INT,
+	FOREIGN KEY (ID_Ordine) REFERENCES Ordine(ID),
+	FOREIGN KEY (ID_Prodotto) REFERENCES Prodotto(ID)
+);
