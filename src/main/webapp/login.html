@@ -2,54 +2,42 @@
 <html lang="it-IT">
 <head>
 
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
     <title>Login</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <script type="text/javascript" src="script.js"></script>
+    <script src='https://kit.fontawesome.com/c6b30e1924.js' crossorigin='anonymous'></script>
+    <link rel="stylesheet" type="text/css" href="style/style.css">
+    <script type="text/javascript" src="script/script.js"></script>
 
 </head>
 <body>
 
     <div class="navigation-bar">
         <ul class="navigation-bar">
-            <li class="navigation-bar"><a href="index.html" class="navigation-bar">HomePage</a></li>
-            <li class="navigation-bar"><a href="#" class="navigation-bar">Catalogo</a></li>
-            <li class="navigation-bar"><a href="#" class="navigation-bar">Offerte</a></li>
-            <li class="navigation-bar"><a href="#" class="navigation-bar">Assistenza</a></li>
-            <li class="navigation-bar"><a href="#" class="navigation-bar">Chi siamo</a></li>
-            <li class="navigation-bar"><a href="login.html" class="navigation-bar">Accesso</a></li>
+            <li class="navigation-bar"><a href="index.html" class="navigation-bar"><i class="fa-solid fa-house"></i><br/>HomePage</a></li>
+            <li class="navigation-bar"><a href="#" class="navigation-bar"><i class="fa-solid fa-book-open"></i><br/>Catalogo</a></li>
+            <li class="navigation-bar"><a href="#" class="navigation-bar"><i class="fa-solid fa-dollar-sign"></i><br/>Offerte</a></li>
+            <li class="navigation-bar"><a href="#" class="navigation-bar"><i class="fa-solid fa-circle-question"></i>Assistenza</a></li>
+            <li class="navigation-bar"><a href="#" class="navigation-bar"><i class="fa-solid fa-circle-info"></i><br/>Chi siamo</a></li>
+            <li class="navigation-bar"><a href="login.html" class="navigation-bar"><i class="fa-solid fa-user"></i><br/>Accesso</a></li>
+            <li class="navigation-bar"><a href="#" class="navigation-bar"><i class="fa-solid fa-cart-shopping"></i><br/>Carrello</a></li>
         </ul>
     </div>
 
     <div class="login-form">
         <form action="hello-servlet">
 
-            <div class="form-row">
-                <div class="form-group" style="margin: 0 !important;">
-                    <label for="email" class="login-text">Email</label>
-                    <input type="email" id="email" name="email" placeholder="Email">
-                </div>
-            </div>
+            <label for="email" class="login-text">Email</label>
+            <input type="email" class="login" id="email" name="email" placeholder="Email">
+            <label for="password" class="login-text">Password</label>
+            <input type="password" class="login" id="password" name="password" placeholder="Password">
 
-            <div class="form-row">
-                <div class="form-group" style="margin: 0 !important;">
-                    <label for="password" class="login-text">Password</label>
-                    <input type="password" id="password" name="password" placeholder="Password">
-                </div>
-            </div>
-
-            <div class="form-row">
-                <input type="submit" value="Login" class="submit-login">
-            </div>
-
-            <p class="login-text">Nuovo utente?</p>
+            <br/>
+            <input type="submit" value="Login" class="submit-login">
         </form>
 
-        <div class="form-row">
-            <input type="submit" value="Crea un account" class="submit-register" onclick="location.href='register.html'">
-        </div>
+        <p class="login-text">Nuovo utente?</p>
+        <input type="submit" value="Crea un account" class="submit-register" onclick="location.href='register.html'">
     </div>
 
 </body>

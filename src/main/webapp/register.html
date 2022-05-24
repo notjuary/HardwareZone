@@ -2,78 +2,98 @@
 <html lang="it-IT">
 <head>
 
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
     <title>Register</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <script type="text/javascript" src="script.js"></script>
+    <script src='https://kit.fontawesome.com/c6b30e1924.js' crossorigin='anonymous'></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="style/style.css">
+    <script type="text/javascript" src="script/script.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            showTabPersonalInformation();
+
+            function showTabPersonalInformation() {
+                $(".tab-personal-information").show();
+                $(".tab-login-info").hide();
+                $(".tab-address").hide();
+            };
+
+            function showTabLogin() {
+                $(".tab-personal-information").hide();
+                $(".tab-login-info").show();
+                $(".tab-address").hide();
+            };
+
+            function showTabAddress() {
+                $(".tab-personal-information").hide();
+                $(".tab-login-info").hide();
+                $(".tab-address").show();
+            };
+
+            $(".show-tab-login-info").click(showTabLogin);
+            $(".show-tab-address").click(showTabAddress);
+            $(".show-tab-personal-information").click(showTabPersonalInformation);
+        });
+    </script>
 
 </head>
 <body>
 
     <div class="navigation-bar">
         <ul class="navigation-bar">
-            <li class="navigation-bar"><a href="index.html" class="navigation-bar">HomePage</a></li>
-            <li class="navigation-bar"><a href="#" class="navigation-bar">Catalogo</a></li>
-            <li class="navigation-bar"><a href="#" class="navigation-bar">Offerte</a></li>
-            <li class="navigation-bar"><a href="#" class="navigation-bar">Assistenza</a></li>
-            <li class="navigation-bar"><a href="#" class="navigation-bar">Chi siamo</a></li>
-            <li class="navigation-bar"><a href="login.html" class="navigation-bar">Accesso</a></li>
+            <li class="navigation-bar"><a href="index.html" class="navigation-bar"><i class="fa-solid fa-house"></i><br/>HomePage</a></li>
+            <li class="navigation-bar"><a href="#" class="navigation-bar"><i class="fa-solid fa-book-open"></i><br/>Catalogo</a></li>
+            <li class="navigation-bar"><a href="#" class="navigation-bar"><i class="fa-solid fa-dollar-sign"></i><br/>Offerte</a></li>
+            <li class="navigation-bar"><a href="#" class="navigation-bar"><i class="fa-solid fa-circle-question"></i>Assistenza</a></li>
+            <li class="navigation-bar"><a href="#" class="navigation-bar"><i class="fa-solid fa-circle-info"></i><br/>Chi siamo</a></li>
+            <li class="navigation-bar"><a href="login.html" class="navigation-bar"><i class="fa-solid fa-user"></i><br/>Accesso</a></li>
+            <li class="navigation-bar"><a href="#" class="navigation-bar"><i class="fa-solid fa-cart-shopping"></i><br/>Carrello</a></li>
         </ul>
     </div>
 
     <div class="login-form">
         <form action="hello-servlet">
 
-            <div class="form-row">
-                <div class="form-group" style="margin: 0 !important;">
-                    <label for="nome" class="login-text">Nome</label>
-                    <input type="text" id="nome" name="nome" placeholder="Nome">
-                </div>
-                <div class="form-group">
-                    <label for="cognome" class="login-text">Cognome</label>
-                    <input type="text" id="cognome" name="cognome" placeholder="Cognome">
-                </div>
+            <div class="tab-personal-information">
+                <label for="nome" class="login-text">Nome</label>
+                <input type="text" class="register" id="nome" name="nome" placeholder="Nome">
+                <label for="cognome" class="login-text">Cognome</label>
+                <input type="text" class="register" id="cognome" name="cognome" placeholder="Cognome">
+                <label for="data-di-nascita" class="login-text">Data di nascita</label>
+                <input type="date" class="register" id="data-di-nascita" name="data-di-nascita" placeholder="Data di nascita">
+
+                <br/>
+                <input type="button" value="Avanti" class="show-tab-login-info"><br/>
             </div>
 
-            <div class="form-row">
-                <div class="form-group" style="margin: 0 !important;">
-                    <label for="email" class="login-text">Email</label>
-                    <input type="email" id="email" name="email" placeholder="Email">
-                </div>
-                <div class="form-group">
-                    <label for="password" class="login-text">Password</label>
-                    <input type="password" id="password" name="password" placeholder="Password">
-                </div>
+            <div class="tab-login-info">
+                <label for="email" class="login-text">Email</label>
+                <input type="email" class="register" id="email" name="email" placeholder="Email">
+                <label for="password" class="login-text">Password</label>
+                <input type="password" class="register" id="password" name="password" placeholder="Password">
+
+                <br/>
+                <input type="button" value="Indietro" class="show-tab-personal-information"><br/>
+                <input type="button" value="Avanti" class="show-tab-address"><br/>
             </div>
 
-            <div class="form-row">
-                <div class="form-group" style="margin: 0 !important;">
-                    <label for="città" class="login-text">Città</label>
-                    <input type="text" id="città" name="città" placeholder="Città">
-                </div>
-                <div class="form-group">
-                    <label for="provincia" class="login-text">Provincia</label>
-                    <input type="text" id="provincia" name="provincia" placeholder="Provincia">
-                </div>
-            </div>
+            <div class="tab-address">
+                <label for="città" class="login-text">Città</label>
+                <input type="text" class="register" id="città" name="città" placeholder="Città">
+                <label for="provincia" class="login-text">Provincia</label>
+                <input type="text" class="register" id="provincia" name="provincia" placeholder="Provincia">
+                <label for="codice-postale" class="login-text">Codice Postale</label>
+                <input type="text" class="register" id="codice-postale" name="codice-postale" placeholder="Codice Postale" pattern="[0-9]{5}">
+                <label for="indirizzo" class="login-text">Indirizzo</label>
+                <input type="text" class="register" id="indirizzo" name="indirizzo" placeholder="Indirizzo">
 
-
-            <div class="form-row">
-                <div class="form-group" style="margin: 0 !important;">
-                    <label for="codice-postale" class="login-text">Codice Postale</label>
-                    <input type="text" id="codice-postale" name="codice-postale" placeholder="Codice Postale" pattern="[0-9]{5}">
-                </div>
-                <div class="form-group">
-                    <label for="indirizzo" class="login-text">Indirizzo</label>
-                    <input type="text" id="indirizzo" name="indirizzo" placeholder="Indirizzo">
-                </div>
-            </div>
-
-            <div class="form-row">
+                <br/>
+                <input type="button" value="Indietro" class="show-tab-login-info"><br/>
                 <input type="submit" value="Crea un account" class="submit-register" style="margin-top: 16px !important;">
             </div>
+
         </form>
 
         <p class="login-text">Hai già un account? <a href="login.html">Accedi</a></p>

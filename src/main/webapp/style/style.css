@@ -34,7 +34,7 @@ li.navigation-bar a.navigation-bar:hover {
 div.login-form {
     position: absolute;
     transform: translate(-50%, -50%); /*non spiegato dal prof*/
-    top: 50%;
+    top: 55%;
     left: 50%;
     display: inline-block;
     padding: 20px 50px 20px 50px;
@@ -42,24 +42,14 @@ div.login-form {
     border-radius: 10px;
 }
 
-div.form-row {
-    margin: 0 0 0 0;
-    padding: 5px 0 5px 0;
-    display: flex;
-}
-
-div.form-group {
-    margin: 0 0 0 15px;
-    padding: 5px 0 5px 0;
-}
-
-label.login-text, p.login-text {
+.login-text {
     display: block;
     font-size: 14px;
     color: #EEE5E9;
 }
 
-input#nome, input#cognome, input#email, input#password, input#città, input#provincia, input#codice-postale, input#indirizzo {
+input.register, input.login {
+    margin: 5px 0 5px 0;
     color: #EEE5E9;
     border: solid 2px #E5E5E5;
     border-radius: 10px;
@@ -71,7 +61,7 @@ input#nome, input#cognome, input#email, input#password, input#città, input#prov
     outline-style: none;
 }
 
-input.submit-login {
+input.submit-login, input.show-tab-login-info, input.show-tab-personal-information, input.show-tab-address {
     margin-top: 16px;
     font-family: 'Poppins', sans-serif;
     color: #EEE5E9;
@@ -84,7 +74,7 @@ input.submit-login {
     cursor: pointer;
 }
 
-input.submit-login:hover {
+input.submit-login:hover, input.show-tab-login-info:hover, input.show-tab-personal-information:hover, input.show-tab-address:hover {
     color: #0F1A20;
     background: #EEE5E9;
 }
@@ -101,7 +91,7 @@ input.submit-register {
     cursor: pointer;
 }
 
-.login-text a{
+.login-text a {
     color: turquoise;
 }
 /*
