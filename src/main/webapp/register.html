@@ -22,13 +22,14 @@
 <body>
 
     <div class="navigation-bar">
+        <span class="navigation-bar" onclick="showMenu()"><i class="fa-solid fa-bars"></i></span>
         <ul class="navigation-bar">
             <li class="navigation-bar"><a href="index.html" class="navigation-bar"><i class="fa-solid fa-house"></i><br/>HomePage</a></li>
             <li class="navigation-bar"><a href="#" class="navigation-bar"><i class="fa-solid fa-book-open"></i><br/>Catalogo</a></li>
             <li class="navigation-bar"><a href="#" class="navigation-bar"><i class="fa-solid fa-dollar-sign"></i><br/>Offerte</a></li>
             <li class="navigation-bar"><a href="#" class="navigation-bar"><i class="fa-solid fa-circle-question"></i>Assistenza</a></li>
             <li class="navigation-bar"><a href="#" class="navigation-bar"><i class="fa-solid fa-circle-info"></i><br/>Chi siamo</a></li>
-            <li class="navigation-bar"><a href="login.html" class="navigation-bar"><i class="fa-solid fa-user"></i><br/>Accesso</a></li>
+            <li class="active"><a href="login.html" class="active"><i class="fa-solid fa-user"></i><br/>Accesso</a></li>
             <li class="navigation-bar"><a href="#" class="navigation-bar"><i class="fa-solid fa-cart-shopping"></i><br/>Carrello</a></li>
         </ul>
     </div>
@@ -38,11 +39,11 @@
 
             <div class="tab-personal-information">
                 <label for="nome" class="login-text">Nome</label>
-                <input type="text" class="register" id="nome" name="nome" placeholder="Nome" required="required">
+                <input type="text" class="register" id="nome" name="nome" placeholder="Nome">
                 <label for="cognome" class="login-text">Cognome</label>
-                <input type="text" class="register" id="cognome" name="cognome" placeholder="Cognome" required="required">
+                <input type="text" class="register" id="cognome" name="cognome" placeholder="Cognome">
                 <label for="data-di-nascita" class="login-text">Data di nascita</label>
-                <input type="date" class="register" id="data-di-nascita" name="data-di-nascita" placeholder="Data di nascita" required="required">
+                <input type="date" class="register" id="data-di-nascita" name="data-di-nascita" placeholder="Data di nascita">
 
                 <br/>
                 <input type="button" value="Avanti" class="show-tab-login-info" onclick="validatePersonalInformation()"><br/>
@@ -50,9 +51,11 @@
 
             <div class="tab-login-information">
                 <label for="email" class="login-text">Email</label>
-                <input type="email" class="register" id="email" name="email" placeholder="Email" required="required">
+                <input type="email" class="register" id="email" name="email" placeholder="Email">
                 <label for="password" class="login-text">Password</label>
-                <input type="password" class="register" id="password" name="password" placeholder="Password" required="required">
+                <input type="password" class="register" id="password" name="password" placeholder="Password">
+                <label for="telefono" class="login-text">Telefono</label>
+                <input type="tel" class="register" id="telefono" name="telefono" placeholder="Telefono">
 
                 <br/>
                 <input type="button" value="Indietro" class="show-tab-personal-information" onclick="showTabPersonalInformation()"><br/>
@@ -61,13 +64,13 @@
 
             <div class="tab-address-information">
                 <label for="città" class="login-text">Città</label>
-                <input type="text" class="register" id="città" name="città" placeholder="Città" required="required">
+                <input type="text" class="register" id="città" name="città" placeholder="Città">
                 <label for="provincia" class="login-text">Provincia</label>
-                <input type="text" class="register" id="provincia" name="provincia" placeholder="Provincia" required="required">
+                <input type="text" class="register" id="provincia" name="provincia" placeholder="Provincia">
                 <label for="codice-postale" class="login-text">Codice Postale</label>
-                <input type="text" class="register" id="codice-postale" name="codice-postale" placeholder="Codice Postale" pattern="[0-9]{5}" required="required">
+                <input type="text" class="register" id="codice-postale" name="codice-postale" placeholder="Codice Postale">
                 <label for="indirizzo" class="login-text">Indirizzo</label>
-                <input type="text" class="register" id="indirizzo" name="indirizzo" placeholder="Indirizzo" required="required">
+                <input type="text" class="register" id="indirizzo" name="indirizzo" placeholder="Indirizzo">
 
                 <br/>
                 <input type="button" value="Indietro" class="show-tab-login-info" onclick="showTabLoginInformation()"><br/>

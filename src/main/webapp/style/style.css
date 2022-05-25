@@ -15,16 +15,32 @@ ul.navigation-bar {
     justify-content: center;
 }
 
+span.navigation-bar {
+    display: none;
+    visibility: hidden;
+}
 
 li.navigation-bar a.navigation-bar {
     width: 100px;
     margin: 0 5px 0 5px;
     border-radius: 12px;
     display: block;
-    color: white;
+    color: #E5E5E5;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
+}
+
+li.active a.active {
+    width: 100px;
+    color: #E5E5E5;
+    margin: 0 5px 0 5px;
+    border-radius: 12px;
+    display: block;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    background-color: #C92403;
 }
 
 li.navigation-bar a.navigation-bar:hover {
@@ -32,9 +48,9 @@ li.navigation-bar a.navigation-bar:hover {
 }
 
 div.login-form {
-    position: absolute;
-    transform: translate(-50%, -50%); /*non spiegato dal prof*/
-    top: 55%;
+    position: relative;
+    transform: translate(-50%, 0); /*non spiegato dal prof*/
+    margin-top: 50px;
     left: 50%;
     display: inline-block;
     padding: 20px 50px 20px 50px;
@@ -94,8 +110,22 @@ input.submit-register {
 .login-text a {
     color: turquoise;
 }
-/*
-@media screen and (max-width: 850px) {
 
+@media screen and (max-width: 1000px) {
+
+    span.navigation-bar {
+        margin: 15px 0 0 15px;
+        display: inline-block;
+        color: #E5E5E5;
+        text-align: center;
+        padding: 14px 16px;
+        visibility: visible;
+        font-size: 32px;
+    }
+
+    ul.navigation-bar {
+
+        visibility: hidden;
+        display: none;
+    }
 }
-*/

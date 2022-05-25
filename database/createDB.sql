@@ -1,3 +1,4 @@
+DROP DATABASE ecommerce;
 CREATE DATABASE ecommerce;
 
 USE ecommerce;
