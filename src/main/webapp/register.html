@@ -11,30 +11,10 @@
     <script type="text/javascript" src="script/script.js"></script>
 
     <script>
-        $(document).ready(function(){
-            showTabPersonalInformation();
-
-            function showTabPersonalInformation() {
-                $(".tab-personal-information").show();
-                $(".tab-login-info").hide();
-                $(".tab-address").hide();
-            };
-
-            function showTabLogin() {
-                $(".tab-personal-information").hide();
-                $(".tab-login-info").show();
-                $(".tab-address").hide();
-            };
-
-            function showTabAddress() {
-                $(".tab-personal-information").hide();
-                $(".tab-login-info").hide();
-                $(".tab-address").show();
-            };
-
-            $(".show-tab-login-info").click(showTabLogin);
-            $(".show-tab-address").click(showTabAddress);
-            $(".show-tab-personal-information").click(showTabPersonalInformation);
+        $(document).ready(function() {
+            $(".tab-personal-information").show();
+            $(".tab-login-information").hide();
+            $(".tab-address-information").hide();
         });
     </script>
 
@@ -58,39 +38,39 @@
 
             <div class="tab-personal-information">
                 <label for="nome" class="login-text">Nome</label>
-                <input type="text" class="register" id="nome" name="nome" placeholder="Nome">
+                <input type="text" class="register" id="nome" name="nome" placeholder="Nome" required="required">
                 <label for="cognome" class="login-text">Cognome</label>
-                <input type="text" class="register" id="cognome" name="cognome" placeholder="Cognome">
+                <input type="text" class="register" id="cognome" name="cognome" placeholder="Cognome" required="required">
                 <label for="data-di-nascita" class="login-text">Data di nascita</label>
-                <input type="date" class="register" id="data-di-nascita" name="data-di-nascita" placeholder="Data di nascita">
+                <input type="date" class="register" id="data-di-nascita" name="data-di-nascita" placeholder="Data di nascita" required="required">
 
                 <br/>
-                <input type="button" value="Avanti" class="show-tab-login-info"><br/>
+                <input type="button" value="Avanti" class="show-tab-login-info" onclick="validatePersonalInformation()"><br/>
             </div>
 
-            <div class="tab-login-info">
+            <div class="tab-login-information">
                 <label for="email" class="login-text">Email</label>
-                <input type="email" class="register" id="email" name="email" placeholder="Email">
+                <input type="email" class="register" id="email" name="email" placeholder="Email" required="required">
                 <label for="password" class="login-text">Password</label>
-                <input type="password" class="register" id="password" name="password" placeholder="Password">
+                <input type="password" class="register" id="password" name="password" placeholder="Password" required="required">
 
                 <br/>
-                <input type="button" value="Indietro" class="show-tab-personal-information"><br/>
-                <input type="button" value="Avanti" class="show-tab-address"><br/>
+                <input type="button" value="Indietro" class="show-tab-personal-information" onclick="showTabPersonalInformation()"><br/>
+                <input type="button" value="Avanti" class="show-tab-address" onclick="validateLoginInformation()"><br/>
             </div>
 
-            <div class="tab-address">
+            <div class="tab-address-information">
                 <label for="città" class="login-text">Città</label>
-                <input type="text" class="register" id="città" name="città" placeholder="Città">
+                <input type="text" class="register" id="città" name="città" placeholder="Città" required="required">
                 <label for="provincia" class="login-text">Provincia</label>
-                <input type="text" class="register" id="provincia" name="provincia" placeholder="Provincia">
+                <input type="text" class="register" id="provincia" name="provincia" placeholder="Provincia" required="required">
                 <label for="codice-postale" class="login-text">Codice Postale</label>
-                <input type="text" class="register" id="codice-postale" name="codice-postale" placeholder="Codice Postale" pattern="[0-9]{5}">
+                <input type="text" class="register" id="codice-postale" name="codice-postale" placeholder="Codice Postale" pattern="[0-9]{5}" required="required">
                 <label for="indirizzo" class="login-text">Indirizzo</label>
-                <input type="text" class="register" id="indirizzo" name="indirizzo" placeholder="Indirizzo">
+                <input type="text" class="register" id="indirizzo" name="indirizzo" placeholder="Indirizzo" required="required">
 
                 <br/>
-                <input type="button" value="Indietro" class="show-tab-login-info"><br/>
+                <input type="button" value="Indietro" class="show-tab-login-info" onclick="showTabLoginInformation()"><br/>
                 <input type="submit" value="Crea un account" class="submit-register" style="margin-top: 16px !important;">
             </div>
 
