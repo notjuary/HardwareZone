@@ -11,11 +11,11 @@ CREATE TABLE Utente (
     Email VARCHAR(30) NOT NULL,
     Accesso VARCHAR(12) NOT NULL,
     Telefono CHAR(10) NOT NULL,
-    Città VARCHAR(30) NOT NULL,
+    Citta VARCHAR(30) NOT NULL,
     Provincia CHAR(2) NOT NULL,
     Codice_Postale CHAR(5) NOT NULL,
     Indirizzo VARCHAR(10) NOT NULL,
-    Data_Registazione DATE NOT NULL,
+    Data_Registrazione DATE NOT NULL,
     Stato BOOLEAN NOT NULL DEFAULT TRUE
 );
 

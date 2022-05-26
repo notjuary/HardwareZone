@@ -77,7 +77,7 @@ input.register, input.login {
     outline-style: none;
 }
 
-input.submit-login, input.show-tab-login-info, input.show-tab-personal-information, input.show-tab-address {
+input.submit-login, input.show-tab-login-info, input.show-tab-personal-information, input.show-tab-address, input.show-review-login-info {
     margin-top: 16px;
     font-family: 'Poppins', sans-serif;
     color: #EEE5E9;
@@ -90,7 +90,7 @@ input.submit-login, input.show-tab-login-info, input.show-tab-personal-informati
     cursor: pointer;
 }
 
-input.submit-login:hover, input.show-tab-login-info:hover, input.show-tab-personal-information:hover, input.show-tab-address:hover {
+input.submit-login:hover, input.show-tab-login-info:hover, input.show-tab-personal-information:hover, input.show-tab-address:hover, input.show-review-login-info:hover {
     color: #0F1A20;
     background: #EEE5E9;
 }

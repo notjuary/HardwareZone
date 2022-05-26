@@ -15,6 +15,7 @@
             $(".tab-personal-information").show();
             $(".tab-login-information").hide();
             $(".tab-address-information").hide();
+            $(".tab-review-information").hide();
         });
     </script>
 
@@ -35,7 +36,7 @@
     </div>
 
     <div class="login-form">
-        <form action="hello-servlet">
+        <form action="registrazione-servlet" method="post">
 
             <div class="tab-personal-information">
                 <label for="nome" class="login-text">Nome</label>
@@ -63,8 +64,8 @@
             </div>
 
             <div class="tab-address-information">
-                <label for="città" class="login-text">Città</label>
-                <input type="text" class="register" id="città" name="città" placeholder="Città">
+                <label for="citta" class="login-text">Città</label>
+                <input type="text" class="register" id="citta" name="citta" placeholder="Città">
                 <label for="provincia" class="login-text">Provincia</label>
                 <input type="text" class="register" id="provincia" name="provincia" placeholder="Provincia">
                 <label for="codice-postale" class="login-text">Codice Postale</label>
@@ -74,6 +75,11 @@
 
                 <br/>
                 <input type="button" value="Indietro" class="show-tab-login-info" onclick="showTabLoginInformation()"><br/>
+                <input type="button" value="Avanti" class="show-review-login-info" onclick="validateAddressInformation()"><br/>
+            </div>
+
+            <div class="tab-review-information">
+                <input type="button" value="Indietro" class="show-tab-login-info" onclick="showTabAddressInformation()"><br/>
                 <input type="submit" value="Crea un account" class="submit-register" style="margin-top: 16px !important;">
             </div>
 
@@ -84,5 +90,3 @@
 
 </body>
 </html>
-
-<!--- commento -->
