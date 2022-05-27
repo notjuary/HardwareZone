@@ -5,8 +5,25 @@ const phone_string = /^\d{10}$/ /*10 numeri*/
 const provincia_string = /^([a-zA-Z]{2})$/;
 const cap_string = /^\d{5}$/; /*5 numeri*/
 
+window.addEventListener("resize", browserSize);
+
+function browserSize() {
+
+    if (window.outerWidth > 1000)
+        $("ul.navigation-bar").css({"visibility": "visible", "display": "flex"});
+
+    else
+        $("ul.navigation-bar").css({"visibility": "hidden", "display": "none"});
+}
+
 function showMenu() {
 
+        let nav_bar = $("ul.navigation-bar").css("visibility");
+
+        if (nav_bar === "hidden") {
+            $("ul.navigation-bar").css({"visibility": "visible", "display": "block"});
+        } else
+            $("ul.navigation-bar").css({"visibility": "hidden", "display": "none"});
 }
 
 function showTabPersonalInformation() {
@@ -44,15 +61,24 @@ function validatePersonalInformation() {
     let data_nascita = document.getElementById("data-di-nascita").value;
 
     if (info_string.test(nome) && info_string.test(cognome) && data_nascita !== "") {
+        $("input").css("border-color", "#E5E5E5");
         showTabLoginInformation();
     }
     else {
         if (!(info_string.test(nome)))
-            alert("Nome non valido");
+            $("#nome").css("border-color", "#C92403");
+        else
+            $("#nome").css("border-color", "#E5E5E5");
+
         if (!(info_string.test(cognome)))
-            alert("Cognome non valido");
+            $("#cognome").css("border-color", "#C92403");
+        else
+            $("#cognome").css("border-color", "#E5E5E5");
+
         if (data_nascita === "")
-            alert("Data non valida");
+            $("#data-di-nascita").css("border-color", "#C92403");
+        else
+            $("#data-di-nascita").css("border-color", "#E5E5E5");
     }
 }
 
@@ -63,15 +89,24 @@ function validateLoginInformation() {
     let telefono = document.getElementById("telefono").value;
 
     if (email_string.test(email) && password_string.test(password) && phone_string.test(telefono)) {
+        $("input").css("border-color", "#E5E5E5");
         showTabAddressInformation();
     }
     else {
         if (!(email_string.test(email)))
-            alert("Email non valida");
+            $("#email").css("border-color", "#C92403");
+        else
+            $("#email").css("border-color", "#E5E5E5");
+
         if (!(password_string.test(password)))
-            alert("Password non valida");
+            $("#password").css("border-color", "#C92403");
+        else
+            $("#password").css("border-color", "#E5E5E5");
+
         if (!(phone_string.test(telefono)))
-            alert("Telefono non valido");
+            $("#telefono").css("border-color", "#C92403");
+        else
+            $("#telefono").css("border-color", "#E5E5E5");
     }
 }
 
@@ -83,18 +118,28 @@ function validateAddressInformation() {
     let indirizzo = document.getElementById("indirizzo").value;
 
     if (info_string.test(citta) && provincia_string.test(provincia) && cap_string.test(codice_postale) && info_string.test(indirizzo)) {
+        $("input").css("border-color", "#E5E5E5");
         showTabReviewInformation();
     }
     else {
         if (!(info_string.test(citta)))
-            alert("Città non valida");
-        if (!(info_string.test(provincia)))
-            alert("Provincia non valida");
-        if (!(cap_string.test(codice_postale)))
-            alert("CAP non valido");
-        if (!(info_string.test(indirizzo)))
-            alert("Indirizzo non valido");
+            $("#citta").css("border-color", "#C92403");
+        else
+            $("#citta").css("border-color", "#E5E5E5");
 
-        return false;
+        if (!(info_string.test(provincia)))
+            $("#provincia").css("border-color", "#C92403");
+        else
+            $("#provincia").css("border-color", "#E5E5E5");
+
+        if (!(cap_string.test(codice_postale)))
+            $("#codice-postale").css("border-color", "#C92403");
+        else
+            $("#codice-postale").css("border-color", "#E5E5E5");
+
+        if (!(info_string.test(indirizzo)))
+            $("#indirizzo").css("border-color", "#C92403");
+        else
+            $("#indirizzo").css("border-color", "#E5E5E5");
     }
 }

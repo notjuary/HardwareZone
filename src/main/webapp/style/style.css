@@ -123,8 +123,13 @@ input.submit-register {
         font-size: 32px;
     }
 
-    ul.navigation-bar {
+    li.navigation-bar {
+        margin: 5px 10px 5px 0;
+    }
 
+    ul.navigation-bar {
+        z-index: 1;
+        position: absolute;
         visibility: hidden;
         display: none;
     }
