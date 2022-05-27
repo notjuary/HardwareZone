@@ -7,7 +7,9 @@
     <title>Register</title>
     <script src='https://kit.fontawesome.com/c6b30e1924.js' crossorigin='anonymous'></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="style/style.css">
+    <link rel="stylesheet" type="text/css" href="style/general.css">
+    <link rel="stylesheet" type="text/css" href="style/login.css">
+    <link rel="stylesheet" type="text/css" href="style/nav-menu.css">
     <script type="text/javascript" src="script/script.js"></script>
 
     <script>
@@ -22,18 +24,7 @@
 </head>
 <body>
 
-    <div class="navigation-bar">
-        <span class="navigation-bar" onclick="showMenu()"><i class="fa-solid fa-bars"></i></span>
-        <ul class="navigation-bar">
-            <li class="navigation-bar"><a href="index.html" class="navigation-bar"><i class="fa-solid fa-house"></i><br/>HomePage</a></li>
-            <li class="navigation-bar"><a href="#" class="navigation-bar"><i class="fa-solid fa-book-open"></i><br/>Catalogo</a></li>
-            <li class="navigation-bar"><a href="#" class="navigation-bar"><i class="fa-solid fa-dollar-sign"></i><br/>Offerte</a></li>
-            <li class="navigation-bar"><a href="#" class="navigation-bar"><i class="fa-solid fa-circle-question"></i><br/>Assistenza</a></li>
-            <li class="navigation-bar"><a href="#" class="navigation-bar"><i class="fa-solid fa-circle-info"></i><br/>Chi siamo</a></li>
-            <li class="active"><a href="login.html" class="active"><i class="fa-solid fa-user"></i><br/>Accesso</a></li>
-            <li class="navigation-bar"><a href="#" class="navigation-bar"><i class="fa-solid fa-cart-shopping"></i><br/>Carrello</a></li>
-        </ul>
-    </div>
+    <%@ include file="/resources/menu.jsp"%>
 
     <div class="login-form">
         <form action="registrazione-servlet" method="post">
@@ -86,7 +77,7 @@
 
         </form>
 
-        <p class="login-text">Hai già un account? <a href="login.html">Accedi</a></p>
+        <p class="login-text">Hai già un account? <a href="login.jsp">Accedi</a></p>
     </div>
 
 </body>

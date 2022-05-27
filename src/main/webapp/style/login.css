@@ -1,52 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap');
-
-body {
-    font-family: 'Poppins', sans-serif;
-    background-color: #0F1A20;
-}
-
-ul.navigation-bar {
-    display: flex;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #0F1A20;
-    justify-content: center;
-}
-
-span.navigation-bar {
-    display: none;
-    visibility: hidden;
-}
-
-li.navigation-bar a.navigation-bar {
-    width: 100px;
-    margin: 0 5px 0 5px;
-    border-radius: 12px;
-    display: block;
-    color: #E5E5E5;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-}
-
-li.active a.active {
-    width: 100px;
-    color: #E5E5E5;
-    margin: 0 5px 0 5px;
-    border-radius: 12px;
-    display: block;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-    background-color: #C92403;
-}
-
-li.navigation-bar a.navigation-bar:hover {
-    background-color: #C92403;
-}
-
 div.login-form {
     position: relative;
     transform: translate(-50%, 0); /*non spiegato dal prof*/
@@ -109,28 +60,4 @@ input.submit-register {
 
 .login-text a {
     color: turquoise;
-}
-
-@media screen and (max-width: 1000px) {
-
-    span.navigation-bar {
-        margin: 15px 0 0 15px;
-        display: inline-block;
-        color: #E5E5E5;
-        text-align: center;
-        padding: 14px 16px;
-        visibility: visible;
-        font-size: 32px;
-    }
-
-    li.navigation-bar {
-        margin: 5px 10px 5px 0;
-    }
-
-    ul.navigation-bar {
-        z-index: 1;
-        position: absolute;
-        visibility: hidden;
-        display: none;
-    }
 }

@@ -4,6 +4,7 @@ const password_string = /^[a-zA-Z0-9\_\*\-\+\!\?\,\:\;\.\xE0\xE8\xE9\xF9\xF2\xEC
 const phone_string = /^\d{10}$/ /*10 numeri*/
 const provincia_string = /^([a-zA-Z]{2})$/;
 const cap_string = /^\d{5}$/; /*5 numeri*/
+const address_string = /^([a-zA-Z\xE0\xE8\xE9\xF9\xF2\xEC\x27\x2C]\s?)+$/;
 
 window.addEventListener("resize", browserSize);
 
@@ -117,7 +118,7 @@ function validateAddressInformation() {
     let codice_postale = document.getElementById("codice-postale").value;
     let indirizzo = document.getElementById("indirizzo").value;
 
-    if (info_string.test(citta) && provincia_string.test(provincia) && cap_string.test(codice_postale) && info_string.test(indirizzo)) {
+    if (info_string.test(citta) && provincia_string.test(provincia) && cap_string.test(codice_postale) && address_string.test(indirizzo)) {
         $("input").css("border-color", "#E5E5E5");
         showTabReviewInformation();
     }
@@ -137,7 +138,7 @@ function validateAddressInformation() {
         else
             $("#codice-postale").css("border-color", "#E5E5E5");
 
-        if (!(info_string.test(indirizzo)))
+        if (!(address_string.test(indirizzo)))
             $("#indirizzo").css("border-color", "#C92403");
         else
             $("#indirizzo").css("border-color", "#E5E5E5");
