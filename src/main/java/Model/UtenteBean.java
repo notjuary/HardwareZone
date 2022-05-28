@@ -10,6 +10,8 @@ public class UtenteBean {
     private GregorianCalendar data_nascita, data_registrazione;
     private boolean stato;
 
+    public UtenteBean() {}
+
     public UtenteBean(String nome, String cognome, String email, String password, String telefono, String citta,
                       String provincia, String codice_postale, String indirizzo, GregorianCalendar data_nascita) {
 
@@ -114,8 +116,17 @@ public class UtenteBean {
                 + (data_nascita.get(Calendar.DAY_OF_MONTH));
     }
 
-    public void setDataNascita(GregorianCalendar data_nascita) {
-        this.data_nascita = data_nascita;
+    public void setDataNascita(String data) {
+
+        String[] data_splitted = data.split("-");
+
+        int anno = Integer.parseInt(data_splitted[0]);
+        int mese = Integer.parseInt(data_splitted[1]);
+        int giorno = Integer.parseInt(data_splitted[2]);
+
+        mese--;
+
+        this.data_nascita = new GregorianCalendar(anno, mese, giorno);
     }
 
     public String getDataRegistrazione() {
@@ -125,8 +136,17 @@ public class UtenteBean {
                 + (data_registrazione.get(Calendar.DAY_OF_MONTH));
     }
 
-    public void setDataRegistrazione(GregorianCalendar data_registrazione) {
-        this.data_registrazione = data_registrazione;
+    public void setDataRegistrazione(String data) {
+
+        String[] data_splitted = data.split("-");
+
+        int anno = Integer.parseInt(data_splitted[0]);
+        int mese = Integer.parseInt(data_splitted[1]);
+        int giorno = Integer.parseInt(data_splitted[2]);
+
+        mese--;
+
+        this.data_registrazione = new GregorianCalendar(anno, mese, giorno);
     }
 
     public boolean isActive() {

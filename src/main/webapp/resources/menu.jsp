@@ -1,5 +1,19 @@
-<link rel="stylesheet" type="text/css" href="style/nav-menu.css">
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<link rel="stylesheet" type="text/css" href="/style/nav-menu.css">
 <script src='https://kit.fontawesome.com/c6b30e1924.js' crossorigin='anonymous'></script>
+
+<%
+    String utente = (String) session.getAttribute("nome-utente");
+    String url;
+
+    if (utente == null) {
+        utente = "Accesso";
+        url = "login.jsp";
+    }
+    else {
+        url = "profilo-servlet";
+    }
+%>
 
 <div class="navigation-bar">
     <span class="navigation-bar" onclick="showMenu()"><i class="fa-solid fa-bars"></i></span>
@@ -9,7 +23,7 @@
         <li class="navigation-bar"><a href="#" class="navigation-bar"><i class="fa-solid fa-dollar-sign"></i><br/>Offerte</a></li>
         <li class="navigation-bar"><a onclick="showSearch()" class="navigation-bar"><i class="fa-solid fa-magnifying-glass"></i><br/>Ricerca</a></li>
         <li class="navigation-bar"><a href="#" class="navigation-bar"><i class="fa-solid fa-circle-info"></i><br/>Chi siamo</a></li>
-        <li class="navigation-bar"><a href="login.jsp" class="navigation-bar"><i class="fa-solid fa-user"></i><br/>Accesso</a></li>
+        <li class="navigation-bar"><a href="<%= url%>" class="navigation-bar"><i class="fa-solid fa-user"></i><br/><%= utente%></a></li>
         <li class="navigation-bar"><a href="#" class="navigation-bar"><i class="fa-solid fa-cart-shopping"></i><br/>Carrello</a></li>
     </ul>
 

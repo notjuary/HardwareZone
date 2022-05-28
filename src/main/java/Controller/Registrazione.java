@@ -5,13 +5,15 @@ import java.util.GregorianCalendar;
 
 import Model.UtenteBean;
 import Model.UtenteDAO;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
 @WebServlet(name = "registrazioneServlet", value = "/registrazione-servlet")
 public class Registrazione extends HttpServlet {
 
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         response.setContentType("text/html");
 
         String nome = request.getParameter("nome");
@@ -37,6 +39,13 @@ public class Registrazione extends HttpServlet {
         UtenteBean utente = new UtenteBean(nome,cognome, email, password, telefono, citta, provincia, codice_postale, indirizzo, data_nascita);
 
         service.doSave(utente);
+
+        HttpSession session = request.getSession();
+        session.setAttribute("nome-utente", utente.getNome());
+        session.setAttribute("id-utente", utente.getId());
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+        dispatcher.forward(request, response);
     }
 
     public void destroy() {
