@@ -1,4 +1,5 @@
 <link rel="stylesheet" type="text/css" href="style/nav-menu.css">
+<script src='https://kit.fontawesome.com/c6b30e1924.js' crossorigin='anonymous'></script>
 
 <div class="navigation-bar">
     <span class="navigation-bar" onclick="showMenu()"><i class="fa-solid fa-bars"></i></span>
@@ -6,9 +7,18 @@
         <li class="navigation-bar"><a href="index.jsp" class="navigation-bar"><i class="fa-solid fa-house"></i><br/>HomePage</a></li>
         <li class="navigation-bar"><a href="#" class="navigation-bar"><i class="fa-solid fa-book-open"></i><br/>Catalogo</a></li>
         <li class="navigation-bar"><a href="#" class="navigation-bar"><i class="fa-solid fa-dollar-sign"></i><br/>Offerte</a></li>
-        <li class="navigation-bar"><a href="#" class="navigation-bar"><i class="fa-solid fa-circle-question"></i><br/>Assistenza</a></li>
+        <li class="navigation-bar"><a onclick="showSearch()" class="navigation-bar"><i class="fa-solid fa-magnifying-glass"></i><br/>Ricerca</a></li>
         <li class="navigation-bar"><a href="#" class="navigation-bar"><i class="fa-solid fa-circle-info"></i><br/>Chi siamo</a></li>
         <li class="navigation-bar"><a href="login.jsp" class="navigation-bar"><i class="fa-solid fa-user"></i><br/>Accesso</a></li>
         <li class="navigation-bar"><a href="#" class="navigation-bar"><i class="fa-solid fa-cart-shopping"></i><br/>Carrello</a></li>
     </ul>
+
+    <div class="search-tab">
+        <label>
+            <a onclick="showSearch()"><i class="fa-solid fa-xmark"></i></a>
+            <input type="search" class="search-tab">
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </label>
+    </div>
+
 </div>
