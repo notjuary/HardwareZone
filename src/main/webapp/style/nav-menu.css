@@ -1,15 +1,17 @@
 div.navigation-bar {
+    margin-top: 25px;
     display: flex;
     justify-content: center;
 }
 
 div.item-menu {
-    width: 100px;
+    width: 150px;
     margin: 0 5px 0 5px;
     text-align: center;
     padding: 15px;
     border-radius: 15px;
     background-color: #E5E5E5;
+    cursor: pointer;
 }
 
 div.item-menu a {

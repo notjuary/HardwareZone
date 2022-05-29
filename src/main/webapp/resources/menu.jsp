@@ -16,17 +16,17 @@
 %>
 
 <div class="navigation-bar">
-    <div class="item-menu"><a href="index.jsp">HomePage</a></div>
-    <div class="item-menu"><a href="#">Catalogo</a></div>
-    <div class="item-menu"><a href="#">Offerte</a></div>
-    <div class="item-menu"><a href="login.jsp">Accesso</a></div>
+    <div class="item-menu"><a href="index.jsp"><i class="fa-solid fa-house"></i>HomePage</a></div>
+    <div class="item-menu"><a href="#"><i class="fa-solid fa-book-open"></i>Catalogo</a></div>
+    <div class="item-menu"><a href="#"><i class="fa-solid fa-dollar-sign"></i>Offerte</a></div>
+    <div class="item-menu"><a href="<%= url %>"><i class="fa-solid fa-user"></i>Accesso</a></div>
         <div class="sub-menu">
             <div class="item-submenu"></div>
             <div class="item-submenu"></div>
             <div class="item-submenu"></div>
         </div>
-    <div class="item-menu"><a href="#">Carrello</a></div>
-    <div class="item-menu"><a href="#">Chi siamo</a></div>
+    <div class="item-menu"><a href="#"><i class="fa-solid fa-cart-shopping"></i>Carrello</a></div>
+    <div class="item-menu"><a href="#"><i class="fa-solid fa-circle-info"></i>Chi siamo</a></div>
 </div>
 
 <!--
