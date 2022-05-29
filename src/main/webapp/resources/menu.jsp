@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<link rel="stylesheet" type="text/css" href="/style/nav-menu.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/style/nav-menu.css">
 <script src='https://kit.fontawesome.com/c6b30e1924.js' crossorigin='anonymous'></script>
 
 <%
@@ -28,11 +28,11 @@
     </ul>
 
     <div class="search-tab">
-        <label>
-            <a onclick="showSearch()"><i class="fa-solid fa-xmark"></i></a>
-            <input type="search" class="search-tab">
-            <i class="fa-solid fa-magnifying-glass"></i>
-        </label>
+        <form action="#" class="search-tab">
+            <input type="text" class="search-tab" id="ricerca" name="ricerca" placeholder="Ricerca">
+            <button type="submit" class="search-tag"><i class="fa-solid fa-magnifying-glass"></i></button>
+            <button type="button" class="search-tag" onclick="showSearch()"><i class="fa-solid fa-xmark"></i></button>
+        </form>
     </div>
 
 </div>
