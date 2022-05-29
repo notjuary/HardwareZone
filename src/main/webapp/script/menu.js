@@ -1,3 +1,5 @@
+
+/*
 window.addEventListener("resize", browserSize);
 
 function browserSize() {
@@ -33,3 +35,8 @@ function showSearch() {
     }
 }
 
+function showLoginMenu() {
+
+    $("ul.dropdown").hide();
+}
+*/

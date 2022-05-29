@@ -18,7 +18,7 @@
     <%@ include file="/resources/menu.jsp"%>
 
     <div class="login-form">
-        <form action="login-servlet">
+        <form action="login-servlet" method="post">
 
             <label for="email" class="login-text">Email</label>
             <input type="email" class="login" id="email" name="email" placeholder="Email">

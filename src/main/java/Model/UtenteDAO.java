@@ -75,4 +75,25 @@ public class UtenteDAO {
             throw new RuntimeException(e);
         }
     }
+
+    public int doLogin(String email, String password) {
+
+        try (Connection con = ConPool.getConnection()) {
+            PreparedStatement ps = con.prepareStatement(
+                    "SELECT ID_Utente FROM Utente WHERE Email=? AND Accesso =?");
+
+            ps.setString(1, email);
+            ps.setString(2, password);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next())
+                return rs.getInt(1);
+            else
+                return -1;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

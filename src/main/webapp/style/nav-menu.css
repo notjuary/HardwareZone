@@ -1,3 +1,35 @@
+div.navigation-bar {
+    display: flex;
+    justify-content: center;
+}
+
+div.item-menu {
+    width: 100px;
+    margin: 0 5px 0 5px;
+    text-align: center;
+    padding: 15px;
+    border-radius: 15px;
+    background-color: #E5E5E5;
+}
+
+div.item-menu a {
+    color: #0F1A20;
+    text-decoration: none;
+}
+
+div.item-menu:hover {
+    background-color: #C92403;
+}
+
+div.item-menu:hover a {
+    color: #E5E5E5;
+}
+
+@media screen and (max-width: 760px) {
+    
+}
+
+/*
 ul.navigation-bar {
     display: flex;
     list-style-type: none;
@@ -89,4 +121,4 @@ button.search-tag {
     input.search-tab {
         width: 300px;
     }
-}
+}*/

@@ -16,6 +16,21 @@
 %>
 
 <div class="navigation-bar">
+    <div class="item-menu"><a href="index.jsp">HomePage</a></div>
+    <div class="item-menu"><a href="#">Catalogo</a></div>
+    <div class="item-menu"><a href="#">Offerte</a></div>
+    <div class="item-menu"><a href="login.jsp">Accesso</a></div>
+        <div class="sub-menu">
+            <div class="item-submenu"></div>
+            <div class="item-submenu"></div>
+            <div class="item-submenu"></div>
+        </div>
+    <div class="item-menu"><a href="#">Carrello</a></div>
+    <div class="item-menu"><a href="#">Chi siamo</a></div>
+</div>
+
+<!--
+<div class="navigation-bar">
     <span class="navigation-bar" onclick="showMenu()"><i class="fa-solid fa-bars"></i></span>
     <ul class="navigation-bar">
         <li class="navigation-bar"><a href="index.jsp" class="navigation-bar"><i class="fa-solid fa-house"></i><br/>HomePage</a></li>
@@ -23,7 +38,12 @@
         <li class="navigation-bar"><a href="#" class="navigation-bar"><i class="fa-solid fa-dollar-sign"></i><br/>Offerte</a></li>
         <li class="navigation-bar"><a onclick="showSearch()" class="navigation-bar"><i class="fa-solid fa-magnifying-glass"></i><br/>Ricerca</a></li>
         <li class="navigation-bar"><a href="#" class="navigation-bar"><i class="fa-solid fa-circle-info"></i><br/>Chi siamo</a></li>
-        <li class="navigation-bar"><a href="<%= url%>" class="navigation-bar"><i class="fa-solid fa-user"></i><br/><%= utente%></a></li>
+        <li class="navigation-bar"><a onclick="showLoginMenu()" class="navigation-bar"><i class="fa-solid fa-user"></i><br/><%= utente%></a></li>
+            <div class="sub-nav">
+                <ul>
+                    <li></li>
+                </ul>
+            </div>
         <li class="navigation-bar"><a href="#" class="navigation-bar"><i class="fa-solid fa-cart-shopping"></i><br/>Carrello</a></li>
     </ul>
 
@@ -36,3 +56,4 @@
     </div>
 
 </div>
+-->
