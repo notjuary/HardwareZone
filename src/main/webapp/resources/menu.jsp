@@ -1,4 +1,3 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/style/nav-menu.css">
 <script src='https://kit.fontawesome.com/c6b30e1924.js' crossorigin='anonymous'></script>
 
@@ -16,17 +15,17 @@
 %>
 
 <div class="navigation-bar">
-    <div class="item-menu"><a href="index.jsp"><i class="fa-solid fa-house"></i>HomePage</a></div>
-    <div class="item-menu"><a href="#"><i class="fa-solid fa-book-open"></i>Catalogo</a></div>
-    <div class="item-menu"><a href="#"><i class="fa-solid fa-dollar-sign"></i>Offerte</a></div>
-    <div class="item-menu"><a href="<%= url %>"><i class="fa-solid fa-user"></i>Accesso</a></div>
+    <div class="item-menu" onclick="location.href='index.jsp'"><i class="fa-solid fa-house iconMenu"></i>HomePage</div>
+    <div class="item-menu" onclick="location.href='#'"><i class="fa-solid fa-book-open iconMenu"></i>Catalogo</div>
+    <div class="item-menu" onclick="location.href='#'"><i class="fa-solid fa-dollar-sign iconMenu"></i>Offerte</div>
+    <div class="item-menu" onclick="location.href='<%= url %>'"><i class="fa-solid fa-user iconMenu"></i><%= utente %></div>
         <div class="sub-menu">
             <div class="item-submenu"></div>
             <div class="item-submenu"></div>
             <div class="item-submenu"></div>
         </div>
-    <div class="item-menu"><a href="#"><i class="fa-solid fa-cart-shopping"></i>Carrello</a></div>
-    <div class="item-menu"><a href="#"><i class="fa-solid fa-circle-info"></i>Chi siamo</a></div>
+    <div class="item-menu" onclick="location.href='#'"><i class="fa-solid fa-cart-shopping iconMenu"></i>Carrello</div>
+    <div class="item-menu" onclick="location.href='#'"><i class="fa-solid fa-circle-info iconMenu"></i>Chi siamo</div>
 </div>
 
 <!--

@@ -1,5 +1,9 @@
 package Model;
 
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -11,23 +15,6 @@ public class UtenteBean {
     private boolean stato;
 
     public UtenteBean() {}
-
-    public UtenteBean(String nome, String cognome, String email, String password, String telefono, String citta,
-                      String provincia, String codice_postale, String indirizzo, GregorianCalendar data_nascita) {
-
-        this.nome = nome;
-        this.cognome = cognome;
-        this.email = email;
-        this.password = password;
-        this.telefono = telefono;
-        this.citta = citta;
-        this.provincia = provincia;
-        this.codice_postale = codice_postale;
-        this.indirizzo = indirizzo;
-        this.stato = true;
-        this.data_registrazione = new GregorianCalendar();
-        this.data_nascita = data_nascita;
-    }
 
     public int getId() {
         return id;
@@ -66,7 +53,17 @@ public class UtenteBean {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+
+        try {
+
+            MessageDigest digest = MessageDigest.getInstance("SHA-1");
+            digest.reset();
+            digest.update(password.getBytes(StandardCharsets.UTF_8));
+            this.password = String.format("%040x", new BigInteger(1, digest.digest()));
+
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public String getTelefono() {
@@ -93,11 +90,11 @@ public class UtenteBean {
         this.provincia = provincia;
     }
 
-    public String getCodice_postale() {
+    public String getCodicePostale() {
         return codice_postale;
     }
 
-    public void setCodice_postale(String codice_postale) {
+    public void setCodicePostale(String codice_postale) {
         this.codice_postale = codice_postale;
     }
 
@@ -147,6 +144,11 @@ public class UtenteBean {
         mese--;
 
         this.data_registrazione = new GregorianCalendar(anno, mese, giorno);
+    }
+
+    public void setDataRegistrazione() {
+
+        this.data_registrazione = new GregorianCalendar();
     }
 
     public boolean isActive() {

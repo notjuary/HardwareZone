@@ -9,7 +9,7 @@ CREATE TABLE Utente (
     Cognome VARCHAR(30) NOT NULL,
     Data_Nascita DATE NOT NULL,
     Email VARCHAR(30) UNIQUE NOT NULL,
-    Accesso VARCHAR(12) NOT NULL,
+    Accesso VARCHAR(40) NOT NULL,
     Telefono CHAR(10) NOT NULL,
     Citta VARCHAR(30) NOT NULL,
     Provincia CHAR(2) NOT NULL,

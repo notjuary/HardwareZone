@@ -14,21 +14,17 @@ div.item-menu {
     cursor: pointer;
 }
 
-div.item-menu a {
-    color: #0F1A20;
-    text-decoration: none;
-}
-
 div.item-menu:hover {
     background-color: #C92403;
-}
-
-div.item-menu:hover a {
     color: #E5E5E5;
 }
 
-@media screen and (max-width: 760px) {
-    
+i.iconMenu {
+    margin-right: 5px;
+}
+
+@media screen and (max-width: 940px) {
+
 }
 
 /*
