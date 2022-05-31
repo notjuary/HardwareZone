@@ -14,7 +14,7 @@ CREATE TABLE Utente (
     Citta VARCHAR(30) NOT NULL,
     Provincia CHAR(2) NOT NULL,
     Codice_Postale CHAR(5) NOT NULL,
-    Indirizzo VARCHAR(10) NOT NULL,
+    Indirizzo VARCHAR(30) NOT NULL,
     Data_Registrazione DATE NOT NULL,
     Stato BOOLEAN NOT NULL DEFAULT TRUE
 );
