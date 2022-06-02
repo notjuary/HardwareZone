@@ -32,9 +32,9 @@
     <div class="item-menu" onclick="location.href='#'"><i class="fa-solid fa-dollar-sign iconMenu"></i>Offerte</div>
     <div class="item-menu" onclick="<%= url %>" style="position: relative"><i class="fa-solid fa-user iconMenu"></i><%= utente %>
         <div class="sub-menu">
-            <div class="item-submenu">Profilo</div>
-            <div class="item-submenu">Ordini</div>
-            <div class="item-submenu">Logout</div>
+            <div class="item-submenu" onclick="location.href='#'">Profilo</div>
+            <div class="item-submenu" onclick="location.href='#'">Ordini</div>
+            <div class="item-submenu" onclick="location.href='#'">Logout</div>
         </div>
     </div>
     <div class="item-menu" onclick="location.href='#'"><i class="fa-solid fa-cart-shopping iconMenu"></i>Carrello</div>
