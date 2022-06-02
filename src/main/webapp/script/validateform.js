@@ -1,9 +1,9 @@
-const info_string = /^([a-zA-Z\xE0\xE8\xE9\xF9\xF2\xEC\x27]\s?)+$/; /*caratteri, lettere accentate apostrofo e un solo spazio fra le parole*/
-const email_string = /^[a-zA-Z\d._%-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,4}$/; /*	caratteri e . _ % – + @ + caratteri compreso . + . + min 2, max 4 caratteri*/
-const password_string = /^[a-zA-Z\d\-\xE0\xE8\xE9\xF9\xF2\xEC\x27]{6,12}/; /*Min sei, max 12 di caratteri, numeri, _ * – + ! ? , : ; . e lettere accentate*/
+const info_string = /^([a-zA-Z\xE0\xE8\xE9\xF9\xF2\xEC\x27]\s?){2,30}$/ /* caratteri, lettere accentate apostrofo e un solo spazio fra le parole*/
+const email_string = /^[a-zA-Z\d._%-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,30}$/; /*	caratteri e . _ % – + @ + caratteri compreso . + . + min 2, max 4 caratteri*/
+const password_string = /^[a-zA-Z\d\-\xE0\xE8\xE9\xF9\xF2\xEC\x27]{6,16}/; /* minimo sei, max 12 di caratteri, numeri, _ * – + ! ? , : ; . e lettere accentate*/
 const phone_string = /^\d{10}$/ /*10 numeri*/
 const provincia_string = /^([a-zA-Z]{2})$/;
-const cap_string = /^\d{5}$/; /*5 numeri*/
+const cap_string = /^\d{5}$/; /*Cinque numeri*/
 const address_string = /^([a-zA-Z\d\xE0\xE8\xE9\xF9\xF2\xEC\x27\x2C]\s?)+$/;
 
 function showTabPersonalInformation() {
@@ -44,6 +44,7 @@ function validatePersonalInformation() {
         $("input").css("border-color", "#E5E5E5");
         showTabLoginInformation();
     }
+
     else {
         if (!(info_string.test(nome)))
             $("#nome").css("border-color", "#C92403");

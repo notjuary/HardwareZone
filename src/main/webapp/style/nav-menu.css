@@ -5,13 +5,14 @@ div.navigation-bar {
 }
 
 div.item-menu {
-    width: 150px;
+    width: 160px;
     margin: 0 5px 0 5px;
     text-align: center;
     padding: 15px;
     border-radius: 15px;
     background-color: #E5E5E5;
     cursor: pointer;
+    box-sizing: border-box;
 }
 
 div.item-menu:hover {
