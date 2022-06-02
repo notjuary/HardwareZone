@@ -32,7 +32,14 @@ public class Login extends HttpServlet {
             session.setAttribute("nome-utente", utente.getNome());
             session.setAttribute("id-utente", utente.getId());
 
-            RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+            RequestDispatcher dispatcher;
+
+            if (utente.isAdmin()) {
+                dispatcher = request.getRequestDispatcher("admin.jsp");
+            } else {
+                dispatcher = request.getRequestDispatcher("index.jsp");
+            }
+
             dispatcher.forward(request, response);
 
         } else {

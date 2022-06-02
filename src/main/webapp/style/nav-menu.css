@@ -5,6 +5,7 @@ div.navigation-bar {
 }
 
 div.item-menu {
+    color: #0f1a20;
     width: 160px;
     margin: 0 5px 0 5px;
     text-align: center;
@@ -22,6 +23,27 @@ div.item-menu:hover {
 
 i.iconMenu {
     margin-right: 5px;
+}
+
+div.sub-menu {
+    visibility: hidden;
+    display: none;
+    border-radius: 15px;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+}
+
+div.item-submenu {
+    position: relative;
+    margin-top: 5px;
+    height: 40px;
+    border-radius: 15px;
+    background-color: #E5E5E5;
+    color: #0f1a20;
+    text-align: center;
+    line-height: 40px;
 }
 
 @media screen and (max-width: 940px) {

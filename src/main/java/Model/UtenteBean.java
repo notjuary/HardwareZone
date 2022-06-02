@@ -12,7 +12,7 @@ public class UtenteBean {
     private int id;
     private String nome, cognome, email, password, telefono, citta, provincia, codice_postale, indirizzo;
     private GregorianCalendar data_nascita, data_registrazione;
-    private boolean stato;
+    private boolean stato, admin;
 
     public UtenteBean() {}
 
@@ -156,6 +156,14 @@ public class UtenteBean {
     }
 
     public void setStato(boolean stato) {
+
         this.stato = stato;
+    }
+
+    public boolean isAdmin() { return admin; }
+
+    public void setAdmin(boolean admin) {
+
+        this.admin = admin;
     }
 }

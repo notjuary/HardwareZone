@@ -9,7 +9,7 @@ public class UtenteDAO {
         try (Connection con = ConPool.getConnection()) {
 
             PreparedStatement ps = con.prepareStatement(
-                    "INSERT INTO Utente (Nome, Cognome, Data_Nascita, Email, Accesso, Telefono, Citta, Provincia, Codice_Postale, Indirizzo, Data_Registrazione, Stato) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
+                    "INSERT INTO Utente (Nome, Cognome, Data_Nascita, Email, Accesso, Telefono, Citta, Provincia, Codice_Postale, Indirizzo, Data_Registrazione, Stato, Amministratore) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)",
                     Statement.RETURN_GENERATED_KEYS);
 
             ps.setString(1, utenteBean.getNome());
@@ -24,6 +24,7 @@ public class UtenteDAO {
             ps.setString(10, utenteBean.getIndirizzo());
             ps.setString(11, utenteBean.getDataRegistrazione());
             ps.setBoolean(12, utenteBean.isActive());
+            ps.setBoolean(13, utenteBean.isAdmin());
 
 
             if (ps.executeUpdate() != 1) {
@@ -65,6 +66,7 @@ public class UtenteDAO {
                 utente.setIndirizzo(rs.getString(11));
                 utente.setDataRegistrazione(rs.getString(12));
                 utente.setStato(rs.getBoolean(13));
+                utente.setAdmin(rs.getBoolean(14));
 
                 return utente;
             }

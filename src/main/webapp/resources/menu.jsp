@@ -1,5 +1,18 @@
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/style/nav-menu.css">
 <script src='https://kit.fontawesome.com/c6b30e1924.js' crossorigin='anonymous'></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/script/menu.js"></script>
+
+<script>
+    function showSubMenu() {
+
+        let sub_menu = $("div.sub-menu").css("visibility");
+
+        if (sub_menu === "hidden")
+            $("div.sub-menu").css({"visibility": "visible", "display": "block"});
+        else
+            $("div.sub-menu").css({"visibility": "hidden", "display": "none"});
+    }
+</script>
 
 <%
     String utente = (String) session.getAttribute("nome-utente");
@@ -7,10 +20,9 @@
 
     if (utente == null) {
         utente = "Accesso";
-        url = "login.jsp";
-    }
-    else {
-        url = "profilo-servlet";
+        url = "location.href='login.jsp'";
+    } else {
+        url = "showSubMenu()";
     }
 %>
 
@@ -18,12 +30,13 @@
     <div class="item-menu" onclick="location.href='index.jsp'"><i class="fa-solid fa-house iconMenu"></i>HomePage</div>
     <div class="item-menu" onclick="location.href='#'"><i class="fa-solid fa-book-open iconMenu"></i>Catalogo</div>
     <div class="item-menu" onclick="location.href='#'"><i class="fa-solid fa-dollar-sign iconMenu"></i>Offerte</div>
-    <div class="item-menu" onclick="location.href='<%= url %>'"><i class="fa-solid fa-user iconMenu"></i><%= utente %></div>
+    <div class="item-menu" onclick="<%= url %>" style="position: relative"><i class="fa-solid fa-user iconMenu"></i><%= utente %>
         <div class="sub-menu">
-            <div class="item-submenu"></div>
-            <div class="item-submenu"></div>
-            <div class="item-submenu"></div>
+            <div class="item-submenu">Profilo</div>
+            <div class="item-submenu">Ordini</div>
+            <div class="item-submenu">Logout</div>
         </div>
+    </div>
     <div class="item-menu" onclick="location.href='#'"><i class="fa-solid fa-cart-shopping iconMenu"></i>Carrello</div>
     <div class="item-menu" onclick="location.href='#'"><i class="fa-solid fa-circle-info iconMenu"></i>Chi siamo</div>
 </div>
