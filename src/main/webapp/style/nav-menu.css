@@ -5,6 +5,7 @@ div.navigation-bar {
 }
 
 div.item-menu {
+    display: inline-block;
     color: #0f1a20;
     width: 160px;
     margin: 0 5px 0 5px;
@@ -14,6 +15,10 @@ div.item-menu {
     background-color: #E5E5E5;
     cursor: pointer;
     box-sizing: border-box;
+}
+
+div.show-menu {
+    display: none;
 }
 
 div.item-menu:hover {
@@ -47,7 +52,35 @@ div.item-submenu {
 }
 
 @media screen and (max-width: 940px) {
+    div.navigation-bar {
+        border: solid 1px red;
+        display: block;
+    }
 
+    div.menu {
+        visibility: hidden;
+        display: none;
+    }
+
+    div.item-menu {
+        border: solid green 1px;
+        display: block;
+        width: 100%;
+        margin: 5px 0 5px 0;
+    }
+
+    div.show-menu {
+        position: relative;
+        margin-top: 5px;
+        height: 40px;
+        border-radius: 15px;
+        background-color: #E5E5E5;
+        color: #0f1a20;
+        text-align: left;
+        padding: 0 20px 0 20px;
+        line-height: 40px;
+        display: inline-block;
+    }
 }
 
 /*

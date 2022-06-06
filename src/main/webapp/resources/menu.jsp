@@ -8,6 +8,27 @@
     <script type="text/javascript" src="${pageContext.request.contextPath}/script/menu.js"></script>
 
     <script>
+        window.addEventListener("resize", browserSize);
+
+        /*
+        function browserSize() {
+            if (window.outerWidth > 1000) {
+                $("div.navigation-bar").css({"visibility": "visible", "display": "flex"});
+                $("div.menu").css({"visibility": "visible", "display": "inline-block"});
+            }
+            else
+                $("div.menu").css({"visibility": "hidden", "display": "none"});
+        }*/
+
+        function showMenu() {
+            //noinspection JSJQueryEfficiency
+            let menu = $("div.menu").css("visibility");
+            if (menu === "hidden")
+                $("div.menu").css({"visibility": "visible", "display": "block"});
+            else
+                $("div.menu").css({"visibility": "hidden", "display": "none"});
+        }
+
         function showSubMenu() {
             //noinspection JSJQueryEfficiency
             let sub_menu = $("div.sub-menu").css("visibility");
@@ -34,18 +55,21 @@
     %>
 
     <div class="navigation-bar">
-        <div class="item-menu" onclick="location.href='index.jsp'"><i class="fa-solid fa-house iconMenu"></i>HomePage</div>
-        <div class="item-menu" onclick="location.href='#'"><i class="fa-solid fa-book-open iconMenu"></i>Catalogo</div>
-        <div class="item-menu" onclick="location.href='#'"><i class="fa-solid fa-dollar-sign iconMenu"></i>Offerte</div>
-        <div class="item-menu" onclick="<%= url %>" style="position: relative"><i class="fa-solid fa-user iconMenu"></i><%= utente %>
-            <div class="sub-menu">
-                <div class="item-submenu" onclick="location.href='#'">Profilo</div>
-                <div class="item-submenu" onclick="location.href='#'">Ordini</div>
-                <div class="item-submenu" onclick="location.href='logout-servlet'">Logout</div>
+        <div class="show-menu" onclick="showMenu()"><i class="fa-solid fa-bars"></i></div>
+        <div class="menu">
+            <div class="item-menu" onclick="location.href='index.jsp'"><i class="fa-solid fa-house iconMenu"></i>HomePage</div>
+            <div class="item-menu" onclick="location.href='#'"><i class="fa-solid fa-book-open iconMenu"></i>Catalogo</div>
+            <div class="item-menu" onclick="location.href='#'"><i class="fa-solid fa-dollar-sign iconMenu"></i>Offerte</div>
+            <div class="item-menu" onclick="location.href='#'"><i class="fa-solid fa-cart-shopping iconMenu"></i>Carrello</div>
+            <div class="item-menu" onclick="location.href='#'"><i class="fa-solid fa-circle-info iconMenu"></i>Chi siamo</div>
+            <div class="item-menu" onclick="<%= url %>" style="position: relative"><i class="fa-solid fa-user iconMenu"></i><%= utente %>
+                <div class="sub-menu">
+                    <div class="item-submenu" onclick="location.href='#'">Profilo</div>
+                    <div class="item-submenu" onclick="location.href='#'">Ordini</div>
+                    <div class="item-submenu" onclick="location.href='logout-servlet'">Logout</div>
+                </div>
             </div>
         </div>
-        <div class="item-menu" onclick="location.href='#'"><i class="fa-solid fa-cart-shopping iconMenu"></i>Carrello</div>
-        <div class="item-menu" onclick="location.href='#'"><i class="fa-solid fa-circle-info iconMenu"></i>Chi siamo</div>
     </div>
 
 </body>

@@ -115,11 +115,11 @@ public class UtenteBean {
 
     public void setDataNascita(String data) {
 
-        String[] data_splitted = data.split("-");
+        String[] data_split = data.split("-");
 
-        int anno = Integer.parseInt(data_splitted[0]);
-        int mese = Integer.parseInt(data_splitted[1]);
-        int giorno = Integer.parseInt(data_splitted[2]);
+        int anno = Integer.parseInt(data_split[0]);
+        int mese = Integer.parseInt(data_split[1]);
+        int giorno = Integer.parseInt(data_split[2]);
 
         mese--;
 
@@ -135,11 +135,11 @@ public class UtenteBean {
 
     public void setDataRegistrazione(String data) {
 
-        String[] data_splitted = data.split("-");
+        String[] data_split = data.split("-");
 
-        int anno = Integer.parseInt(data_splitted[0]);
-        int mese = Integer.parseInt(data_splitted[1]);
-        int giorno = Integer.parseInt(data_splitted[2]);
+        int anno = Integer.parseInt(data_split[0]);
+        int mese = Integer.parseInt(data_split[1]);
+        int giorno = Integer.parseInt(data_split[2]);
 
         mese--;
 
