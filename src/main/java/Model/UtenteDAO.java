@@ -78,7 +78,7 @@ public class UtenteDAO {
         }
     }
 
-    public int doRetrieveByUsernamePassword(String email, String password) {
+    public int doRetrieveByEmailAndPassword(String email, String password) {
 
         try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps = con.prepareStatement(
@@ -93,6 +93,23 @@ public class UtenteDAO {
                 return rs.getInt(1);
             else
                 return -1;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean isAlreadyRegistered(String email) {
+
+        try (Connection con = ConPool.getConnection()) {
+            PreparedStatement ps = con.prepareStatement(
+                    "SELECT Email FROM Utente WHERE Email=?");
+
+            ps.setString(1, email);
+
+            ResultSet rs = ps.executeQuery();
+
+            return rs.next();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

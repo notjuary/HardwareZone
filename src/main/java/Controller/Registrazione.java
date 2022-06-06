@@ -28,27 +28,37 @@ public class Registrazione extends HttpServlet {
 
         UtenteDAO service = new UtenteDAO();
 
-        UtenteBean utente = new UtenteBean();
-        utente.setNome(nome);
-        utente.setCognome(cognome);
-        utente.setEmail(email);
-        utente.setPassword(password);
-        utente.setTelefono(telefono);
-        utente.setCitta(citta);
-        utente.setProvincia(provincia);
-        utente.setCodicePostale(codice_postale);
-        utente.setIndirizzo(indirizzo);
-        utente.setDataNascita(data);
-        utente.setDataRegistrazione();
+        if (!service.isAlreadyRegistered(email)) {
 
-        service.doSave(utente);
+            UtenteBean utente = new UtenteBean();
+            utente.setNome(nome);
+            utente.setCognome(cognome);
+            utente.setEmail(email);
+            utente.setPassword(password);
+            utente.setTelefono(telefono);
+            utente.setCitta(citta);
+            utente.setProvincia(provincia);
+            utente.setCodicePostale(codice_postale);
+            utente.setIndirizzo(indirizzo);
+            utente.setDataNascita(data);
+            utente.setDataRegistrazione();
 
-        HttpSession session = request.getSession();
-        session.setAttribute("nome-utente", utente.getNome());
-        session.setAttribute("id-utente", utente.getId());
+            service.doSave(utente);
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
-        dispatcher.forward(request, response);
+            HttpSession session = request.getSession();
+            session.setAttribute("nome-utente", utente.getNome());
+            session.setAttribute("id-utente", utente.getId());
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+            dispatcher.forward(request, response);
+        } else {
+
+            PrintWriter out = response.getWriter();
+            out.println("<script type=\"text/javascript\">");
+            out.println("alert('Utente già registrato');");
+            out.println("window.location.replace('register.jsp');");
+            out.println("</script>");
+        }
     }
 
     public void destroy() {
