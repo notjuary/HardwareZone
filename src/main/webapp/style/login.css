@@ -1,62 +1,45 @@
 div.login-form {
-    margin-top: 50px;
-    position: relative;
-    transform: translate(-50%, 0);
-    left: 50%;
-    display: inline-block;
-    padding: 20px 50px 20px 50px;
-    border: 2px solid #E5E5E5;
-    border-radius: 10px;
-}
-
-.login-text {
     display: block;
-    font-size: 14px;
-    color: #E5E5E5;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: solid 2px #EEE5E9;
+    border-radius: 15px;
+    padding: 20px 40px;
+    color: #EEE5E9;
 }
 
-input.register, input.login {
-    margin: 5px 0 5px 0;
-    color: #E5E5E5;
-    border-radius: 10px;
-    padding: 10px;
-    height: 20px;
-    font-size: 16px;
-    width: 250px;
-    background: #0F1A20;
-    outline-style: none;
+
+div.login-form div {
+    margin-bottom: 15px;
 }
 
-input.submit-login, input.show-tab-login-info, input.show-tab-personal-information, input.show-tab-address, input.show-review-login-info {
-    margin-top: 16px;
-    font-family: 'Poppins', sans-serif;
-    color: #E5E5E5;
-    border-radius: 10px;
-    padding: 10px;
-    height: 60px;
-    font-size: 16px;
-    width: 100%;
-    background: #0F1A20;
-    cursor: pointer;
-}
-
-input.submit-login:hover, input.show-tab-login-info:hover, input.show-tab-personal-information:hover, input.show-tab-address:hover, input.show-review-login-info:hover {
-    color: #0F1A20;
-    background: #E5E5E5;
-}
-
-input.submit-register {
-    font-family: 'Poppins', sans-serif;
-    color: #0F1A20;
-    border-radius: 10px;
-    padding: 10px;
-    height: 60px;
+div.login-form label {
+    display: block;
     font-size: 18px;
-    width: 100%;
-    background: #E5E5E5;
-    cursor: pointer;
+    margin-bottom: 5px;
 }
 
-.login-text a {
-    color: turquoise;
+div.login-form input {
+    display: block;
+    margin: auto;
+    background: none;
+    color: #EEE5E9;
+    border-radius: 10px;
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    outline: none;
+}
+
+div.login-form a {
+    color: #C92403;
+}
+
+input[type = "submit"]:hover {
+    background: #EEE5E9;
+    color: #0F1A20;
+    cursor: pointer;
 }

@@ -21,17 +21,25 @@
     <div class="login-form">
         <form action="login-servlet" method="post">
 
-            <label for="email" class="login-text">Email</label>
-            <input type="email" class="login" id="email" name="email" placeholder="Email">
-            <label for="password" class="login-text">Password</label>
-            <input type="password" class="login" id="password" name="password" placeholder="Password">
+            <div class="nome-utente">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Email">
+            </div>
 
-            <br/>
-            <input type="submit" value="Login" class="submit-login">
+            <div class="password-utente">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Password">
+            </div>
+
+            <div class="login-button">
+                <input type="submit" value="Login">
+            </div>
+
+            <div class="register-button">
+                <span>Nuovo utente? <a href="register.jsp">Crea un account</a></span>
+            </div>
+
         </form>
-
-        <p class="login-text">Nuovo utente?</p>
-        <input type="submit" value="Crea un account" class="submit-register" onclick="location.href='register.jsp'">
     </div>
 
 </body>

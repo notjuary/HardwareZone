@@ -54,10 +54,13 @@ public class Registrazione extends HttpServlet {
         } else {
 
             PrintWriter out = response.getWriter();
-            out.println("<script type=\"text/javascript\">");
-            out.println("alert('Utente già registrato');");
-            out.println("window.location.replace('register.jsp');");
-            out.println("</script>");
+            out.println("<div class=\"alert\">\n" +
+                    "  <span class=\"closebtn\" onclick=\"this.parentElement.style.display='none';\">&times;</span> \n" +
+                    "  <strong>Attenzione!</strong> Email già in uso\n" +
+                    "</div>");
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("register.jsp");
+            dispatcher.include(request, response);
         }
     }
 
