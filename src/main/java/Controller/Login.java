@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 @WebServlet(name = "loginServlet", value = "/login-servlet")
 public class Login extends HttpServlet {
@@ -40,12 +41,24 @@ public class Login extends HttpServlet {
                 dispatcher = request.getRequestDispatcher("index.jsp");
             }
 
-            dispatcher.forward(request, response);
+            PrintWriter out = response.getWriter();
+            out.println("<div class=\"success\">\n" +
+                    "  <span class=\"closebtn\" onclick=\"this.parentElement.style.display='none';\">&times;</span> \n" +
+                    "  <strong>Login eseguito</strong> \n" +
+                    "</div>");
+
+            dispatcher.include(request, response);
 
         } else {
 
+            PrintWriter out = response.getWriter();
+            out.println("<div class=\"alert\">\n" +
+                    "  <span class=\"closebtn\" onclick=\"this.parentElement.style.display='none';\">&times;</span> \n" +
+                    "  <strong>Attenzione!</strong> Email o password errate\n" +
+                    "</div>");
+
             RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
-            dispatcher.forward(request, response);
+            dispatcher.include(request, response);
         }
     }
 

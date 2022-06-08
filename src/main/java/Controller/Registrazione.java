@@ -49,6 +49,12 @@ public class Registrazione extends HttpServlet {
             session.setAttribute("nome-utente", utente.getNome());
             session.setAttribute("id-utente", utente.getId());
 
+            PrintWriter out = response.getWriter();
+            out.println("<div class=\"success\">\n" +
+                    "  <span class=\"closebtn\" onclick=\"this.parentElement.style.display='none';\">&times;</span> \n" +
+                    "  Registrazione effettuata\n" +
+                    "</div>");
+
             RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
             dispatcher.forward(request, response);
         } else {

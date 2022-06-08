@@ -14,7 +14,11 @@
 </head>
 <body>
 
-    <%@ include file="/resources/menu.jsp"%>
+    <%@ include file="/menu.jsp"%>
+
+    <div class="slide-show">
+        
+    </div>
 
 </body>
 </html>

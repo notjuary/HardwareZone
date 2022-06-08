@@ -16,9 +16,12 @@ public class Logout extends HttpServlet {
         session.invalidate();
 
         PrintWriter out = response.getWriter();
-        out.println("<script type=\"text/javascript\">");
-        out.println("alert('Logout eseguito');");
-        out.println("window.location.replace('index.jsp');");
-        out.println("</script>");
+        out.println("<div class=\"success\">\n" +
+                "  <span class=\"closebtn\" onclick=\"this.parentElement.style.display='none';\">&times;</span> \n" +
+                "  <strong>Logout eseguito</strong>\n" +
+                "</div>");
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+        dispatcher.include(request, response);
     }
 }

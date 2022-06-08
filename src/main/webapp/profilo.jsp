@@ -16,7 +16,7 @@
 </head>
 <body>
 
-    <%@ include file="/resources/menu.jsp"%>
+    <%@ include file="/menu.jsp"%>
 
     <div class="login-form">
         <form action="#" method="post">

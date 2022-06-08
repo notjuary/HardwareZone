@@ -6,7 +6,7 @@ div.login-form {
     transform: translate(-50%, -50%);
     border: solid 2px #EEE5E9;
     border-radius: 15px;
-    padding: 20px 40px;
+    padding: 20px;
     color: #EEE5E9;
 }
 
@@ -42,4 +42,22 @@ input[type = "submit"]:hover {
     background: #EEE5E9;
     color: #0F1A20;
     cursor: pointer;
+}
+
+div.register-button {
+    text-align: center;
+}
+
+@media screen and (max-width: 600px) {
+    div.login-form {
+        width: 60%;
+        box-sizing: border-box;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    div.login-form {
+        width: 90%;
+        box-sizing: border-box;
+    }
 }

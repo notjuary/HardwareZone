@@ -7,56 +7,46 @@
     <script src='https://kit.fontawesome.com/c6b30e1924.js' crossorigin='anonymous'></script>
 
     <script>
+        <%
+            String utente = (String) session.getAttribute("nome-utente");
+            String url;
 
+            if (utente == null) {
+                utente = "Accesso";
+                url = "location.href='login.jsp'";
+            } else {
+                url = "showSubMenu()";
+            }
+        %>
+
+        /*
         window.addEventListener("resize", browserSize);
         function browserSize() {
-            if (window.outerWidth > 1100) {
+            if (window.outerWidth > 1150) {
                 $("div.menu").css({"visibility": "visible", "display": "block"});
                 $("div.sub-menu").css({"visibility": "hidden", "display": "none"});
             }
             else
                 $("div.menu").css({"visibility": "hidden", "display": "none"});
-        }
+
+        }*/
 
         function showMenu() {
-            //noinspection JSJQueryEfficiency
-            let menu = $("div.menu").css("visibility");
-            if (menu === "hidden") {
-                $("div.menu").css({"visibility": "visible", "display": "block"});
-                $("div.sub-menu").css({"visibility": "hidden", "display": "none"});
-            }
-            else
-                $("div.menu").css({"visibility": "hidden", "display": "none"});
+            $("div.menu").slideToggle();
         }
 
         function showSubMenu() {
-            //noinspection JSJQueryEfficiency
-            let sub_menu = $("div.sub-menu").css("visibility");
-            if (sub_menu === "hidden")
-                $("div.sub-menu").css({"visibility": "visible", "display": "block"});
-            else
-                $("div.sub-menu").css({"visibility": "hidden", "display": "none"});
+            $("div.sub-menu").slideToggle();
         }
     </script>
 
 </head>
 <body>
 
-    <%
-        String utente = (String) session.getAttribute("nome-utente");
-        String url;
-
-        if (utente == null) {
-            utente = "Accesso";
-            url = "location.href='login.jsp'";
-        } else {
-            url = "showSubMenu()";
-        }
-    %>
-
     <div class="navigation-bar">
         <div class="show-menu" onclick="showMenu()"><i class="fa-solid fa-bars"></i></div>
         <div class="menu">
+            <div class="item-menu item-logo"><img src="img/Logo_Scritta.png" class="logo" alt="logo"></div>
             <div class="item-menu" onclick="location.href='index.jsp'"><i class="fa-solid fa-house iconMenu"></i>HomePage</div>
             <div class="item-menu" onclick="location.href='#'"><i class="fa-solid fa-book-open iconMenu"></i>Catalogo</div>
             <div class="item-menu" onclick="location.href='#'"><i class="fa-solid fa-dollar-sign iconMenu"></i>Offerte</div>

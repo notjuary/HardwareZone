@@ -16,7 +16,7 @@
 </head>
 <body>
 
-    <%@ include file="/resources/menu.jsp"%>
+    <%@ include file="/menu.jsp"%>
 
     <div class="login-form">
         <form action="login-servlet" method="post">
@@ -36,7 +36,7 @@
             </div>
 
             <div class="register-button">
-                <span>Nuovo utente? <a href="register.jsp">Crea un account</a></span>
+                <span>Nuovo utente? <a href="register.jsp"><br/>Crea un account</a></span>
             </div>
 
         </form>

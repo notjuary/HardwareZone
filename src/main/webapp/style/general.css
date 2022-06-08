@@ -5,13 +5,19 @@ body {
     background-color: #0F1A20;
 }
 
-.alert {
+div.alert {
     padding: 20px;
     background-color: #f44336;
     color: white;
 }
 
-.closebtn {
+div.success {
+    padding: 20px;
+    background-color: #2eb885;
+    color: white;
+}
+
+span.closebtn {
     margin-left: 15px;
     color: white;
     font-weight: bold;
@@ -22,6 +28,6 @@ body {
     transition: 0.3s;
 }
 
-.closebtn:hover {
+span.closebtn:hover {
     color: black;
 }
