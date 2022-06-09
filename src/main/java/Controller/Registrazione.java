@@ -51,9 +51,9 @@ public class Registrazione extends HttpServlet {
 
             PrintWriter out = response.getWriter();
             out.println("<div class=\"success\">\n" +
-                    "  <span class=\"closebtn\" onclick=\"this.parentElement.style.display='none';\">&times;</span> \n" +
-                    "  Registrazione effettuata\n" +
-                    "</div>");
+                    "    <span class=\"closebtn\" onclick=\"this.parentElement.style.display='none';\">&times;</span> \n" +
+                    "    Registrazione effettuata\n" +
+                    "    </div>");
 
             RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
             dispatcher.forward(request, response);
@@ -61,9 +61,9 @@ public class Registrazione extends HttpServlet {
 
             PrintWriter out = response.getWriter();
             out.println("<div class=\"alert\">\n" +
-                    "  <span class=\"closebtn\" onclick=\"this.parentElement.style.display='none';\">&times;</span> \n" +
-                    "  <strong>Attenzione!</strong> Email già in uso\n" +
-                    "</div>");
+                    "    <span class=\"closebtn\" onclick=\"this.parentElement.style.display='none';\">&times;</span> \n" +
+                    "    <strong>Attenzione!</strong> Email già in uso\n" +
+                    "    </div>");
 
             RequestDispatcher dispatcher = request.getRequestDispatcher("register.jsp");
             dispatcher.include(request, response);

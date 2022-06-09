@@ -41,9 +41,10 @@ span.closebtn:hover {
 div.footer {
     height: 300px;
     width: 100%;
-    position: relative;
+    position: absolute;
     bottom: 0;
     background: #fefefe;
+    display: block;
 }
 
 div.footer-logo {

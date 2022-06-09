@@ -43,9 +43,9 @@ public class Login extends HttpServlet {
 
             PrintWriter out = response.getWriter();
             out.println("<div class=\"success\">\n" +
-                    "  <span class=\"closebtn\" onclick=\"this.parentElement.style.display='none';\">&times;</span> \n" +
-                    "  <strong>Login eseguito</strong> \n" +
-                    "</div>");
+                    "    <span class=\"closebtn\" onclick=\"this.parentElement.style.display='none';\">&times;</span> \n" +
+                    "    <strong>Login eseguito</strong> \n" +
+                    "    </div>");
 
             dispatcher.include(request, response);
 
@@ -53,9 +53,9 @@ public class Login extends HttpServlet {
 
             PrintWriter out = response.getWriter();
             out.println("<div class=\"alert\">\n" +
-                    "  <span class=\"closebtn\" onclick=\"this.parentElement.style.display='none';\">&times;</span> \n" +
-                    "  <strong>Attenzione!</strong> Email o password errate\n" +
-                    "</div>");
+                    "    <span class=\"closebtn\" onclick=\"this.parentElement.style.display='none';\">&times;</span> \n" +
+                    "    <strong>Attenzione!</strong> Email o password errate\n" +
+                    "    </div>");
 
             RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
             dispatcher.include(request, response);

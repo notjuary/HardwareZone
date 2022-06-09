@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="style/login.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script type="text/javascript" src="script/validateform.js"></script>
+    <script type="text/javascript" src="script/validateForm.js"></script>
 
 </head>
 <body>

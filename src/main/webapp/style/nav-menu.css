@@ -1,6 +1,8 @@
 div.item-logo {
     background: none !important;
     padding: 0 !important;
+    height:54px;
+    margin-bottom: 10px;
 }
 
 img.logo {
@@ -39,12 +41,31 @@ div.item-menu {
     float: left;
 }
 
+div.admin-item-menu {
+    border-radius: 15px;
+    display: inline-block;
+    color: #0f1a20;
+    margin: 10px;
+    text-align: center;
+    padding: 15px;
+    background-color: #E5E5E5;
+    cursor: pointer;
+    box-sizing: border-box;
+    width: calc(100% / 5 - 20px);
+    float: left;
+}
+
+div.item-menu:hover, div.admin-item-menu:hover {
+    background-color: #C92403;
+    color: #E5E5E5;
+}
+
 div.show-menu {
     display: none;
     cursor: pointer;
 }
 
-div.item-menu:hover {
+div.active {
     background-color: #C92403;
     color: #E5E5E5;
 }
@@ -54,8 +75,7 @@ i.iconMenu {
 }
 
 div.sub-menu {
-    visibility: hidden;
-    display: none;
+    display: block;
     border-radius: 15px;
     position: absolute;
     top: 100%;
@@ -80,6 +100,10 @@ div.item-submenu:hover {
 }
 
 @media screen and (max-width: 1160px) {
+    body {
+        overflow: auto;
+    }
+
     div.show-menu {
         display: block;
         width: 100%;
@@ -88,8 +112,40 @@ div.item-submenu:hover {
         font-size: 20px;
     }
 
-    div.menu {
-        display: none;
+    div.navigation-bar {
+        display: block;
+    }
+
+    div.item-menu {
+        float: none !important;
+        display: block;
+        width: 200px;
+        margin: 5px auto auto;
+    }
+
+    div.item-logo {
+        margin-bottom: 10px;
+    }
+}
+
+@media screen and (max-height: 800px) and (max-width: 400px) {
+
+    div.item-logo {
+        margin-bottom: 10px;
+    }
+
+    div.admin-item-menu {
+        padding: 10px;
+        font-size: 12px;
+        width: 80%;
+    }
+
+    div.footer {
+        height: 80px;
+    }
+
+    div.footer img {
+        height: 100%;
     }
 }
 
