@@ -10,6 +10,7 @@
     <title>Utenti</title>
 
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/style/general.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/style/utentiStyle.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/script/eventManager.js"></script>
@@ -30,11 +31,14 @@
 
         <div class="bodyTable">
             <c:forEach items="${utenti}" var="utente">
-                <div>${utente.id}</div>
-                <div>${utente.nome}</div>
-                <div>${utente.cognome}</div>
-                <div>${utente.email}</div>
-                <div>Altro</div>
+                <div class="single-utente">
+                    <div>${utente.id}</div>
+                    <div>${utente.nome}</div>
+                    <div>${utente.cognome}</div>
+                    <div>${utente.email}</div>
+                    <div>...</div>
+                    <div><button class="" onclick=""></button></div>
+                </div>
             </c:forEach>
         </div>
     </div>
