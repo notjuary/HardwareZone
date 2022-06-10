@@ -21,7 +21,7 @@
     <div class="login-form">
         <form action="login-servlet" method="post">
 
-            <div class="nome-utente">
+            <div class="email-utente">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" placeholder="Email">
             </div>

@@ -13,7 +13,6 @@ div.navigation-bar {
     margin-top: 25px;
     display: flex;
     justify-content: center;
-    z-index: 1;
 }
 
 div.show-menu {
@@ -114,6 +113,12 @@ div.item-submenu:hover {
 
     div.navigation-bar {
         display: block;
+        background: #0F1A20;
+    }
+
+    div.menu {
+        display: none;
+        height: 100vh;
     }
 
     div.item-menu {

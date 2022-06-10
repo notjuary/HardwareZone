@@ -23,6 +23,6 @@ public class Profilo extends HttpServlet {
         request.setAttribute("profiloJSP", utente);
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("profilo.jsp");
-        dispatcher.forward(request, response);
+        dispatcher.include(request, response);
     }
 }

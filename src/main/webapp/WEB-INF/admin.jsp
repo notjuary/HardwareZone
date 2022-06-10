@@ -7,15 +7,15 @@
     <meta charset="UTF-8">
     <title>Admin Page</title>
 
-    <link rel="stylesheet" type="text/css" href="style/general.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/style/general.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script type="text/javascript" src="script/eventManager.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/script/eventManager.js"></script>
 
 </head>
 <body>
 
-    <%@ include file="/adminmenu.jsp"%>
+    <%@ include file="/WEB-INF/adminmenu.jsp"%>
 
 </body>
 </html>

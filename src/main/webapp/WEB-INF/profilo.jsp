@@ -8,8 +8,8 @@
     <meta charset="UTF-8">
     <title>Profilo</title>
 
-    <link rel="stylesheet" type="text/css" href="style/general.css">
-    <link rel="stylesheet" type="text/css" href="style/login.css">
+    <link rel="stylesheet" type="text/css" href="../style/general.css">
+    <link rel="stylesheet" type="text/css" href="../style/login.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 

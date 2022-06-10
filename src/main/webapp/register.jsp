@@ -32,49 +32,97 @@
         <form action="registrazione-servlet" method="post">
 
             <div class="tab-personal-information">
-                <label for="nome" class="login-text">Nome</label>
-                <input type="text" class="register" id="nome" name="nome" placeholder="Nome">
-                <label for="cognome" class="login-text">Cognome</label>
-                <input type="text" class="register" id="cognome" name="cognome" placeholder="Cognome">
-                <label for="data-di-nascita" class="login-text">Data di nascita</label>
-                <input type="date" class="register" id="data-di-nascita" name="data-di-nascita" placeholder="Data di nascita">
 
-                <br/>
-                <input type="button" value="Avanti" class="show-tab-login-info" onclick="validatePersonalInformation()"><br/>
+                <div class="nome-utente">
+                    <label for="nome" class="login-text">Nome</label>
+                    <input type="text" class="register" id="nome" name="nome" placeholder="Nome">
+                </div>
+
+                <div class="cognome-utente">
+                    <label for="cognome" class="login-text">Cognome</label>
+                    <input type="text" class="register" id="cognome" name="cognome" placeholder="Cognome">
+                </div>
+
+                <div class="data-nascita">
+                    <label for="data-di-nascita" class="login-text">Data di nascita</label>
+                    <input type="date" class="register" id="data-di-nascita" name="data-di-nascita" placeholder="Data di nascita">
+                </div>
+
+                <div class="login-button">
+                    <input type="button" value="Avanti" class="show-tab-login-info" onclick="validatePersonalInformation()">
+                </div>
+
             </div>
 
             <div class="tab-login-information">
-                <label for="email" class="login-text">Email</label>
-                <input type="email" class="register" id="email" name="email" placeholder="Email">
-                <label for="password" class="login-text">Password</label>
-                <input type="password" class="register" id="password" name="password" placeholder="Password">
-                <label for="telefono" class="login-text">Telefono</label>
-                <input type="tel" class="register" id="telefono" name="telefono" placeholder="Telefono">
 
-                <br/>
-                <input type="button" value="Indietro" class="show-tab-personal-information" onclick="showTabPersonalInformation()"><br/>
-                <input type="button" value="Avanti" class="show-tab-address" onclick="validateLoginInformation()"><br/>
+                <div class="email-utente">
+                    <label for="email" class="login-text">Email</label>
+                    <input type="email" class="register" id="email" name="email" placeholder="Email">
+                </div>
+
+                <div class="password-utente">
+                    <label for="password" class="login-text">Password</label>
+                    <input type="password" class="register" id="password" name="password" placeholder="Password">
+                </div>
+
+                <div class="telefono-utente">
+                    <label for="telefono" class="login-text">Telefono</label>
+                    <input type="tel" class="register" id="telefono" name="telefono" placeholder="Telefono">
+                </div>
+
+                <div class="login-button">
+                    <input type="button" value="Indietro" class="show-tab-personal-information" onclick="showTabPersonalInformation()">
+                </div>
+
+                <div class="login-button">
+                    <input type="button" value="Avanti" class="show-tab-address" onclick="validateLoginInformation()">
+                </div>
+
             </div>
 
             <div class="tab-address-information">
-                <label for="citta" class="login-text">Città</label>
-                <input type="text" class="register" id="citta" name="citta" placeholder="Città">
-                <label for="provincia" class="login-text">Provincia</label>
-                <input type="text" class="register" id="provincia" name="provincia" placeholder="Provincia">
-                <label for="codice-postale" class="login-text">Codice Postale</label>
-                <input type="text" class="register" id="codice-postale" name="codice-postale" placeholder="Codice Postale">
-                <label for="indirizzo" class="login-text">Indirizzo</label>
-                <input type="text" class="register" id="indirizzo" name="indirizzo" placeholder="Indirizzo">
 
-                <br/>
-                <input type="button" value="Indietro" class="show-tab-login-info" onclick="showTabLoginInformation()"><br/>
-                <input type="button" value="Avanti" class="show-review-login-info" onclick="validateAddressInformation()"><br/>
+                <div class="citta-utente">
+                    <label for="citta" class="login-text">Città</label>
+                    <input type="text" class="register" id="citta" name="citta" placeholder="Città">
+                </div>
+
+                <div class="provincia-utente">
+                    <label for="provincia" class="login-text">Provincia</label>
+                    <input type="text" class="register" id="provincia" name="provincia" placeholder="Provincia">
+                </div>
+
+                <div class="codice-postale-utente">
+                    <label for="codice-postale" class="login-text">Codice Postale</label>
+                    <input type="text" class="register" id="codice-postale" name="codice-postale" placeholder="Codice Postale">
+                </div>
+
+                <div class="indirizzo-utente">
+                    <label for="indirizzo" class="login-text">Indirizzo</label>
+                    <input type="text" class="register" id="indirizzo" name="indirizzo" placeholder="Indirizzo">
+                </div>
+
+                <div class="login-button">
+                    <input type="button" value="Indietro" class="show-tab-login-info" onclick="showTabLoginInformation()">
+                </div>
+
+                <div class="login-button">
+                    <input type="button" value="Avanti" class="show-review-login-info" onclick="validateAddressInformation()">
+                </div>
+
             </div>
 
             <div class="tab-review-information">
                 <p class="login-text">Conferma registrazione</p>
-                <input type="button" value="Annulla" class="show-tab-login-info" onclick="showTabPersonalInformation()"><br/>
-                <input type="submit" value="Crea un account" class="submit-register" style="margin-top: 16px !important;">
+
+                <div class="login-button">
+                    <input type="button" value="Annulla" class="show-tab-login-info" onclick="showTabPersonalInformation()">
+                </div>
+
+                <div class="register-button">
+                    <input type="submit" value="Crea un account" class="submit-register">
+                </div>
             </div>
 
         </form>

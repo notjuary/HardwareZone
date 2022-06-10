@@ -36,7 +36,7 @@ public class Login extends HttpServlet {
             RequestDispatcher dispatcher;
 
             if (utente.isAdmin()) {
-                dispatcher = request.getRequestDispatcher("admin.jsp");
+                dispatcher = request.getRequestDispatcher("WEB-INF/admin.jsp");
             } else {
                 dispatcher = request.getRequestDispatcher("index.jsp");
             }

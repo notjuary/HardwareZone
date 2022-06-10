@@ -1,13 +1,14 @@
 div.login-form {
     display: block;
     position: absolute;
-    top: 50%;
+    margin-top: 50px;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, 0);
     border: solid 2px #EEE5E9;
     border-radius: 15px;
     padding: 20px;
     color: #EEE5E9;
+    z-index: -1;
 }
 
 
@@ -38,7 +39,7 @@ div.login-form a {
     color: #C92403;
 }
 
-input[type = "submit"]:hover {
+input[type = "submit"]:hover, input[type = "button"]:hover {
     background: #EEE5E9;
     color: #0F1A20;
     cursor: pointer;

@@ -56,7 +56,7 @@ public class Registrazione extends HttpServlet {
                     "    </div>");
 
             RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
-            dispatcher.forward(request, response);
+            dispatcher.include(request, response);
         } else {
 
             PrintWriter out = response.getWriter();

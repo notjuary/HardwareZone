@@ -1,6 +1,7 @@
 package Model;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class UtenteDAO {
 
@@ -110,6 +111,43 @@ public class UtenteDAO {
             ResultSet rs = ps.executeQuery();
 
             return rs.next();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ArrayList<UtenteBean> doRetrieveAll() {
+
+        try (Connection con = ConPool.getConnection()) {
+            PreparedStatement ps = con.prepareStatement(
+                    "SELECT * FROM Utente ORDER BY ID_Utente");
+
+            ArrayList<UtenteBean> listaUtenti = new ArrayList<UtenteBean>();
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                UtenteBean utente = new UtenteBean();
+
+                utente.setId(rs.getInt(1));
+                utente.setNome(rs.getString(2));
+                utente.setCognome(rs.getString(3));
+                utente.setDataNascita(rs.getString(4));
+                utente.setEmail(rs.getString(5));
+                utente.setPassword(rs.getString(6));
+                utente.setTelefono(rs.getString(7));
+                utente.setCitta(rs.getString(8));
+                utente.setProvincia(rs.getString(9));
+                utente.setCodicePostale(rs.getString(10));
+                utente.setIndirizzo(rs.getString(11));
+                utente.setDataRegistrazione(rs.getString(12));
+                utente.setStato(rs.getBoolean(13));
+                utente.setAdmin(rs.getBoolean(14));
+
+                listaUtenti.add(utente);
+            }
+
+            return listaUtenti;
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
