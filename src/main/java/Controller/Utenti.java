@@ -7,8 +7,7 @@ import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet(name = "utentiServlet", value = "/utenti-servlet")
 public class Utenti extends HttpServlet {
@@ -17,7 +16,7 @@ public class Utenti extends HttpServlet {
 
         UtenteDAO service = new UtenteDAO();
 
-        ArrayList<UtenteBean> listaUtenti = service.doRetrieveAll();
+        List<UtenteBean> listaUtenti = service.doRetrieveAll();
 
         request.setAttribute("utenti", listaUtenti);
 

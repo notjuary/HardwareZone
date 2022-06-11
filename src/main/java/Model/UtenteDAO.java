@@ -2,6 +2,7 @@ package Model;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class UtenteDAO {
 
@@ -24,8 +25,8 @@ public class UtenteDAO {
             ps.setString(9, utenteBean.getCodicePostale());
             ps.setString(10, utenteBean.getIndirizzo());
             ps.setString(11, utenteBean.getDataRegistrazione());
-            ps.setBoolean(12, utenteBean.isActive());
-            ps.setBoolean(13, utenteBean.isAdmin());
+            ps.setString(12, utenteBean.isActive());
+            ps.setString(13, utenteBean.isAdmin());
 
 
             if (ps.executeUpdate() != 1) {
@@ -66,8 +67,8 @@ public class UtenteDAO {
                 utente.setCodicePostale(rs.getString(10));
                 utente.setIndirizzo(rs.getString(11));
                 utente.setDataRegistrazione(rs.getString(12));
-                utente.setStato(rs.getBoolean(13));
-                utente.setAdmin(rs.getBoolean(14));
+                utente.setStato(rs.getString(13));
+                utente.setAdmin(rs.getString(14));
 
                 return utente;
             }
@@ -117,7 +118,7 @@ public class UtenteDAO {
         }
     }
 
-    public ArrayList<UtenteBean> doRetrieveAll() {
+    public List<UtenteBean> doRetrieveAll() {
 
         try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps = con.prepareStatement(
@@ -141,8 +142,8 @@ public class UtenteDAO {
                 utente.setCodicePostale(rs.getString(10));
                 utente.setIndirizzo(rs.getString(11));
                 utente.setDataRegistrazione(rs.getString(12));
-                utente.setStato(rs.getBoolean(13));
-                utente.setAdmin(rs.getBoolean(14));
+                utente.setStato(rs.getString(13));
+                utente.setAdmin(rs.getString(14));
 
                 listaUtenti.add(utente);
             }

@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="Model.UtenteBean" %><%--@elvariable id="utenti" type="model.UtenteBean"--%>
+<%@ page import="Model.UtenteBean" %>
+<%--@elvariable id="utenti" type="model.UtenteBean"--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -29,6 +30,8 @@
             <div>Stato</div>
         </div>
 
+        <div>${utenti[0].stato}</div>
+
         <div class="bodyTable">
             <c:forEach items="${utenti}" var="utente">
                 <div class="single-utente">
@@ -36,8 +39,8 @@
                     <div>${utente.nome}</div>
                     <div>${utente.cognome}</div>
                     <div>${utente.email}</div>
-                    <div>...</div>
-                    <div><button class="" onclick=""></button></div>
+                    <div>${utente.telefono}</div>
+                    <div><button class="button-show-more" onclick="">Altro</button></div>
                 </div>
             </c:forEach>
         </div>

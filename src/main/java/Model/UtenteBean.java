@@ -10,9 +10,8 @@ import java.util.GregorianCalendar;
 public class UtenteBean {
 
     private int id;
-    private String nome, cognome, email, password, telefono, citta, provincia, codice_postale, indirizzo;
+    private String nome, cognome, email, password, telefono, citta, provincia, codice_postale, indirizzo, stato, admin;
     private GregorianCalendar data_nascita, data_registrazione;
-    private boolean stato, admin;
 
     public UtenteBean() {}
 
@@ -151,18 +150,18 @@ public class UtenteBean {
         this.data_registrazione = new GregorianCalendar();
     }
 
-    public boolean isActive() {
+    public String isActive() {
         return stato;
     }
 
-    public void setStato(boolean stato) {
+    public void setStato(String stato) {
 
         this.stato = stato;
     }
 
-    public boolean isAdmin() { return admin; }
+    public String isAdmin() { return admin; }
 
-    public void setAdmin(boolean admin) {
+    public void setAdmin(String admin) {
 
         this.admin = admin;
     }

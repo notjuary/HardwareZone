@@ -16,8 +16,8 @@ CREATE TABLE Utente (
     Codice_Postale CHAR(5) NOT NULL,
     Indirizzo VARCHAR(30) NOT NULL,
     Data_Registrazione DATE NOT NULL,
-    Stato BOOLEAN DEFAULT TRUE,
-    Amministratore BOOLEAN DEFAULT FALSE
+    Stato VARCHAR(5) DEFAULT "true",
+    Amministratore VARCHAR(5) DEFAULT "false"
 );
 
 CREATE TABLE Carrello (
@@ -81,6 +81,6 @@ CREATE TABLE Fattura (
     Indirizzo VARCHAR(10) NOT NULL
 );
 
-INSERT INTO Utente (Nome, Cognome, Data_Nascita, Email, Accesso, Telefono, Citta, Provincia, Codice_Postale, Indirizzo, Data_Registrazione, Stato, Amministratore) VALUES("Teodoro","Grauso","2001-10-12","teo@ecommerce.com","5cec175b165e3d5e62c9e13ce848ef6feac81bff","1234567890","Fisciano","SA","84040","Via, 1","2022-01-01",TRUE,TRUE);
-INSERT INTO Utente (Nome, Cognome, Data_Nascita, Email, Accesso, Telefono, Citta, Provincia, Codice_Postale, Indirizzo, Data_Registrazione, Stato, Amministratore) VALUES("Michele","Spinelli","2000-07-06","mike@ecommerce.com","5cec175b165e3d5e62c9e13ce848ef6feac81bff","1234567890","Fisciano","SA","84040","Via, 2","2022-01-01",TRUE,TRUE);
-INSERT INTO Utente (Nome, Cognome, Data_Nascita, Email, Accesso, Telefono, Citta, Provincia, Codice_Postale, Indirizzo, Data_Registrazione, Stato, Amministratore) VALUES("Junhuang","Chen","2001-02-11","junhuang@ecommerce.com","5cec175b165e3d5e62c9e13ce848ef6feac81bff","1234567890","Fisciano","SA","84040","Via, 3","2022-01-01",TRUE,TRUE);
+INSERT INTO Utente (Nome, Cognome, Data_Nascita, Email, Accesso, Telefono, Citta, Provincia, Codice_Postale, Indirizzo, Data_Registrazione, Stato, Amministratore) VALUES("Teodoro","Grauso","2001-10-12","teo@ecommerce.com","5cec175b165e3d5e62c9e13ce848ef6feac81bff","1234567890","Fisciano","SA","84040","Via, 1","2022-01-01","true","true");
+INSERT INTO Utente (Nome, Cognome, Data_Nascita, Email, Accesso, Telefono, Citta, Provincia, Codice_Postale, Indirizzo, Data_Registrazione, Stato, Amministratore) VALUES("Michele","Spinelli","2000-07-06","mike@ecommerce.com","5cec175b165e3d5e62c9e13ce848ef6feac81bff","1234567890","Fisciano","SA","84040","Via, 2","2022-01-01","true","true");
+INSERT INTO Utente (Nome, Cognome, Data_Nascita, Email, Accesso, Telefono, Citta, Provincia, Codice_Postale, Indirizzo, Data_Registrazione, Stato, Amministratore) VALUES("Junhuang","Chen","2001-02-11","junhuang@ecommerce.com","5cec175b165e3d5e62c9e13ce848ef6feac81bff","1234567890","Fisciano","SA","84040","Via, 3","2022-01-01","true","true");

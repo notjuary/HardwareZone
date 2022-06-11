@@ -42,6 +42,8 @@ public class Registrazione extends HttpServlet {
             utente.setIndirizzo(indirizzo);
             utente.setDataNascita(data);
             utente.setDataRegistrazione();
+            utente.setStato("true");
+            utente.setAdmin("false");
 
             service.doSave(utente);
 

@@ -1,4 +1,4 @@
-.headerTable{
+div.headerTable{
     margin-top: 30px;
     color: white;
     display: grid;
@@ -11,7 +11,7 @@
     border-bottom: 1px solid;
 }
 
-.single-utente{
+div.single-utente{
     margin-top: 30px;
     color: white;
     display: grid;
@@ -25,3 +25,14 @@
     border: 1px solid;
     border-radius: 10px;
 }
+
+button.button-show-more {
+    transition: 0.5s;
+    color: black;
+    padding: 5px;
+}
+button.button-show-more:hover {
+    transition: 0.5s;
+    background: red;
+}
+
