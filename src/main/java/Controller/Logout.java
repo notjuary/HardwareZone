@@ -24,4 +24,7 @@ public class Logout extends HttpServlet {
         RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
         dispatcher.include(request, response);
     }
+
+    public void destroy() {
+    }
 }

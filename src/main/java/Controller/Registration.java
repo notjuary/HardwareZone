@@ -2,54 +2,53 @@ package Controller;
 
 import java.io.*;
 
-import Model.UtenteBean;
-import Model.UtenteDAO;
+import Model.UserBean;
+import Model.UserDAO;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
-@WebServlet(name = "registrazioneServlet", value = "/registrazione-servlet")
-public class Registrazione extends HttpServlet {
+@WebServlet(name = "registrationServlet", value = "/registration-servlet")
+public class Registration extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         response.setContentType("text/html");
 
-        String nome = request.getParameter("nome");
-        String cognome = request.getParameter("cognome");
+        String name = request.getParameter("name");
+        String surname = request.getParameter("surname");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
-        String telefono = request.getParameter("telefono");
-        String citta = request.getParameter("citta");
-        String provincia = request.getParameter("provincia");
-        String codice_postale = request.getParameter("codice-postale");
-        String indirizzo = request.getParameter("indirizzo");
-        String data = request.getParameter("data-di-nascita");
+        String phone = request.getParameter("phone");
+        String city = request.getParameter("city");
+        String province = request.getParameter("province");
+        String postalCode = request.getParameter("postalCode");
+        String address = request.getParameter("address");
+        String date = request.getParameter("birthday");
 
-        UtenteDAO service = new UtenteDAO();
+        UserDAO service = new UserDAO();
 
         if (!service.isAlreadyRegistered(email)) {
 
-            UtenteBean utente = new UtenteBean();
-            utente.setNome(nome);
-            utente.setCognome(cognome);
-            utente.setEmail(email);
-            utente.setPassword(password);
-            utente.setTelefono(telefono);
-            utente.setCitta(citta);
-            utente.setProvincia(provincia);
-            utente.setCodicePostale(codice_postale);
-            utente.setIndirizzo(indirizzo);
-            utente.setDataNascita(data);
-            utente.setDataRegistrazione();
-            utente.setStato("true");
-            utente.setAdmin("false");
+            UserBean user = new UserBean();
+            user.setName(name);
+            user.setSurname(surname);
+            user.setEmail(email);
+            user.setPassword(password);
+            user.setPhone(phone);
+            user.setCity(city);
+            user.setProvince(province);
+            user.setPostalCode(postalCode);
+            user.setAddress(address);
+            user.setBirthday(date);
+            user.setRegister();
+            user.setState("true");
+            user.setAdmin("false");
 
-            service.doSave(utente);
+            service.doSave(user);
 
             HttpSession session = request.getSession();
-            session.setAttribute("nome-utente", utente.getNome());
-            session.setAttribute("id-utente", utente.getId());
+            session.setAttribute("user", user);
 
             PrintWriter out = response.getWriter();
             out.println("<div class=\"success\">\n" +

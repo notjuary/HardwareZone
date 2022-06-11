@@ -1,5 +1,5 @@
-const info_string = /^([a-zA-Z\xE0\xE8\xE9\xF9\xF2\xEC\x27]\s?){2,30}$/ /* caratteri, lettere accentate apostrofo e un solo spazio fra le parole*/
-const email_string = /^[a-zA-Z\d._%-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,30}$/; /*	caratteri e . _ % – + @ + caratteri compreso . + . + min 2, max 4 caratteri*/
+const info_string = /^([a-zA-Z\xE0\xE8\xE9\xF9\xF2\xEC\x27]\s?){2,20}$/ /* caratteri, lettere accentate apostrofo e un solo spazio fra le parole*/
+const email_string = /^[a-zA-Z\d._%-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,20}$/; /*	caratteri e . _ % – + @ + caratteri compreso . + . + min 2, max 4 caratteri*/
 const password_string = /^[a-zA-Z\d\-\xE0\xE8\xE9\xF9\xF2\xEC\x27]{6,16}/; /* minimo sei, max 12 di caratteri, numeri, _ * – + ! ? , : ; . e lettere accentate*/
 const phone_string = /^\d{10}$/ /*10 numeri*/
 const provincia_string = /^([a-zA-Z]{2})$/;
@@ -36,27 +36,27 @@ function showTabReviewInformation() {
 
 function validatePersonalInformation() {
 
-    let nome = document.getElementById("nome").value;
-    let cognome = document.getElementById("cognome").value;
-    let data_nascita = document.getElementById("data-di-nascita").value;
+    let name = document.getElementById("name").value;
+    let surname = document.getElementById("surname").value;
+    let birthday = document.getElementById("birthday").value;
 
-    if (info_string.test(nome) && info_string.test(cognome) && data_nascita !== "") {
+    if (info_string.test(name) && info_string.test(surname) && birthday !== "") {
         $("input").css("border-color", "#E5E5E5");
         showTabLoginInformation();
     }
 
     else {
-        if (!(info_string.test(nome)))
-            $("#nome").css("border-color", "#C92403");
+        if (!(info_string.test(name)))
+            $("#name").css("border-color", "#C92403");
         else
-            $("#nome").css("border-color", "#E5E5E5");
+            $("#name").css("border-color", "#E5E5E5");
 
-        if (!(info_string.test(cognome)))
-            $("#cognome").css("border-color", "#C92403");
+        if (!(info_string.test(surname)))
+            $("#surname").css("border-color", "#C92403");
         else
-            $("#cognome").css("border-color", "#E5E5E5");
+            $("#surname").css("border-color", "#E5E5E5");
 
-        if (data_nascita === "")
+        if (birthday === "")
             $("#data-di-nascita").css("border-color", "#C92403");
         else
             $("#data-di-nascita").css("border-color", "#E5E5E5");
@@ -67,9 +67,9 @@ function validateLoginInformation() {
 
     let email = document.getElementById("email").value;
     let password = document.getElementById("password").value;
-    let telefono = document.getElementById("telefono").value;
+    let phone = document.getElementById("phone").value;
 
-    if (email_string.test(email) && password_string.test(password) && phone_string.test(telefono)) {
+    if (email_string.test(email) && password_string.test(password) && phone_string.test(phone)) {
         $("input").css("border-color", "#E5E5E5");
         showTabAddressInformation();
     }
@@ -84,43 +84,43 @@ function validateLoginInformation() {
         else
             $("#password").css("border-color", "#E5E5E5");
 
-        if (!(phone_string.test(telefono)))
-            $("#telefono").css("border-color", "#C92403");
+        if (!(phone_string.test(phone)))
+            $("#phone").css("border-color", "#C92403");
         else
-            $("#telefono").css("border-color", "#E5E5E5");
+            $("#phone").css("border-color", "#E5E5E5");
     }
 }
 
 function validateAddressInformation() {
 
-    let citta = document.getElementById("citta").value;
-    let provincia = document.getElementById("provincia").value;
-    let codice_postale = document.getElementById("codice-postale").value;
-    let indirizzo = document.getElementById("indirizzo").value;
+    let city = document.getElementById("city").value;
+    let province = document.getElementById("province").value;
+    let postalCode = document.getElementById("postalCode").value;
+    let address = document.getElementById("address").value;
 
-    if (info_string.test(citta) && provincia_string.test(provincia) && cap_string.test(codice_postale) && address_string.test(indirizzo)) {
+    if (info_string.test(city) && provincia_string.test(province) && cap_string.test(postalCode) && address_string.test(address)) {
         $("input").css("border-color", "#E5E5E5");
         showTabReviewInformation();
     }
     else {
-        if (!(info_string.test(citta)))
-            $("#citta").css("border-color", "#C92403");
+        if (!(info_string.test(city)))
+            $("#city").css("border-color", "#C92403");
         else
-            $("#citta").css("border-color", "#E5E5E5");
+            $("#city").css("border-color", "#E5E5E5");
 
-        if (!(info_string.test(provincia)))
-            $("#provincia").css("border-color", "#C92403");
+        if (!(info_string.test(province)))
+            $("#province").css("border-color", "#C92403");
         else
-            $("#provincia").css("border-color", "#E5E5E5");
+            $("#province").css("border-color", "#E5E5E5");
 
-        if (!(cap_string.test(codice_postale)))
+        if (!(cap_string.test(postalCode)))
             $("#codice-postale").css("border-color", "#C92403");
         else
             $("#codice-postale").css("border-color", "#E5E5E5");
 
-        if (!(address_string.test(indirizzo)))
-            $("#indirizzo").css("border-color", "#C92403");
+        if (!(address_string.test(address)))
+            $("#address").css("border-color", "#C92403");
         else
-            $("#indirizzo").css("border-color", "#E5E5E5");
+            $("#address").css("border-color", "#E5E5E5");
     }
 }

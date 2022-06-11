@@ -1,3 +1,4 @@
+<%@ page import="Model.UserBean" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="it-IT">
@@ -8,13 +9,15 @@
 
     <script>
         <%
-            String utente = (String) session.getAttribute("nome-utente");
-            String url;
+            UserBean user = (UserBean) session.getAttribute("user");
 
-            if (utente == null) {
-                utente = "Accesso";
+            String name, url;
+
+            if (user == null) {
+                name = "Accesso";
                 url = "location.href='login.jsp'";
             } else {
+                name = user.getName();
                 url = "showSubMenu(this)";
             }
         %>
@@ -69,17 +72,17 @@
     <div class="show-menu" onclick="showMenu()"><i class="fa-solid fa-bars"></i></div>
     <div class="menu">
         <div class="admin-item-menu item-logo" onclick="location.href='#'"><img src="${pageContext.request.contextPath}/img/Logo_NoScritta.png" class="logo" alt="logo"></div>
-        <div class="admin-item-menu" onclick="location.href='utenti-servlet'" data-name="HomePage"><i class="fa-solid fa-house iconMenu"></i>Utenti</div>
+        <div class="admin-item-menu" onclick="location.href='user-servlet'" data-name="HomePage"><i class="fa-solid fa-house iconMenu"></i>Utenti</div>
         <div class="admin-item-menu" onclick="location.href='#'" data-name="Ordini"><i class="fa-solid fa-book-open iconMenu"></i>Ordini</div>
         <div class="admin-item-menu" onclick="showSubMenu(this)" style="position: relative" data-name="Prodotti"><i class="fa-solid fa-dollar-sign iconMenu"></i>Prodotti
             <div class="sub-menu" data-name="Prodotti">
-                <div class="item-submenu" onclick="location.href='#'">Aggiungi</div>
-                <div class="item-submenu" onclick="location.href='logout-servlet'">Gestione</div>
+                <div class="item-submenu" onclick="location.href='#'" data-name="Prodotti">Aggiungi</div>
+                <div class="item-submenu" onclick="location.href='logout-servlet'" data-name="Prodotti">Gestione</div>
             </div>
         </div>
-        <div class="admin-item-menu" onclick="<%= url %>" style="position: relative" data-name="Login"><i class="fa-solid fa-user iconMenu"></i><%= utente %>
+        <div class="admin-item-menu" onclick="<%= url %>" style="position: relative" data-name="Login"><i class="fa-solid fa-user iconMenu"></i><%= name %>
             <div class="sub-menu" data-name="Login">
-                <div class="item-submenu" onclick="location.href='#'">Profilo</div>
+                <div class="item-submenu" onclick="location.href='admin-profile-servlet'" data-name="Login">Profilo</div>
                 <div class="item-submenu" onclick="location.href='logout-servlet'">Logout</div>
             </div>
         </div>

@@ -1,7 +1,7 @@
 package Controller;
 
-import Model.UtenteBean;
-import Model.UtenteDAO;
+import Model.UserBean;
+import Model.UserDAO;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -22,20 +22,19 @@ public class Login extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        UtenteDAO service = new UtenteDAO();
+        UserDAO service = new UserDAO();
         int login = service.doRetrieveByEmailAndPassword(email, password);
 
         if (login != -1) {
 
-            UtenteBean utente = service.doRetrieveById(login);
+            UserBean user = service.doRetrieveById(login);
 
             HttpSession session = request.getSession();
-            session.setAttribute("nome-utente", utente.getNome());
-            session.setAttribute("id-utente", utente.getId());
+            session.setAttribute("user", user);
 
             RequestDispatcher dispatcher;
 
-            if (utente.isAdmin().equals("true")) {
+            if (user.isAdmin().equalsIgnoreCase("true")) {
                 dispatcher = request.getRequestDispatcher("WEB-INF/admin.jsp");
             } else {
                 dispatcher = request.getRequestDispatcher("index.jsp");

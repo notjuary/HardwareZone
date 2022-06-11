@@ -15,7 +15,7 @@
 </head>
 <body>
 
-    <%@ include file="/WEB-INF/adminmenu.jsp"%>
+    <%@ include file="/WEB-INF/menu-admin.jsp"%>
 
 </body>
 </html>

@@ -1,4 +1,4 @@
-div.headerTable{
+div.headerTable {
     margin-top: 30px;
     color: white;
     display: grid;
@@ -11,7 +11,7 @@ div.headerTable{
     border-bottom: 1px solid;
 }
 
-div.single-utente{
+div.single-user {
     margin-top: 30px;
     color: white;
     display: grid;

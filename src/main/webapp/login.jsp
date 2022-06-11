@@ -21,12 +21,12 @@
     <div class="login-form">
         <form action="login-servlet" method="post">
 
-            <div class="email-utente">
+            <div class="user-email">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" placeholder="Email">
             </div>
 
-            <div class="password-utente">
+            <div class="user-password">
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" placeholder="Password">
             </div>
