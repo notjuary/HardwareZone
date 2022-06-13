@@ -14,15 +14,6 @@
     <script type="text/javascript" src="script/validateForm.js"></script>
     <script type="text/javascript" src="script/eventManager.js"></script>
 
-    <script>
-        $(document).ready(function() {
-            $(".tab-personal-information").show();
-            $(".tab-login-information").hide();
-            $(".tab-address-information").hide();
-            $(".tab-review-information").hide();
-        });
-    </script>
-
 </head>
 <body>
 

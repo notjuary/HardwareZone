@@ -1,10 +1,14 @@
-const info_string = /^([a-zA-Z\xE0\xE8\xE9\xF9\xF2\xEC\x27]\s?){2,20}$/ /* caratteri, lettere accentate apostrofo e un solo spazio fra le parole*/
-const email_string = /^[a-zA-Z\d._%-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,20}$/; /*	caratteri e . _ % – + @ + caratteri compreso . + . + min 2, max 4 caratteri*/
-const password_string = /^[a-zA-Z\d\-\xE0\xE8\xE9\xF9\xF2\xEC\x27]{6,16}/; /* minimo sei, max 12 di caratteri, numeri, _ * – + ! ? , : ; . e lettere accentate*/
-const phone_string = /^\d{10}$/ /*10 numeri*/
-const provincia_string = /^([a-zA-Z]{2})$/;
-const cap_string = /^\d{5}$/; /*Cinque numeri*/
-const address_string = /^([a-zA-Z\d\xE0\xE8\xE9\xF9\xF2\xEC\x27\x2C]\s?)+$/;
+const info_string = /^([a-zA-Z\xE0\xE8\xE9\xF9\xF2\xEC\x27]\s?){2,20}$/;
+const email_string = /^[a-zA-Z\d._%-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,20}$/;
+const password_string = /^[a-zA-Z\d\-\xE0\xE8\xE9\xF9\xF2\xEC\x27]{6,16}/;
+const phone_string = /^\d{10}$/;
+const province_string = /^([a-zA-Z]{2})$/;
+const postalcode_string = /^\d{5}$/;
+const address_string = /^([a-zA-Z\d\xE0\xE8\xE9\xF9\xF2\xEC\x27\x2C]{2,20}\s?)+$/;
+
+$(document).ready(function() {
+    showTabPersonalInformation();
+});
 
 function showTabPersonalInformation() {
     $(".tab-personal-information").show();
@@ -98,7 +102,7 @@ function validateAddressInformation() {
     let postalCode = document.getElementById("postalCode").value;
     let address = document.getElementById("address").value;
 
-    if (info_string.test(city) && provincia_string.test(province) && cap_string.test(postalCode) && address_string.test(address)) {
+    if (info_string.test(city) && province_string.test(province) && postalcode_string.test(postalCode) && address_string.test(address)) {
         $("input").css("border-color", "#E5E5E5");
         showTabReviewInformation();
     }
@@ -113,7 +117,7 @@ function validateAddressInformation() {
         else
             $("#province").css("border-color", "#E5E5E5");
 
-        if (!(cap_string.test(postalCode)))
+        if (!(postalcode_string.test(postalCode)))
             $("#codice-postale").css("border-color", "#C92403");
         else
             $("#codice-postale").css("border-color", "#E5E5E5");

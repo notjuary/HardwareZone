@@ -14,6 +14,7 @@ public class EditProfile extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html");
 
         String name = request.getParameter("name");
         String surname = request.getParameter("surname");

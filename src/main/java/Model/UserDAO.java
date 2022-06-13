@@ -145,6 +145,7 @@ public class UserDAO {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
+
                 UserBean utente = new UserBean();
 
                 utente.setId(rs.getInt(1));

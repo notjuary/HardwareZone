@@ -5,16 +5,16 @@ USE ecommerce;
 
 CREATE TABLE Utente (
 	ID_Utente INT AUTO_INCREMENT PRIMARY KEY,
-    Nome VARCHAR(30) NOT NULL,
-    Cognome VARCHAR(30) NOT NULL,
+    Nome VARCHAR(20) NOT NULL,
+    Cognome VARCHAR(20) NOT NULL,
     Data_Nascita DATE NOT NULL,
-    Email VARCHAR(30) UNIQUE NOT NULL,
+    Email VARCHAR(20) UNIQUE NOT NULL,
     Accesso VARCHAR(40) NOT NULL,
     Telefono CHAR(10) NOT NULL,
-    Citta VARCHAR(30) NOT NULL,
+    Citta VARCHAR(20) NOT NULL,
     Provincia CHAR(2) NOT NULL,
     Codice_Postale CHAR(5) NOT NULL,
-    Indirizzo VARCHAR(30) NOT NULL,
+    Indirizzo VARCHAR(20) NOT NULL,
     Data_Registrazione DATE NOT NULL,
     Stato VARCHAR(5) DEFAULT "true",
     Amministratore VARCHAR(5) DEFAULT "false"

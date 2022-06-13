@@ -60,7 +60,4 @@ public class Login extends HttpServlet {
             dispatcher.include(request, response);
         }
     }
-
-    public void destroy() {
-    }
 }

@@ -1,5 +1,5 @@
-<%@ page import="Model.UserBean" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="Model.UserBean" %>
 <!DOCTYPE html>
 <html lang="it-IT">
 <head>
@@ -22,6 +22,11 @@
             }
         %>
 
+        $(document).ready(function() {
+            $("div.sub-menu").hide();
+            currentPage();
+        });
+
         window.addEventListener("resize", browserSize);
         function browserSize() {
             if (window.outerWidth <= 1160)
@@ -30,20 +35,15 @@
                 $("div.menu").show();
         }
 
-        $(document).ready(function() {
-            $("div.sub-menu").hide();
-            currentPage();
-        });
-
         function showMenu() {
             $("div.menu").slideToggle();
         }
 
         function showSubMenu(element) {
+
             let elementAttribute = element.getAttribute("data-name");
 
             $(".sub-menu").each(function() {
-
 
                 if (elementAttribute === (this.getAttribute("data-name")))
                     $(this).slideToggle();

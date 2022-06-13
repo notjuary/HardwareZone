@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 public class Logout extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html");
 
         HttpSession session = request.getSession();
         session.invalidate();
@@ -23,8 +24,5 @@ public class Logout extends HttpServlet {
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
         dispatcher.include(request, response);
-    }
-
-    public void destroy() {
     }
 }

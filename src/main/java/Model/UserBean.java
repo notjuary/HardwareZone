@@ -26,30 +26,37 @@ public class UserBean {
     }
 
     public String getName() {
+
         return name;
     }
 
     public void setName(String name) {
+
         this.name = name;
     }
 
     public String getSurname() {
+
         return surname;
     }
 
     public void setSurname(String surname) {
+
         this.surname = surname;
     }
 
     public String getEmail() {
+
         return email;
     }
 
     public void setEmail(String email) {
+
         this.email = email;
     }
 
     public String getPassword() {
+
         return password;
     }
 
@@ -68,18 +75,22 @@ public class UserBean {
     }
 
     public String getPhone() {
+
         return phone;
     }
 
     public void setPhone(String phone) {
+
         this.phone = phone;
     }
 
     public String getCity() {
+
         return city;
     }
 
     public void setCity(String city) {
+
         this.city = city;
     }
 
@@ -88,22 +99,27 @@ public class UserBean {
     }
 
     public void setProvince(String province) {
+
         this.province = province;
     }
 
     public String getPostalCode() {
+
         return postalCode;
     }
 
     public void setPostalCode(String postalCode) {
+
         this.postalCode = postalCode;
     }
 
     public String getAddress() {
+
         return address;
     }
 
     public void setAddress(String address) {
+
         this.address = address;
     }
 
@@ -153,6 +169,7 @@ public class UserBean {
     }
 
     public String isActive() {
+
         return state;
     }
 
@@ -161,7 +178,10 @@ public class UserBean {
         this.state = state;
     }
 
-    public String isAdmin() { return admin; }
+    public String isAdmin() {
+
+        return admin;
+    }
 
     public void setAdmin(String admin) {
 
