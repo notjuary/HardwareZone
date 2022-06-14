@@ -4,20 +4,21 @@
 <html lang="it-IT">
 <head>
 
+    <title>Menu</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/style/nav-menu.css">
     <script src='https://kit.fontawesome.com/c6b30e1924.js' crossorigin='anonymous'></script>
 
     <script>
         <%
-            UserBean user = (UserBean) session.getAttribute("user");
+            UserBean myProfile = (UserBean) request.getSession().getAttribute("user");
 
             String name, url;
 
-            if (user == null) {
+            if (myProfile == null) {
                 name = "Accesso";
                 url = "location.href='login.jsp'";
             } else {
-                name = user.getName();
+                name = myProfile.getName();
                 url = "showSubMenu()";
             }
         %>
@@ -70,7 +71,7 @@
             <div class="item-menu" onclick="location.href='#'" data-name="Chi siamo"><i class="fa-solid fa-circle-info iconMenu"></i>Chi siamo</div>
             <div class="item-menu" onclick="<%= url %>" style="position: relative" data-name="Login"><i class="fa-solid fa-user iconMenu"></i><%= name %>
                 <div class="sub-menu" data-name="Login">
-                    <div class="item-submenu" onclick="location.href='user-profile-servlet'" data-name="Login">Profilo</div>
+                    <div class="item-submenu" onclick="location.href='myProfile-profile-servlet'" data-name="Login">Profilo</div>
                     <div class="item-submenu" onclick="location.href='#'" data-name="Login">Ordini</div>
                     <div class="item-submenu" onclick="location.href='logout-servlet'">Logout</div>
                 </div>

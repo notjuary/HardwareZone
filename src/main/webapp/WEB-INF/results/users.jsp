@@ -1,4 +1,3 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="Model.UserBean" %>
 <%--@elvariable id="users" type="model.UserBean"--%>
@@ -31,16 +30,19 @@
         </div>
 
         <div class="bodyTable">
-            <c:forEach items="${users}" var="user">
-                <div class="single-user">
-                    <div>${user.id}</div>
-                    <div>${user.name}</div>
-                    <div>${user.surname}</div>
-                    <div>${user.email}</div>
-                    <div>${user.state}</div>
+            <%
+                ArrayList<UserBean> usersList = (ArrayList<UserBean>) request.getAttribute("users");
+
+                for (UserBean user: usersList) { %>
+                    <div class="single-user">
+                    <div><%= user.getId() %></div>
+                    <div><%= user.getName() %></div>
+                    <div><%= user.getSurname() %></div>
+                    <div><%= user.getEmail() %></div>
+                    <div><%= user.isActive() %></div>
                     <div><button class="button-show-more" onclick="">Altro</button></div>
-                </div>
-            </c:forEach>
+                    </div>
+             <% } %>
         </div>
     </div>
 
