@@ -13,6 +13,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script type="text/javascript" src="script/validateForm.js"></script>
 
+    <%
+        if ((UserBean) request.getSession().getAttribute("user") != null) {
+            response.sendRedirect("index.jsp");
+        }
+    %>
+
 </head>
 <body>
 

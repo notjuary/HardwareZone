@@ -14,6 +14,12 @@
     <script type="text/javascript" src="script/validateForm.js"></script>
     <script type="text/javascript" src="script/eventManager.js"></script>
 
+    <%
+        if ((UserBean) request.getSession().getAttribute("user") != null) {
+            response.sendRedirect("index.jsp");
+        }
+    %>
+
 </head>
 <body>
 

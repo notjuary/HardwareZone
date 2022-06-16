@@ -1,4 +1,4 @@
-<%--@elvariable id="profiloJSP" type="model.UtenteBean"--%>
+<%--@elvariable id="profileJSP" type="model.UtenteBean"--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="it-IT">
@@ -9,7 +9,7 @@
     <title>Profilo</title>
 
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/style/general.css">
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/style/login.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/style/profile.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
@@ -19,46 +19,62 @@
 
     <%@ include file="/menu.jsp"%>
 
-    <div class="login-form">
+    <div class="edit-form">
         <form action="edit-profile-servlet" method="post">
 
             <div class="container">
-                <div class="personal-information"></div>
+
+                <div class="personal-information">
+
+                    <label class="text-section">Dati personali</label>
+
+                    <label for="name" class="login-text">Nome</label>
+                    <input type="text" class="register" id="name" name="name" placeholder="${profileJSP.getName()}" value="${profileJSP.getName()}">
+
+                    <label for="surname" class="login-text">Cognome</label>
+                    <input type="text" class="register" id="surname" name="surname" placeholder="${profileJSP.getSurname()}" value="${profileJSP.getSurname()}">
+
+                    <label for="birthday" class="login-text">Data di nascita</label>
+                    <input type="text" class="register" id="birthday" name="birthday" placeholder="${profileJSP.getBirthday()}" onfocus="(this.type='date')" value="${profileJSP.getBirthday()}">
+
+                </div>
+
+                <div class="login-information">
+
+                    <label class="text-section">Dati accesso</label>
+
+                    <label for="email" class="login-text">Email</label>
+                    <input type="email" class="register" id="email" name="email" placeholder="${profileJSP.getEmail()}" value="${profileJSP.getEmail()}">
+
+                    <label for="password" class="login-text">Password</label>
+                    <input type="password" class="register" id="password" name="password" placeholder="Password">
+
+                    <label for="phone" class="login-text">Telefono</label>
+                    <input type="tel" class="register" id="phone" name="phone" placeholder="${profileJSP.getPhone()}" value="${profileJSP.getPhone()}">
+
+                </div>
+
+                <div class="address-information">
+
+                    <label class="text-section">Indirizzo</label>
+
+                    <label for="city" class="login-text">Città</label>
+                    <input type="text" class="register" id="city" name="city" placeholder="${profileJSP.getCity()}" value="${profileJSP.getCity()}">
+
+                    <label for="province" class="login-text">Provincia</label>
+                    <input type="text" class="register" id="province" name="province" placeholder="${profileJSP.getProvince()}" value="${profileJSP.getProvince()}">
+
+                    <label for="postalCode" class="login-text">Codice Postale</label>
+                    <input type="text" class="register" id="postalCode" name="postalCode" placeholder="${profileJSP.getPostalCode()}" value="${profileJSP.getPostalCode()}">
+
+                    <label for="address" class="login-text">Indirizzo</label>
+                    <input type="text" class="register" id="address" name="address" placeholder="${profileJSP.getAddress()}" value="${profileJSP.getAddress()}">
+
+                </div>
+
             </div>
 
-            <!--
-            <label for="nome" class="login-text">Nome</label>
-            <input type="text" class="register" id="nome" name="nome" placeholder="${profiloJSP.getNome()}" value="${profiloJSP.getNome()}">
-
-            <label for="cognome" class="login-text">Cognome</label>
-            <input type="text" class="register" id="cognome" name="cognome" placeholder="${profiloJSP.getCognome()}" value="${profiloJSP.getCognome()}">
-
-            <label for="data-di-nascita" class="login-text">Data di nascita</label>
-            <input type="text" class="register" id="data-di-nascita" name="data-di-nascita" placeholder="${profiloJSP.getDataNascita()}" onfocus="(this.type='date')" value="${profiloJSP.getDataNascita()}">
-
-            <label for="email" class="login-text">Email</label>
-            <input type="email" class="register" id="email" name="email" placeholder="${profiloJSP.getEmail()}" value="${profiloJSP.getEmail()}">
-
-            <label for="password" class="login-text">Password</label>
-            <input type="password" class="register" id="password" name="password" placeholder="Password">
-
-            <label for="telefono" class="login-text">Telefono</label>
-            <input type="tel" class="register" id="telefono" name="telefono" placeholder="${profiloJSP.getTelefono()}" value="${profiloJSP.getTelefono()}">
-
-            <label for="citta" class="login-text">Città</label>
-            <input type="text" class="register" id="citta" name="citta" placeholder="${profiloJSP.getCitta()}" value="${profiloJSP.getCitta()}">
-
-            <label for="provincia" class="login-text">Provincia</label>
-            <input type="text" class="register" id="provincia" name="provincia" placeholder="${profiloJSP.getProvincia()}" value="${profiloJSP.getProvincia()}">
-
-            <label for="codice-postale" class="login-text">Codice Postale</label>
-            <input type="text" class="register" id="codice-postale" name="codice-postale" placeholder="${profiloJSP.getCodicePostale()}" value="${profiloJSP.getCodicePostale()}">
-
-            <label for="indirizzo" class="login-text">Indirizzo</label>
-            <input type="text" class="register" id="indirizzo" name="indirizzo" placeholder="${profiloJSP.getIndirizzo()}" value="${profiloJSP.getIndirizzo()}">
-
-            <input type="button" value="Annulla" class="show-tab-login-info" onclick="location.href='index.jsp'">
-            <input type="submit" value="Salva modifiche" style="margin-top: 16px !important;">-->
+            <div class="register-button"><input type="submit" value="Salva"></div>
 
         </form>
     </div>

@@ -1,3 +1,10 @@
+div.navigation-bar {
+    padding: 20px 0;
+    display: flex;
+    justify-content: center;
+    z-index: 1;
+}
+
 div.item-logo {
     background: none !important;
     padding: 0 !important;
@@ -7,12 +14,6 @@ div.item-logo {
 
 img.logo {
     height: 54px;
-}
-
-div.navigation-bar {
-    margin-top: 25px;
-    display: flex;
-    justify-content: center;
 }
 
 div.show-menu {
@@ -114,9 +115,12 @@ div.item-submenu:hover {
     div.navigation-bar {
         display: block;
         background: #0F1A20;
+        position: absolute;
+        width: 100%;
     }
 
     div.menu {
+        z-index: 1;
         display: none;
         height: 100vh;
     }
