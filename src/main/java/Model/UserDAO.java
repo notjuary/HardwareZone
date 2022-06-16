@@ -6,7 +6,7 @@ import java.util.List;
 
 public class UserDAO {
 
-    public void doSave(UserBean utenteBean) {
+    public void doSave(UserBean userBean) {
 
         try (Connection con = ConPool.getConnection()) {
 
@@ -14,20 +14,19 @@ public class UserDAO {
                     "INSERT INTO Utente (Nome, Cognome, Data_Nascita, Email, Accesso, Telefono, Citta, Provincia, Codice_Postale, Indirizzo, Data_Registrazione, Stato, Amministratore) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)",
                     Statement.RETURN_GENERATED_KEYS);
 
-            ps.setString(1, utenteBean.getName());
-            ps.setString(2, utenteBean.getSurname());
-            ps.setString(3, utenteBean.getBirthday());
-            ps.setString(4, utenteBean.getEmail());
-            ps.setString(5, utenteBean.getPassword());
-            ps.setString(6, utenteBean.getPhone());
-            ps.setString(7, utenteBean.getCity());
-            ps.setString(8, utenteBean.getProvince());
-            ps.setString(9, utenteBean.getPostalCode());
-            ps.setString(10, utenteBean.getAddress());
-            ps.setString(11, utenteBean.getRegister());
-            ps.setString(12, utenteBean.isActive());
-            ps.setString(13, utenteBean.isAdmin());
-
+            ps.setString(1, userBean.getName());
+            ps.setString(2, userBean.getSurname());
+            ps.setString(3, userBean.getBirthday());
+            ps.setString(4, userBean.getEmail());
+            ps.setString(5, userBean.getPassword());
+            ps.setString(6, userBean.getPhone());
+            ps.setString(7, userBean.getCity());
+            ps.setString(8, userBean.getProvince());
+            ps.setString(9, userBean.getPostalCode());
+            ps.setString(10, userBean.getAddress());
+            ps.setString(11, userBean.getRegister());
+            ps.setString(12, userBean.isActive());
+            ps.setString(13, userBean.isAdmin());
 
             if (ps.executeUpdate() != 1) {
                 throw new RuntimeException("INSERT error.");
@@ -36,43 +35,44 @@ public class UserDAO {
             ResultSet rs = ps.getGeneratedKeys();
             rs.next();
             int id = rs.getInt(1);
-            utenteBean.setId(id);
+            userBean.setId(id);
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public UserBean doRetrieveById(int id) {
+    public UserBean doRetrieveByEmailAndPassword(String email, String password) {
 
         try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps = con.prepareStatement(
                     "SELECT * " +
                             "FROM Utente " +
-                            "WHERE ID_Utente=?");
+                            "WHERE Email=? AND Accesso=SHA1(?)");
 
-            ps.setInt(1, id);
+            ps.setString(1, email);
+            ps.setString(2, password);
 
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                UserBean utente = new UserBean();
-                utente.setId(rs.getInt(1));
-                utente.setName(rs.getString(2));
-                utente.setSurname(rs.getString(3));
-                utente.setBirthday(rs.getString(4));
-                utente.setEmail(rs.getString(5));
-                utente.setPassword(rs.getString(6));
-                utente.setPhone(rs.getString(7));
-                utente.setCity(rs.getString(8));
-                utente.setProvince(rs.getString(9));
-                utente.setPostalCode(rs.getString(10));
-                utente.setAddress(rs.getString(11));
-                utente.setRegister(rs.getString(12));
-                utente.setState(rs.getString(13));
-                utente.setAdmin(rs.getString(14));
+                UserBean user = new UserBean();
+                user.setId(rs.getInt(1));
+                user.setName(rs.getString(2));
+                user.setSurname(rs.getString(3));
+                user.setBirthday(rs.getString(4));
+                user.setEmail(rs.getString(5));
+                user.setPassword(rs.getString(6));
+                user.setPhone(rs.getString(7));
+                user.setCity(rs.getString(8));
+                user.setProvince(rs.getString(9));
+                user.setPostalCode(rs.getString(10));
+                user.setAddress(rs.getString(11));
+                user.setRegister(rs.getString(12));
+                user.setState(rs.getString(13));
+                user.setAdmin(rs.getString(14));
 
-                return utente;
+                return user;
             }
 
             return null;
@@ -82,30 +82,7 @@ public class UserDAO {
         }
     }
 
-    public int doRetrieveByEmailAndPassword(String email, String password) {
-
-        try (Connection con = ConPool.getConnection()) {
-            PreparedStatement ps = con.prepareStatement(
-                    "SELECT ID_Utente " +
-                            "FROM Utente " +
-                            "WHERE Email=? AND Accesso=SHA1(?)");
-
-            ps.setString(1, email);
-            ps.setString(2, password);
-
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next())
-                return rs.getInt(1);
-            else
-                return -1;
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public  void doUpdate(UserBean utente)
+    public void doUpdate(UserBean utente)
     {
         try (Connection con = ConPool.getConnection()) {
 
@@ -141,32 +118,32 @@ public class UserDAO {
             PreparedStatement ps = con.prepareStatement(
                     "SELECT * FROM Utente ORDER BY ID_Utente");
 
-            ArrayList<UserBean> listaUtenti = new ArrayList<UserBean>();
+            ArrayList<UserBean> usersList = new ArrayList<UserBean>();
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
 
-                UserBean utente = new UserBean();
+                UserBean user = new UserBean();
 
-                utente.setId(rs.getInt(1));
-                utente.setName(rs.getString(2));
-                utente.setSurname(rs.getString(3));
-                utente.setBirthday(rs.getString(4));
-                utente.setEmail(rs.getString(5));
-                utente.setPassword(rs.getString(6));
-                utente.setPhone(rs.getString(7));
-                utente.setCity(rs.getString(8));
-                utente.setProvince(rs.getString(9));
-                utente.setPostalCode(rs.getString(10));
-                utente.setAddress(rs.getString(11));
-                utente.setRegister(rs.getString(12));
-                utente.setState(rs.getString(13));
-                utente.setAdmin(rs.getString(14));
+                user.setId(rs.getInt(1));
+                user.setName(rs.getString(2));
+                user.setSurname(rs.getString(3));
+                user.setBirthday(rs.getString(4));
+                user.setEmail(rs.getString(5));
+                user.setPassword(rs.getString(6));
+                user.setPhone(rs.getString(7));
+                user.setCity(rs.getString(8));
+                user.setProvince(rs.getString(9));
+                user.setPostalCode(rs.getString(10));
+                user.setAddress(rs.getString(11));
+                user.setRegister(rs.getString(12));
+                user.setState(rs.getString(13));
+                user.setAdmin(rs.getString(14));
 
-                listaUtenti.add(utente);
+                usersList.add(user);
             }
 
-            return listaUtenti;
+            return usersList;
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

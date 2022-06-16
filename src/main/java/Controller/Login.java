@@ -23,11 +23,9 @@ public class Login extends HttpServlet {
         String password = request.getParameter("password");
 
         UserDAO service = new UserDAO();
-        int login = service.doRetrieveByEmailAndPassword(email, password);
+        UserBean user = service.doRetrieveByEmailAndPassword(email, password);
 
-        if (login != -1) {
-
-            UserBean user = service.doRetrieveById(login);
+        if (user != null) {
 
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
@@ -36,28 +34,33 @@ public class Login extends HttpServlet {
 
             if (user.isAdmin().equalsIgnoreCase("true")) {
                 dispatcher = request.getRequestDispatcher("WEB-INF/admin.jsp");
-            } else {
+            }
+
+            else {
                 dispatcher = request.getRequestDispatcher("index.jsp");
             }
 
             PrintWriter out = response.getWriter();
             out.println("<div class=\"success\">\n" +
-                    "    <span class=\"closebtn\" onclick=\"this.parentElement.style.display='none';\">&times;</span> \n" +
+                    "    <span class=\"closebtn\" onclick=\"clearDiv();\">&times;</span> \n" +
                     "    <strong>Login eseguito</strong> \n" +
                     "    </div>");
 
             dispatcher.include(request, response);
+            out.close();
+        }
 
-        } else {
+        else {
 
             PrintWriter out = response.getWriter();
             out.println("<div class=\"alert\">\n" +
-                    "    <span class=\"closebtn\" onclick=\"this.parentElement.style.display='none';\">&times;</span> \n" +
+                    "    <span class=\"closebtn\" onclick=\"clearDiv();\">&times;</span> \n" +
                     "    <strong>Attenzione!</strong> Email o password errate\n" +
                     "    </div>");
 
             RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
             dispatcher.include(request, response);
+            out.close();
         }
     }
 }

@@ -12,9 +12,10 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script type="text/javascript" src="script/validateForm.js"></script>
+    <script type="text/javascript" src="script/eventManager.js"></script>
 
     <%
-        if ((UserBean) request.getSession().getAttribute("user") != null) {
+        if (request.getSession().getAttribute("user") != null) {
             response.sendRedirect("index.jsp");
         }
     %>
@@ -22,7 +23,8 @@
 </head>
 <body>
 
-    <%@ include file="/menu.jsp"%>
+    <%@ include file="menu.jsp"%>
+    <script type="text/javascript" src="script/eventManager.js"></script>
 
     <div class="login-form">
         <form action="login-servlet" method="post">

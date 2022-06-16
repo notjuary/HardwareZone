@@ -54,6 +54,7 @@ div.register-button {
 
 @media screen and (max-width: 600px) {
     div.login-form {
+        margin-top: 80px;
         width: 60%;
         box-sizing: border-box;
         min-width: auto;

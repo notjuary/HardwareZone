@@ -18,11 +18,12 @@ public class Logout extends HttpServlet {
 
         PrintWriter out = response.getWriter();
         out.println("<div class=\"success\">\n" +
-                "    <span class=\"closebtn\" onclick=\"this.parentElement.style.display='none';\">&times;</span> \n" +
+                "    <span class=\"closebtn\" onclick=\"clearDiv();\">&times;</span> \n" +
                 "    <strong>Logout eseguito</strong>\n" +
                 "    </div>");
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
         dispatcher.include(request, response);
+        out.close();
     }
 }

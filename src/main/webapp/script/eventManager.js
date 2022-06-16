@@ -1,5 +1,8 @@
-setTimeout(clearDiv, 5000);
+$("div.success div.alert").ready(function() {
+    setTimeout(clearDiv, 5000);
+});
 
 function clearDiv() {
-    $(".success").fadeOut();
+    $("div.success").fadeOut();
+    $("div.alert").fadeOut();
 }

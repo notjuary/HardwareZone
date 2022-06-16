@@ -8,6 +8,7 @@
     <title>HomePage</title>
 
     <link rel="stylesheet" type="text/css" href="style/general.css">
+    <link rel="stylesheet" type="text/css" href="style/footer.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script type="text/javascript" src="script/eventManager.js"></script>
@@ -15,7 +16,7 @@
 </head>
 <body>
 
-    <%@ include file="/menu.jsp"%>
+    <%@ include file="menu.jsp"%>
 
     <div class="slide-show">
 

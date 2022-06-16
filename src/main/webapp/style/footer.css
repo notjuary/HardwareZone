@@ -1,0 +1,20 @@
+div.footer {
+    height: 300px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    background: #fefefe;
+    display: block;
+}
+
+div.footer-logo {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 100%;
+    padding: 15px;
+}
+
+div.footer-logo img {
+    height: 100px;
+}

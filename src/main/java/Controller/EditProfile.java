@@ -53,11 +53,12 @@ public class EditProfile extends HttpServlet {
 
         PrintWriter out = response.getWriter();
         out.println("<div class=\"success\">\n" +
-                "    <span class=\"closebtn\" onclick=\"this.parentElement.style.display='none';\">&times;</span> \n" +
+                "    <span class=\"closebtn\" onclick=\"clearDiv();\">&times;</span> \n" +
                 "    Modifica effettuata\n" +
                 "    </div>");
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/profile-user.jsp");
         dispatcher.include(request, response);
+        out.close();
     }
 }

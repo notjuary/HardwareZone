@@ -30,12 +30,13 @@ public class AdminProfile extends HttpServlet {
 
             PrintWriter out = response.getWriter();
             out.println("<div class=\"alert\">\n" +
-                    "    <span class=\"closebtn\" onclick=\"this.parentElement.style.display='none';\">&times;</span> \n" +
+                    "    <span class=\"closebtn\" onclick=\"clearDiv();\">&times;</span> \n" +
                     "    <strong>Attenzione!</strong> Accesso negato \n" +
                     "    </div>");
 
             RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
             dispatcher.include(request, response);
+            out.close();
         }
     }
 }

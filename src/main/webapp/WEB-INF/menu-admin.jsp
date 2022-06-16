@@ -4,8 +4,10 @@
 <html lang="it-IT">
 <head>
 
+    <title>Admin Menu</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/style/nav-menu.css">
     <script src='https://kit.fontawesome.com/c6b30e1924.js' crossorigin='anonymous'></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/script/eventManager.js"></script>
 
     <script>
         <%
@@ -29,8 +31,10 @@
 
         window.addEventListener("resize", browserSize);
         function browserSize() {
-            if (window.outerWidth <= 1160)
+            if (window.outerWidth <= 1160) {
                 $("div.menu").hide();
+                $("div.sub-menu").hide();
+            }
             else
                 $("div.menu").show();
         }

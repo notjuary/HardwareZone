@@ -7,6 +7,7 @@
     <title>Menu</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/style/nav-menu.css">
     <script src='https://kit.fontawesome.com/c6b30e1924.js' crossorigin='anonymous'></script>
+    <script type="text/javascript" src="script/eventManager.js"></script>
 
     <script>
         <%
@@ -19,14 +20,16 @@
                 url = "location.href='login.jsp'";
             } else {
                 name = myProfile.getName();
-                url = "showSubMenu()";
+                url = "showSubMenu(this)";
             }
         %>
 
         window.addEventListener("resize", browserSize);
         function browserSize() {
-            if (window.outerWidth <= 1160)
+            if (window.outerWidth <= 1160) {
                 $("div.menu").hide();
+                $("div.sub-menu").hide();
+            }
             else
                 $("div.menu").show();
         }
@@ -40,8 +43,17 @@
             $("div.menu").slideToggle();
         }
 
-        function showSubMenu() {
-            $("div.sub-menu").slideToggle();
+        function showSubMenu(element) {
+
+            let elementAttribute = element.getAttribute("data-name");
+
+            $(".sub-menu").each(function() {
+
+                if (elementAttribute === (this.getAttribute("data-name")))
+                    $(this).slideToggle();
+                else
+                    $(this).hide();
+            });
         }
 
         function currentPage() {

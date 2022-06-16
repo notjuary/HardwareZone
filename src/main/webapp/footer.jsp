@@ -3,6 +3,7 @@
 <head>
 
     <title>Footer</title>
+    <link rel="stylesheet" type="text/css" href=""${pageContext.request.contextPath}/style/footer.css">
 
 </head>
 <body>
