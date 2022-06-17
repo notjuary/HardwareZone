@@ -22,6 +22,7 @@
                 name = myProfile.getName();
                 url = "showSubMenu(this)";
             }
+
         %>
 
         $(document).ready(function() {

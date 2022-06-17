@@ -13,6 +13,19 @@ div.edit-form {
     min-height: 340px;
 }
 
+div.back {
+    background: white;
+    padding: 8px;
+    display: inline-block;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+div.back a {
+    text-decoration: none;
+    color: black;
+}
+
 label.text-section {
     text-align: center;
     display: block;

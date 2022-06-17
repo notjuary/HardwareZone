@@ -14,17 +14,16 @@
     <script type="text/javascript" src="script/validateForm.js"></script>
     <script type="text/javascript" src="script/eventManager.js"></script>
 
-    <%
-        if (request.getSession().getAttribute("user") != null) {
-            response.sendRedirect("index.jsp");
-        }
-    %>
-
 </head>
 <body>
 
     <%@ include file="menu.jsp"%>
-    <script type="text/javascript" src="script/eventManager.js"></script>
+
+    <%
+        if (myProfile != null) {
+            response.sendRedirect("index.jsp");
+        }
+    %>
 
     <div class="login-form">
         <form action="login-servlet" method="post">

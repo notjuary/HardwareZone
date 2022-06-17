@@ -4,7 +4,7 @@ const password_string = /^[a-zA-Z\d\-\xE0\xE8\xE9\xF9\xF2\xEC\x27]{6,16}/;
 const phone_string = /^\d{10}$/;
 const province_string = /^([a-zA-Z]{2})$/;
 const postalcode_string = /^\d{5}$/;
-const address_string = /^([a-zA-Z\d\xE0\xE8\xE9\xF9\xF2\xEC\x27\x2C]{2,20}\s?)+$/;
+const address_string = /^([a-zA-Z\d\xE0\xE8\xE9\xF9\xF2\xEC\x27\x2C]\s?){2,20}$/;
 
 $(document).ready(function() {
     showTabPersonalInformation();
@@ -61,9 +61,9 @@ function validatePersonalInformation() {
             $("#surname").css("border-color", "#E5E5E5");
 
         if (birthday === "")
-            $("#data-di-nascita").css("border-color", "#C92403");
+            $("#birthday").css("border-color", "#C92403");
         else
-            $("#data-di-nascita").css("border-color", "#E5E5E5");
+            $("#birthday").css("border-color", "#E5E5E5");
     }
 }
 

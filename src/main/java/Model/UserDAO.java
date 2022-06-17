@@ -42,6 +42,45 @@ public class UserDAO {
         }
     }
 
+    public UserBean doRetrieveById(int id) {
+
+        try (Connection con = ConPool.getConnection()) {
+            PreparedStatement ps = con.prepareStatement(
+                    "SELECT * " +
+                            "FROM Utente " +
+                            "WHERE ID_Utente=?");
+
+            ps.setInt(1, id);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                UserBean user = new UserBean();
+                user.setId(rs.getInt(1));
+                user.setName(rs.getString(2));
+                user.setSurname(rs.getString(3));
+                user.setBirthday(rs.getString(4));
+                user.setEmail(rs.getString(5));
+                user.setPassword(rs.getString(6));
+                user.setPhone(rs.getString(7));
+                user.setCity(rs.getString(8));
+                user.setProvince(rs.getString(9));
+                user.setPostalCode(rs.getString(10));
+                user.setAddress(rs.getString(11));
+                user.setRegister(rs.getString(12));
+                user.setState(rs.getString(13));
+                user.setAdmin(rs.getString(14));
+
+                return user;
+            }
+
+            return null;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public UserBean doRetrieveByEmailAndPassword(String email, String password) {
 
         try (Connection con = ConPool.getConnection()) {
@@ -88,6 +127,19 @@ public class UserDAO {
 
             Statement st = con.createStatement();
             String query = "UPDATE Utente SET Nome = '" + utente.getName() + "', Cognome = '" + utente.getSurname() + "', Data_Nascita = '" + utente.getBirthday() + "', Email = '" + utente.getEmail() + "', Accesso = '" + utente.getPassword() + "', Telefono = '" + utente.getPhone() +  "', Citta = '" + utente.getCity() + "', Provincia = '" + utente.getProvince() + "', Codice_Postale = '" + utente.getPostalCode() + "', Indirizzo = '" + utente.getAddress() + "', Stato = '" + utente.isActive() + "', Amministratore = '" + utente.isAdmin() + "' WHERE Id_Utente = " + utente.getId();
+            st.executeUpdate(query);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void doUpdateState(UserBean utente)
+    {
+        try (Connection con = ConPool.getConnection()) {
+
+            Statement st = con.createStatement();
+            String query = "UPDATE Utente SET Stato = '" + utente.isActive() + "' WHERE Id_Utente = " + utente.getId();
             st.executeUpdate(query);
 
         } catch (SQLException e) {

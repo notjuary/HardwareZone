@@ -11,6 +11,10 @@ div.headerTable {
     border-bottom: 1px solid;
 }
 
+div.show-more a {
+    color: white;
+}
+
 div.single-user {
     margin-top: 30px;
     color: white;
@@ -35,4 +39,3 @@ button.button-show-more:hover {
     transition: 0.5s;
     background: red;
 }
-

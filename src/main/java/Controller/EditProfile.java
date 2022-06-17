@@ -57,7 +57,7 @@ public class EditProfile extends HttpServlet {
                 "    Modifica effettuata\n" +
                 "    </div>");
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/profile-user.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/user/profile-user.jsp");
         dispatcher.include(request, response);
         out.close();
     }

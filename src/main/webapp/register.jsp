@@ -9,22 +9,21 @@
 
     <link rel="stylesheet" type="text/css" href="style/general.css">
     <link rel="stylesheet" type="text/css" href="style/login.css">
-    <link rel="stylesheet" type="text/css" href="style/footer.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script type="text/javascript" src="script/validateForm.js"></script>
     <script type="text/javascript" src="script/eventManager.js"></script>
 
-    <%
-        if (request.getSession().getAttribute("user") != null) {
-            response.sendRedirect("index.jsp");
-        }
-    %>
-
 </head>
 <body>
 
     <%@ include file="menu.jsp"%>
+
+    <%
+        if (myProfile != null) {
+            response.sendRedirect("index.jsp");
+        }
+    %>
 
     <div class="login-form">
         <form action="registration-servlet" method="post">

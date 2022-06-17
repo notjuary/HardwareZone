@@ -1,6 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="Model.UserBean" %>
-<%@ page import="java.io.PrintWriter" %>
 <!DOCTYPE html>
 <html lang="it-IT">
 <head>
@@ -17,7 +15,7 @@
 </head>
 <body>
 
-    <%@ include file="/WEB-INF/menu-admin.jsp"%>
+    <%@ include file="/WEB-INF/admin/menu-admin.jsp"%>
 
 </body>
 </html>

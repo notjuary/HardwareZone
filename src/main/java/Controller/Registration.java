@@ -24,67 +24,69 @@ public class Registration extends HttpServlet {
         final Pattern phone_string = Pattern.compile("^\\d{10}$");
         final Pattern province_string = Pattern.compile("^([a-zA-Z]{2})$");
         final Pattern postalcode_string = Pattern.compile("^\\d{5}$");
-        final Pattern address_string = Pattern.compile("^([a-zA-Z\\d\\xE0\\xE8\\xE9\\xF9\\xF2\\xEC\\x27\\x2C]{2,20}\\s?)+$");
+        final Pattern address_string = Pattern.compile("^([a-zA-Z\\d\\xE0\\xE8\\xE9\\xF9\\xF2\\xEC\\x27\\x2C]\\s?){2,20}$");
 
         int level = 0;
 
         String name = request.getParameter("name");
         Matcher matcher = info_string.matcher(name);
         boolean matchFound = matcher.find();
-        if(matchFound)
+        if (matchFound)
             level++;
 
         String surname = request.getParameter("surname");
         matcher = info_string.matcher(surname);
         matchFound = matcher.find();
-        if(matchFound)
+        if (matchFound)
             level++;
 
         String email = request.getParameter("email");
         matcher = email_string.matcher(email);
         matchFound = matcher.find();
-        if(matchFound)
+        if (matchFound)
             level++;
 
         String password = request.getParameter("password");
-        matcher = password_string.matcher(email);
+        matcher = password_string.matcher(password);
         matchFound = matcher.find();
-        if(matchFound)
+        if (matchFound)
             level++;
 
         String phone = request.getParameter("phone");
-        matcher = phone_string.matcher(email);
+        matcher = phone_string.matcher(phone);
         matchFound = matcher.find();
-        if(matchFound)
+        if (matchFound)
             level++;
 
         String city = request.getParameter("city");
-        matcher = info_string.matcher(email);
+        matcher = info_string.matcher(city);
         matchFound = matcher.find();
-        if(matchFound)
+        if (matchFound)
             level++;
 
         String province = request.getParameter("province");
-        matcher = province_string.matcher(email);
+        matcher = province_string.matcher(province);
         matchFound = matcher.find();
-        if(matchFound)
+        if (matchFound)
             level++;
 
         String postalCode = request.getParameter("postalCode");
-        matcher = postalcode_string.matcher(email);
+        matcher = postalcode_string.matcher(postalCode);
         matchFound = matcher.find();
-        if(matchFound)
+        if (matchFound)
             level++;
 
         String address = request.getParameter("address");
-        matcher = address_string.matcher(email);
+        matcher = address_string.matcher(address);
         matchFound = matcher.find();
-        if(matchFound)
+        if (matchFound)
             level++;
 
         String date = request.getParameter("birthday");
-        if(date != null)
+        if (date != null)
             level++;
+
+        System.out.println(level);
 
         UserDAO service = new UserDAO();
 

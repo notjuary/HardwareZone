@@ -22,7 +22,7 @@ public class AdminProfile extends HttpServlet {
 
             request.setAttribute("profileJSP", user);
 
-            RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/profile-admin.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/admin/profile-admin.jsp");
             dispatcher.include(request, response);
         }
 

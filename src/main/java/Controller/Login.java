@@ -25,7 +25,7 @@ public class Login extends HttpServlet {
         UserDAO service = new UserDAO();
         UserBean user = service.doRetrieveByEmailAndPassword(email, password);
 
-        if (user != null) {
+        if (user != null && user.isActive().equalsIgnoreCase("true")) {
 
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
@@ -33,7 +33,7 @@ public class Login extends HttpServlet {
             RequestDispatcher dispatcher;
 
             if (user.isAdmin().equalsIgnoreCase("true")) {
-                dispatcher = request.getRequestDispatcher("WEB-INF/admin.jsp");
+                dispatcher = request.getRequestDispatcher("WEB-INF/admin/admin.jsp");
             }
 
             else {
@@ -50,12 +50,38 @@ public class Login extends HttpServlet {
             out.close();
         }
 
-        else {
+        else if (user == null) {
 
             PrintWriter out = response.getWriter();
             out.println("<div class=\"alert\">\n" +
                     "    <span class=\"closebtn\" onclick=\"clearDiv();\">&times;</span> \n" +
                     "    <strong>Attenzione!</strong> Email o password errate\n" +
+                    "    </div>");
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
+            dispatcher.include(request, response);
+            out.close();
+        }
+
+        else if (user.isActive().equalsIgnoreCase("false")) {
+
+            PrintWriter out = response.getWriter();
+            out.println("<div class=\"alert\">\n" +
+                    "    <span class=\"closebtn\" onclick=\"clearDiv();\">&times;</span> \n" +
+                    "    <strong>Attenzione!</strong> Account disabilitato\n" +
+                    "    </div>");
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
+            dispatcher.include(request, response);
+            out.close();
+        }
+
+        else {
+
+            PrintWriter out = response.getWriter();
+            out.println("<div class=\"alert\">\n" +
+                    "    <span class=\"closebtn\" onclick=\"clearDiv();\">&times;</span> \n" +
+                    "    <strong>Attenzione!</strong> Errore imprevisto\n" +
                     "    </div>");
 
             RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");

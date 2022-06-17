@@ -47,7 +47,7 @@
                     <input type="email" class="register" id="email" name="email" placeholder="${profileJSP.getEmail()}" value="${profileJSP.getEmail()}">
 
                     <label for="password" class="login-text">Password</label>
-                    <input type="password" class="register" id="password" name="password" placeholder="Password">
+                    <input type="password" class="register" id="password" name="password" placeholder="Password" required>
 
                     <label for="phone" class="login-text">Telefono</label>
                     <input type="tel" class="register" id="phone" name="phone" placeholder="${profileJSP.getPhone()}" value="${profileJSP.getPhone()}">

@@ -1,7 +1,8 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="Model.UserBean" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<!DOCTYPE html>
+<html lang="it-IT">
 <head>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,7 +18,7 @@
 </head>
 <body>
 
-    <%@ include file="/WEB-INF/menu-admin.jsp"%>
+    <%@ include file="/WEB-INF/admin/menu-admin.jsp"%>
 
     <div class="container">
         <div class="headerTable">
@@ -29,18 +30,26 @@
         </div>
 
         <div class="bodyTable">
-            <%
-                ArrayList<UserBean> usersList = (ArrayList<UserBean>) request.getAttribute("users");
 
-                for (UserBean user: usersList) { %>
-                    <div class="single-user">
+            <% ArrayList<UserBean> usersList = (ArrayList<UserBean>) request.getAttribute("users");
+
+            for (UserBean user: usersList) { %>
+                <div class="single-user">
                     <div><%= user.getId() %></div>
                     <div><%= user.getName() %></div>
                     <div><%= user.getSurname() %></div>
                     <div><%= user.getEmail() %></div>
                     <div><%= user.isActive() %></div>
-                    <div><button class="button-show-more" onclick="">Altro</button></div>
-                    </div>
+                    <div class="show-more"><a href="${pageContext.request.contextPath}/user-info-servlet?id=<%= user.getId() %>">Altro</a></div>
+                    <%
+                        String active;
+                        if (user.isActive().equalsIgnoreCase("true"))
+                            active = "Disattiva";
+                        else
+                            active = "Attiva";
+                    %>
+                    <div class="show-more"><a href="${pageContext.request.contextPath}/set-state-user-servlet?id=<%= user.getId() %>&active=<%= user.isActive()%>"><%= active %></a></div>
+                </div>
              <% } %>
         </div>
     </div>
