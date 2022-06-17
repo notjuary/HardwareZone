@@ -26,6 +26,21 @@ div.back a {
     color: black;
 }
 
+div.setAdmin {
+    background: white;
+    padding: 8px;
+    display: inline-block;
+    border-radius: 10px;
+    cursor: pointer;
+    position: relative;
+    left: 20px;
+}
+
+div.setAdmin a {
+    text-decoration: none;
+    color: black;
+}
+
 label.text-section {
     text-align: center;
     display: block;
