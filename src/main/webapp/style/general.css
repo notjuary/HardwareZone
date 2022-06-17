@@ -11,6 +11,12 @@ body {
     background-color: #0F1A20;
 }
 
+div.warning {
+    padding: 20px;
+    background-color: #c27000;
+    color: white;
+}
+
 div.alert {
     padding: 20px;
     background-color: #f44336;

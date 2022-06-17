@@ -147,6 +147,19 @@ public class UserDAO {
         }
     }
 
+    public void doUpdateAdmin(UserBean utente)
+    {
+        try (Connection con = ConPool.getConnection()) {
+
+            Statement st = con.createStatement();
+            String query = "UPDATE Utente SET Amministratore = 'true' WHERE Id_Utente = " + utente.getId();
+            st.executeUpdate(query);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public boolean isAlreadyRegistered(String email) {
 
         try (Connection con = ConPool.getConnection()) {

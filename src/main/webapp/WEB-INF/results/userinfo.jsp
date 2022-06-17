@@ -28,6 +28,10 @@
             <a href="${pageContext.request.contextPath}/users-servlet">Indietro</a>
         </div>
 
+        <div class="setAdmin">
+            <a href="${pageContext.request.contextPath}/set-admin-servlet?id=<%= user.getId() %>">Rendi amministratore</a>
+        </div>
+
         <div class="container">
 
             <div class="personal-information">

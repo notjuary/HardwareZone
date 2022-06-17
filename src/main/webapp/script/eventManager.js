@@ -5,4 +5,5 @@ $("div.success div.alert").ready(function() {
 function clearDiv() {
     $("div.success").fadeOut();
     $("div.alert").fadeOut();
+    $("div.warning").fadeOut();
 }

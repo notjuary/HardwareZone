@@ -40,7 +40,7 @@
                     <div><%= user.getSurname() %></div>
                     <div><%= user.getEmail() %></div>
                     <div><%= user.isActive() %></div>
-                    <div class="show-more"><a href="${pageContext.request.contextPath}/user-info-servlet?id=<%= user.getId() %>">Altro</a></div>
+
                     <%
                         String active;
                         if (user.isActive().equalsIgnoreCase("true"))
@@ -48,7 +48,10 @@
                         else
                             active = "Attiva";
                     %>
-                    <div class="show-more"><a href="${pageContext.request.contextPath}/set-state-user-servlet?id=<%= user.getId() %>&active=<%= user.isActive()%>"><%= active %></a></div>
+
+                    <div class="set-state"><a href="${pageContext.request.contextPath}/set-state-user-servlet?id=<%= user.getId() %>&active=<%= user.isActive()%>"><%= active %></a></div>
+                    <div class="show-more"><a href="${pageContext.request.contextPath}/user-info-servlet?id=<%= user.getId() %>">Altro <i class="fas fa-info-circle"></i></a></div>
+
                 </div>
              <% } %>
         </div>
