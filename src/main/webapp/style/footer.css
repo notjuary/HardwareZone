@@ -1,5 +1,4 @@
 div.footer {
-    height: 300px;
     width: 100%;
     position: absolute;
     bottom: 0;
@@ -7,14 +6,39 @@ div.footer {
     display: block;
 }
 
-div.footer-logo {
-    position: absolute;
-    bottom: 0;
-    right: 0;
+div.container {
+    display: flex;
     height: 100%;
-    padding: 15px;
 }
 
-div.footer-logo img {
-    height: 100px;
+div.container > div {
+    width: calc(100% / 3);
+    float: left;
+    padding: 25px;
+    margin: 10px;
+}
+
+div.links {
+    text-align: center;
+}
+
+div.links a {
+    display: block;
+    text-decoration: none;
+    color: #0f1a20;
+}
+
+div.social {
+    text-align: center;
+}
+
+div.social a {
+    padding: 5px;
+    font-size: 35px;
+    color: #0f1a20;
+}
+
+div.social a:hover {
+    color: red;
+    text-align: center;
 }

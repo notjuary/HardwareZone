@@ -81,7 +81,7 @@
         <div class="admin-item-menu" onclick="location.href='#'" data-name="Ordini"><i class="fa-solid fa-dollar-sign iconMenu"></i>Ordini</div>
         <div class="admin-item-menu" onclick="showSubMenu(this)" style="position: relative" data-name="Prodotti"><i class="fa-solid fa-book-open iconMenu"></i>Prodotti
             <div class="sub-menu" data-name="Prodotti">
-                <div class="item-submenu" onclick="location.href='#'" data-name="Prodotti">Aggiungi</div>
+                <div class="item-submenu" onclick="location.href='insert-product-servlet'" data-name="Prodotti">Aggiungi</div>
                 <div class="item-submenu" onclick="location.href='#'" data-name="Prodotti">Gestione</div>
             </div>
         </div>

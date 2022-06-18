@@ -1,0 +1,47 @@
+div.container {
+    width: 100%;
+    text-align: left;
+    color: white;
+    justify-content: center;
+    display: flex;
+}
+
+div.containerProduct {
+    padding: 15px;
+    border: solid 1px white;
+    border-radius: 15px;
+    min-width: 400px;
+    min-height: 680px;
+}
+
+div.containerProduct > div {
+    padding: 10px;
+}
+
+label {
+    display: block;
+}
+
+input.product, textarea.product {
+    display: block;
+    width: 100%;
+    border-radius: 10px;
+    padding: 5px;
+    background: white;
+    font-size: 15px;
+    outline: none;
+}
+
+div.add-product > input {
+    display: block;
+    width: 100%;
+    border-radius: 10px;
+    padding: 5px;
+    background: none;
+    color: white;
+}
+
+div.add-product > input:hover {
+    color: black;
+    background: white;
+}

@@ -1,9 +1,9 @@
 package Model;
 
 public class ProductBean {
-    private int id, quantita_disponibile, sconto;
-    private String nome, descrizione, immagine, categoria;
-    private double prezzo;
+    private int id, quantity, sales;
+    private String name, description, image, category;
+    private double price;
 
     public ProductBean() {}
 
@@ -17,73 +17,73 @@ public class ProductBean {
         this.id = id;
     }
 
-    public int getQuantita_disponibile() {
+    public int getQuantity() {
 
-        return quantita_disponibile;
+        return quantity;
     }
 
-    public void setQuantita_disponibile(int quantita_disponibile) {
+    public void setQuantity(int quantity) {
 
-        this.quantita_disponibile = quantita_disponibile;
+        this.quantity = quantity;
     }
 
-    public int getSconto() {
+    public int getSales() {
 
-        return sconto;
+        return sales;
     }
 
-    public void setSconto(int sconto) {
+    public void setSales(int sales) {
 
-        this.sconto = sconto;
+        this.sales = sales;
     }
 
-    public String getNome() {
+    public String getName() {
 
-        return nome;
+        return name;
     }
 
-    public void setNome(String nome) {
+    public void setName(String name) {
 
-        this.nome = nome;
+        this.name = name;
     }
 
-    public String getDescrizione() {
+    public String getDescription() {
 
-        return descrizione;
+        return description;
     }
 
-    public void setDescrizione(String descrizione) {
+    public void setDescription(String description) {
 
-        this.descrizione = descrizione;
+        this.description = description;
     }
 
-    public String getImmagine() {
+    public String getImage() {
 
-        return immagine;
+        return image;
     }
 
-    public void setImmagine(String immagine) {
+    public void setImage(String image) {
 
-        this.immagine = immagine;
+        this.image = image;
     }
 
-    public String getCategoria() {
+    public String getCategory() {
 
-        return categoria;
+        return category;
     }
 
-    public void setCategoria(String categoria) {
+    public void setCategory(String category) {
 
-        this.categoria = categoria;
+        this.category = category;
     }
 
-    public double getPrezzo() {
+    public double getPrice() {
 
-        return prezzo;
+        return price;
     }
 
-    public void setPrezzo(double prezzo) {
+    public void setPrice(double price) {
 
-        this.prezzo = prezzo;
+        this.price = price;
     }
 }
