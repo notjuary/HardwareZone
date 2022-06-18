@@ -30,11 +30,11 @@ div.menu {
 div.item-menu {
     border-radius: 15px;
     display: inline-block;
-    color: #0f1a20;
+    color: #0F1A20;
     margin: 10px;
     text-align: center;
     padding: 15px;
-    background-color: #E5E5E5;
+    background-color: #EEE5E9;
     cursor: pointer;
     box-sizing: border-box;
     width: calc(100% / 7 - 20px);
@@ -44,11 +44,11 @@ div.item-menu {
 div.admin-item-menu {
     border-radius: 15px;
     display: inline-block;
-    color: #0f1a20;
+    color: #0F1A20;
     margin: 10px;
     text-align: center;
     padding: 15px;
-    background-color: #E5E5E5;
+    background-color: #EEE5E9;
     cursor: pointer;
     box-sizing: border-box;
     width: calc(100% / 5 - 20px);
@@ -57,7 +57,7 @@ div.admin-item-menu {
 
 div.item-menu:hover, div.admin-item-menu:hover {
     background-color: #C92403;
-    color: #E5E5E5;
+    color: #EEE5E9;
 }
 
 div.show-menu {
@@ -67,7 +67,7 @@ div.show-menu {
 
 div.active {
     background-color: #C92403;
-    color: #E5E5E5;
+    color: #EEE5E9;
 }
 
 i.iconMenu {
@@ -88,15 +88,15 @@ div.item-submenu {
     margin-top: 5px;
     height: 40px;
     border-radius: 15px;
-    background-color: #E5E5E5;
-    color: #0f1a20;
+    background-color: #EEE5E9;
+    color: #0F1A20;
     text-align: center;
     line-height: 40px;
 }
 
 div.item-submenu:hover {
     background-color: #C92403;
-    color: #E5E5E5;
+    color: #EEE5E9;
 }
 
 @media screen and (max-width: 1160px) {
@@ -108,7 +108,7 @@ div.item-submenu:hover {
         display: block;
         width: 100%;
         text-align: center;
-        color: #E5E5E5;
+        color: #EEE5E9;
         font-size: 20px;
     }
 

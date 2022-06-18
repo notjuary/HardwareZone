@@ -35,7 +35,7 @@ div.login-form input {
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
     outline: none;
-    border: solid 2px #EEE5E9
+    border: solid 2px #EEE5E9;
 }
 
 div.login-form a {

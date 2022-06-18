@@ -1,14 +1,14 @@
 div.container {
     width: 100%;
     text-align: left;
-    color: white;
+    color: #EEE5E9;
     justify-content: center;
     display: flex;
 }
 
 div.containerProduct {
     padding: 15px;
-    border: solid 1px white;
+    border: solid 1px #EEE5E9;
     border-radius: 15px;
     min-width: 400px;
     min-height: 680px;
@@ -27,7 +27,7 @@ input.product, textarea.product {
     width: 100%;
     border-radius: 10px;
     padding: 5px;
-    background: white;
+    background: #EEE5E9;
     font-size: 15px;
     outline: none;
 }
@@ -38,10 +38,10 @@ div.add-product > input {
     border-radius: 10px;
     padding: 5px;
     background: none;
-    color: white;
+    color: #EEE5E9;
 }
 
 div.add-product > input:hover {
-    color: black;
-    background: white;
+    color: #0F1A20;
+    background: #EEE5E9;
 }

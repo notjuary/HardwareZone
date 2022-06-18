@@ -1,6 +1,6 @@
 div.headerTable {
     margin-top: 30px;
-    color: white;
+    color: #EEE5E9;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     grid-column-gap: 0;
@@ -12,17 +12,17 @@ div.headerTable {
 }
 
 div.show-more a {
-    color: white;
+    color: #EEE5E9;
 }
 
 div.set-state a {
     text-decoration: none;
-    color: white;
+    color: #EEE5E9;
 }
 
 div.single-user {
     margin-top: 30px;
-    color: white;
+    color: #EEE5E9;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     grid-column-gap: 0;
@@ -37,10 +37,10 @@ div.single-user {
 
 button.button-show-more {
     transition: 0.5s;
-    color: black;
+    color: #0F1A20;
     padding: 5px;
 }
 button.button-show-more:hover {
     transition: 0.5s;
-    background: red;
+    background: #C92403;
 }

@@ -20,18 +20,18 @@ div.warning {
 div.alert {
     padding: 20px;
     background-color: #f44336;
-    color: white;
+    color: #EEE5E9;
 }
 
 div.success {
     padding: 20px;
     background-color: #2eb885;
-    color: white;
+    color: #EEE5E9;
 }
 
 span.closebtn {
     margin-left: 15px;
-    color: white;
+    color: #EEE5E9;
     font-weight: bold;
     float: right;
     font-size: 22px;
@@ -41,5 +41,5 @@ span.closebtn {
 }
 
 span.closebtn:hover {
-    color: black;
+    color: #0F1A20;
 }

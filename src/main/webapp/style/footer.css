@@ -2,7 +2,7 @@ div.footer {
     width: 100%;
     position: absolute;
     bottom: 0;
-    background: #fefefe;
+    background: #EEE5E9;
     display: block;
 }
 
@@ -25,7 +25,12 @@ div.links {
 div.links a {
     display: block;
     text-decoration: none;
-    color: #0f1a20;
+    color: #0F1A20;
+}
+
+div.links a:hover {
+    color: #C92403;
+    text-align: center;
 }
 
 div.social {
@@ -35,10 +40,10 @@ div.social {
 div.social a {
     padding: 5px;
     font-size: 35px;
-    color: #0f1a20;
+    color: #0F1A20;
 }
 
 div.social a:hover {
-    color: red;
+    color: #C92403;
     text-align: center;
 }

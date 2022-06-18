@@ -14,7 +14,7 @@ div.edit-form {
 }
 
 div.back {
-    background: white;
+    background: #EEE5E9;
     padding: 8px;
     display: inline-block;
     border-radius: 10px;
@@ -23,11 +23,11 @@ div.back {
 
 div.back a {
     text-decoration: none;
-    color: black;
+    color: #0F1A20;
 }
 
 div.setAdmin {
-    background: white;
+    background: #EEE5E9;
     padding: 8px;
     display: inline-block;
     border-radius: 10px;
@@ -38,7 +38,7 @@ div.setAdmin {
 
 div.setAdmin a {
     text-decoration: none;
-    color: black;
+    color: #0F1A20;
 }
 
 label.text-section {
@@ -82,7 +82,7 @@ div.edit-form input {
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
     outline: none;
-    border: solid 2px #EEE5E9
+    border: solid 2px #EEE5E9;
 }
 
 input[type = "submit"] {
@@ -109,7 +109,7 @@ input[type = "submit"]:hover {
 
     div.container > div {
         display: block;
-        border: solid red 1px;
+        border: solid #C92403 1px;
         width: 100%;
         position: relative;
     }
