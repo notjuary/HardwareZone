@@ -18,9 +18,9 @@
     <%@ include file="menu.jsp"%>
 
     <div class="slide-show">
-
     </div>
 
     <%@ include file="/footer.jsp"%>
+
 </body>
 </html>

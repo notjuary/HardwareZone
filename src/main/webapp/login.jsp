@@ -27,7 +27,6 @@
 
     <div class="login-form">
         <form action="login-servlet" method="post">
-
             <div class="user-email">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" placeholder="Email">
@@ -45,7 +44,6 @@
             <div class="register-button">
                 <span>Nuovo utente? <a href="register.jsp"><br/>Crea un account</a></span>
             </div>
-
         </form>
     </div>
 

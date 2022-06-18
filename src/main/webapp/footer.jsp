@@ -10,7 +10,6 @@
 <body>
 
     <div class="footer">
-
         <div class="container">
             <div class="info">
                 <h2>About Us</h2>

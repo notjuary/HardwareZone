@@ -23,7 +23,6 @@
     <%@ include file="/WEB-INF/admin/menu-admin.jsp"%>
 
     <div class="edit-form">
-
         <div class="back">
             <a href="${pageContext.request.contextPath}/users-servlet">Indietro</a>
         </div>
@@ -33,9 +32,7 @@
         </div>
 
         <div class="container">
-
             <div class="personal-information">
-
                 <label class="text-section">Dati personali</label>
 
                 <label for="name" class="login-text">Nome</label>
@@ -49,11 +46,9 @@
 
                 <label for="admin" class="login-text">Admin</label>
                 <input type="text" class="register" id="admin" name="admin" placeholder="${profileJSP.isAdmin()}" readonly>
-
             </div>
 
             <div class="login-information">
-
                 <label class="text-section">Dati accesso</label>
 
                 <label for="email" class="login-text">Email</label>
@@ -67,11 +62,9 @@
 
                 <label for="state" class="login-text">Stato</label>
                 <input type="text" class="register" id="state" name="state" placeholder="${profileJSP.isActive()}" readonly>
-
             </div>
 
             <div class="address-information">
-
                 <label class="text-section">Indirizzo</label>
 
                 <label for="city" class="login-text">Città</label>
@@ -85,9 +78,7 @@
 
                 <label for="address" class="login-text">Indirizzo</label>
                 <input type="text" class="register" id="address" name="address" placeholder="${profileJSP.getAddress()}" readonly>
-
             </div>
-
         </div>
     </div>
 

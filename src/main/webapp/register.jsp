@@ -29,7 +29,6 @@
         <form action="registration-servlet" method="post">
 
             <div class="tab-personal-information">
-
                 <div class="user-name">
                     <label for="name" class="login-text">Nome</label>
                     <input type="text" class="register" id="name" name="name" placeholder="Nome">
@@ -48,11 +47,9 @@
                 <div class="login-button">
                     <input type="button" value="Avanti" class="show-tab-login-info" onclick="validatePersonalInformation()">
                 </div>
-
             </div>
 
             <div class="tab-login-information">
-
                 <div class="user-email">
                     <label for="email" class="login-text">Email</label>
                     <input type="email" class="register" id="email" name="email" placeholder="Email">
@@ -75,11 +72,9 @@
                 <div class="login-button">
                     <input type="button" value="Avanti" class="show-tab-address" onclick="validateLoginInformation()">
                 </div>
-
             </div>
 
             <div class="tab-address-information">
-
                 <div class="user-city">
                     <label for="city" class="login-text">Città</label>
                     <input type="text" class="register" id="city" name="city" placeholder="Città">
@@ -107,7 +102,6 @@
                 <div class="login-button">
                     <input type="button" value="Avanti" class="show-review-login-info" onclick="validateAddressInformation()">
                 </div>
-
             </div>
 
             <div class="tab-review-information">

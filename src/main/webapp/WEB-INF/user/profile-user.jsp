@@ -21,11 +21,8 @@
 
     <div class="edit-form">
         <form action="edit-profile-servlet" method="post">
-
             <div class="container">
-
                 <div class="personal-information">
-
                     <label class="text-section">Dati personali</label>
 
                     <label for="name" class="login-text">Nome</label>
@@ -36,11 +33,9 @@
 
                     <label for="birthday" class="login-text">Data di nascita</label>
                     <input type="text" class="register" id="birthday" name="birthday" placeholder="${profileJSP.getBirthday()}" onfocus="(this.type='date')" value="${profileJSP.getBirthday()}">
-
                 </div>
 
                 <div class="login-information">
-
                     <label class="text-section">Dati accesso</label>
 
                     <label for="email" class="login-text">Email</label>
@@ -51,11 +46,9 @@
 
                     <label for="phone" class="login-text">Telefono</label>
                     <input type="tel" class="register" id="phone" name="phone" placeholder="${profileJSP.getPhone()}" value="${profileJSP.getPhone()}">
-
                 </div>
 
                 <div class="address-information">
-
                     <label class="text-section">Indirizzo</label>
 
                     <label for="city" class="login-text">Città</label>
@@ -69,13 +62,10 @@
 
                     <label for="address" class="login-text">Indirizzo</label>
                     <input type="text" class="register" id="address" name="address" placeholder="${profileJSP.getAddress()}" value="${profileJSP.getAddress()}">
-
                 </div>
-
             </div>
 
             <div class="register-button"><input type="submit" value="Salva"></div>
-
         </form>
     </div>
 
