@@ -29,7 +29,7 @@ CREATE TABLE Carrello (
 
 CREATE TABLE Prodotto (
 	ID_Prodotto INT AUTO_INCREMENT PRIMARY KEY,
-    Nome VARCHAR(30) NOT NULL,
+    Nome VARCHAR(20) NOT NULL,
     Descrizione VARCHAR(255) NOT NULL,
     Prezzo DOUBLE NOT NULL,
     Quantità_Disponibile INT NOT NULL DEFAULT 0,
