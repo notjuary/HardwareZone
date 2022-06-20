@@ -17,7 +17,7 @@
 <body>
 
 
-<%@ include file="/menu.jsp"%>
+<%@ include file="/WEB-INF/admin/menu-admin.jsp"%>
 
 <div class="edit-form">
     <form action="edit-profile-servlet" method="post">

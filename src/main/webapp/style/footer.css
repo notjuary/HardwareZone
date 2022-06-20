@@ -4,6 +4,7 @@ div.footer {
     bottom: 0;
     background: #EEE5E9;
     display: block;
+    height: auto;
 }
 
 div.container {
@@ -46,4 +47,20 @@ div.social a {
 div.social a:hover {
     color: #C92403;
     text-align: center;
+}
+
+@media screen and (max-width: 660px) {
+    div.container {
+        display: block;
+    }
+
+    div.info h2 {
+        text-align: center;
+    }
+
+    div.container > div {
+        display: block;
+        float: none;
+        width: 100%;
+    }
 }

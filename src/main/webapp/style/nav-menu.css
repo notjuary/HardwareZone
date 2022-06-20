@@ -125,7 +125,7 @@ div.item-submenu:hover {
         height: 100vh;
     }
 
-    div.item-menu {
+    div.item-menu, div.admin-item-menu {
         float: none !important;
         display: block;
         width: 200px;

@@ -1,7 +1,6 @@
 div.login-form {
     display: block;
     position: absolute;
-    margin-top: 80px;
     left: 50%;
     transform: translate(-50%, 0);
     border: solid 2px #EEE5E9;

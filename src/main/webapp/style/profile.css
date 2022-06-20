@@ -109,7 +109,6 @@ input[type = "submit"]:hover {
 
     div.container > div {
         display: block;
-        border: solid #C92403 1px;
         width: 100%;
         position: relative;
     }
@@ -121,6 +120,19 @@ input[type = "submit"]:hover {
         box-sizing: border-box;
         min-width: auto;
         min-height: auto;
+    }
+
+    div.back {
+        display: block;
+        width: 100%;
+        text-align: center;
+    }
+
+    div.setAdmin {
+        display: block;
+        width: 100%;
+        left: 0;
+        text-align: center;
     }
 }
 
