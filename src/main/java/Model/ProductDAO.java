@@ -69,7 +69,7 @@ public class ProductDAO {
         }
     }
 
-    public List<ProductBean> doRetrieveAll() {
+    public ArrayList<ProductBean> doRetrieveAll() {
 
         try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps = con.prepareStatement(
@@ -101,7 +101,7 @@ public class ProductDAO {
         }
     }
 
-    public List<ProductBean> doRetrieveByCategory(String category) {
+    public ArrayList<ProductBean> doRetrieveByCategory(String category) {
 
         try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps = con.prepareStatement(
@@ -135,7 +135,7 @@ public class ProductDAO {
         }
     }
 
-    public List<ProductBean> doRetrieveByRangePrice(Double min, Double max) {
+    public ArrayList<ProductBean> doRetrieveByRangePrice(Double min, Double max) {
 
         try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps = con.prepareStatement(

@@ -1,0 +1,11 @@
+div.productCard {
+    color: #EEE5E9;
+    text-align: center;
+    border: solid 1px white;
+    float: left;
+    width: calc(100% / 3);
+}
+
+div.productCard img {
+    width: 100px;
+}

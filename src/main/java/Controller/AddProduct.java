@@ -31,7 +31,7 @@ public class AddProduct extends HttpServlet {
         product.setQuantity(Integer.parseInt(quantity));
         product.setSales(Integer.parseInt(sales));
         product.setCategory(category);
-        product.setImage("image");
+        product.setImage("nophoto.png");
 
         service.doSave(product);
     }
