@@ -7,12 +7,12 @@ div.footer {
     height: auto;
 }
 
-div.container {
+div.containerFooter {
     display: flex;
     height: 100%;
 }
 
-div.container > div {
+div.containerFooter > div {
     width: calc(100% / 3);
     float: left;
     padding: 25px;
@@ -50,7 +50,7 @@ div.social a:hover {
 }
 
 @media screen and (max-width: 660px) {
-    div.container {
+    div.containerFooter {
         display: block;
     }
 
@@ -58,7 +58,7 @@ div.social a:hover {
         text-align: center;
     }
 
-    div.container > div {
+    div.containerFooter > div {
         display: block;
         float: none;
         width: 100%;

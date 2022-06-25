@@ -22,7 +22,7 @@
     <%@ include file="/WEB-INF/admin/menu-admin.jsp"%>
 
     <div class="container">
-        <form action="${pageContext.request.contextPath}/add-product-servlet" method="post">
+        <form action="${pageContext.request.contextPath}/add-product-servlet" method="post" enctype="multipart/form-data">
             <div class="containerProduct">
                 <div class="product-name">
                     <label for="name">Nome</label>

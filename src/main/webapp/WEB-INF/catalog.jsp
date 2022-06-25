@@ -22,10 +22,10 @@
 
     <% ArrayList<ProductBean> productsList = (ArrayList<ProductBean>) request.getAttribute("products"); %>
 
-    <div class="container">
+    <div class="containerProduct">
         <% for (ProductBean product: productsList) { %>
             <div class="productCard">
-                <div class="image"><img src="./img/<%= product.getImage() %>" alt="<%= product.getName() %>"></div>
+                <div class="image"><img src="<%= product.getImage() %>" alt="<%= product.getName() %>"></div>
                 <div class="name"><%= product.getName() %></div>
                 <div class="price">€<%= product.getPrice() %></div>
             </div>
