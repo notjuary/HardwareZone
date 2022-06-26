@@ -51,7 +51,7 @@
 
                 <div class="product-image">
                     <label for="image">Immagine</label>
-                    <input type="file" id="image" name="image" class="product" placeholder="image">
+                    <input type="file" id="image" name="image" class="product">
                 </div>
 
                 <%
