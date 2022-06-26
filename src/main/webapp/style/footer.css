@@ -1,6 +1,6 @@
 div.footer {
     width: 100%;
-    position: absolute;
+    position: relative;
     bottom: 0;
     background: #EEE5E9;
     display: block;

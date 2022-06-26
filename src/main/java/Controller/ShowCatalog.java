@@ -17,8 +17,11 @@ public class ShowCatalog extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
 
+        int first = Integer.parseInt(request.getParameter("first"));
+        int last = Integer.parseInt(request.getParameter("last"));
+
         ProductDAO service = new ProductDAO();
-        ArrayList<ProductBean> listProducts = service.doRetrieveAll();
+        ArrayList<ProductBean> listProducts = service.doRetrieveAll(first, last);
 
         request.setAttribute("products", listProducts);
 
