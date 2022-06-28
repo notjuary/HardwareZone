@@ -40,7 +40,24 @@ button.button-show-more {
     color: #0F1A20;
     padding: 5px;
 }
+
 button.button-show-more:hover {
     transition: 0.5s;
     background: #C92403;
+}
+
+@media screen and (max-width: 1160px) {
+    div.headerTable {
+        display: none;
+    }
+
+    div.bodyTable {
+        margin-top: 80px;
+    }
+
+    div.single-user {
+        display: block;
+        width: 90%;
+        margin: 16px auto;
+    }
 }

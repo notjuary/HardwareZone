@@ -20,7 +20,7 @@
 
     <%@ include file="/WEB-INF/admin/menu-admin.jsp"%>
 
-    <div class="container">
+    <div class="containerProductDiv">
         <div class="headerTable">
             <div>ID</div>
             <div>Nome</div>

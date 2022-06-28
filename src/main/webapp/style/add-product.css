@@ -1,9 +1,10 @@
-div.container {
+div.containerProductDiv {
     width: 100%;
     text-align: left;
     color: #EEE5E9;
     justify-content: center;
     display: flex;
+    margin-bottom: 50px;
 }
 
 div.containerProduct {
@@ -11,7 +12,6 @@ div.containerProduct {
     border: solid 1px #EEE5E9;
     border-radius: 15px;
     min-width: 400px;
-    min-height: 650px;
 }
 
 div.containerProduct > div {
@@ -34,6 +34,11 @@ input.product, textarea.product {
     line-height: 40px;
 }
 
+textarea.product {
+    resize: vertical;
+    min-height: 100px;
+}
+
 div.add-product > input {
     display: block;
     width: 100%;
@@ -47,4 +52,19 @@ div.add-product > input {
 div.add-product > input:hover {
     color: #0F1A20;
     background: #EEE5E9;
+}
+
+@media screen and (max-width: 1160px) {
+    div.containerProductDiv {
+        margin-top: 80px;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    div.containerProduct {
+        display: block;
+        margin: 0 auto;
+        min-width: unset;
+        width: 100%;
+    }
 }

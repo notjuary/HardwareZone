@@ -43,3 +43,7 @@ span.closebtn {
 span.closebtn:hover {
     color: #0F1A20;
 }
+
+div.slide-show {
+    min-height: 600px;
+}

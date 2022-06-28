@@ -49,11 +49,11 @@ label.text-section {
     text-decoration: underline;
 }
 
-div.container {
+div.containerProductDiv {
     display: flex;
 }
 
-div.container > div {
+div.containerProductDiv > div {
     display: inline-block;
     padding: 15px;
     box-sizing: border-box;
@@ -103,11 +103,11 @@ input[type = "submit"]:hover {
         max-width: 400px;
     }
 
-    div.container {
+    div.containerProductDiv {
         display: block;
     }
 
-    div.container > div {
+    div.containerProductDiv > div {
         display: block;
         width: 100%;
         position: relative;

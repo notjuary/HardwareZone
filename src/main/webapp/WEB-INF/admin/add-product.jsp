@@ -21,7 +21,7 @@
 
     <%@ include file="/WEB-INF/admin/menu-admin.jsp"%>
 
-    <div class="container">
+    <div class="containerProductDiv">
         <form action="${pageContext.request.contextPath}/add-product-servlet" method="post" enctype="multipart/form-data">
             <div class="containerProduct">
                 <div class="product-name">
@@ -31,7 +31,7 @@
 
                 <div class="product-description">
                     <label for="description">Descrizione</label>
-                    <textarea id="description" name="description" class="product" placeholder="Descrizione"></textarea>
+                    <textarea id="description" name="description" class="product" placeholder="Descrizione" rows="6"></textarea>
                 </div>
 
                 <div class="product-price">

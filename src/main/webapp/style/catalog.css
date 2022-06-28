@@ -1,14 +1,18 @@
+div.bodyCatalog {
+    display: flex;
+    padding: 10px;
+    height: 100vh;
+}
+
 div.containerProduct {
     position: relative;
-    min-height: 600px;
-    margin-bottom: 20px;
+    width: 100%;
 }
 
 div.filterBar {
     border-radius: 15px;
     margin-left: 10px;
     width: 300px;
-    height: 100vh;
     background: #eee5e9;
 
 }
@@ -39,6 +43,7 @@ div.filterSearch input {
     color: #eee5e9;
     margin-bottom: 5px;
     width: 90%;
+    border-style: none;
 }
 
 div.filterSearch input:hover {
@@ -51,7 +56,7 @@ div.productCard {
     background: #EEE5E9;
     float: left;
     position: relative;
-    width: calc(100% / 4 - 20px);
+    width: calc(100% / 3 - 20px);
     border-radius: 20px;
     overflow: hidden;
     margin: 10px;
@@ -62,7 +67,7 @@ div.productCard img {
 }
 
 div.arrow-container {
-    z-index: -1;
+    z-index: 1;
     position: absolute;
     bottom: 0;
     display: flex;
@@ -79,6 +84,17 @@ div.arrow-container div {
 }
 
 div.arrow-container i:hover {
+    cursor: pointer;
+}
+
+div.productCard i {
+    position: absolute;
+    font-size: 28px;
+    top: 15px;
+    right: 15px;
+}
+
+div.productCard i:hover {
     color: #c92403;
     cursor: pointer;
 }

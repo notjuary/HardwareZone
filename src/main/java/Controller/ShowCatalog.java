@@ -8,7 +8,6 @@ import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 @WebServlet(name = "showCatalogServlet", value = "/show-catalog-servlet")
 public class ShowCatalog extends HttpServlet {
