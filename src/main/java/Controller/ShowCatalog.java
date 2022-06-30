@@ -1,5 +1,7 @@
 package Controller;
 
+import Model.CategoryBean;
+import Model.CategoryDAO;
 import Model.ProductBean;
 import Model.ProductDAO;
 import jakarta.servlet.*;
@@ -19,9 +21,13 @@ public class ShowCatalog extends HttpServlet {
         int first = Integer.parseInt(request.getParameter("first"));
         int last = Integer.parseInt(request.getParameter("last"));
 
+        CategoryDAO serviceCategory = new CategoryDAO();
+        ArrayList<CategoryBean> listCategories = serviceCategory.doRetrieveAll();
+
         ProductDAO service = new ProductDAO();
         ArrayList<ProductBean> listProducts = service.doRetrieveAll(first, last);
 
+        request.setAttribute("categories", listCategories);
         request.setAttribute("products", listProducts);
 
         String address = "/WEB-INF/catalog.jsp";

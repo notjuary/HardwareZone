@@ -1,5 +1,7 @@
 package Controller;
 
+import Model.CategoryBean;
+import Model.CategoryDAO;
 import Model.ProductBean;
 import Model.ProductDAO;
 import jakarta.servlet.*;
@@ -8,6 +10,7 @@ import jakarta.servlet.annotation.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 @MultipartConfig(fileSizeThreshold = 1024 * 1024,
         maxFileSize = 1024 * 1024 * 5,
@@ -34,6 +37,21 @@ public class AddProduct extends HttpServlet {
 
         ProductDAO service = new ProductDAO();
         ProductBean product = new ProductBean();
+
+        CategoryDAO serviceCategory = new CategoryDAO();
+        ArrayList<CategoryBean> categoryList = serviceCategory.doRetrieveAll();
+
+        boolean categoryExist = false;
+        for (CategoryBean categorySaved: categoryList) {
+
+            if (categorySaved.getNome().equalsIgnoreCase(category)) {
+                categoryExist = true;
+                break;
+            }
+        }
+
+        if (!categoryExist)
+            serviceCategory.doSave(category);
 
         product.setName(name);
         product.setDescription(description);

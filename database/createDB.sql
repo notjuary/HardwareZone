@@ -35,7 +35,7 @@ CREATE TABLE Prodotto (
     Quantità_Disponibile INT NOT NULL DEFAULT 0,
     Sconto INT NOT NULL DEFAULT 0,
     Immagine VARCHAR(255) NOT NULL,
-    Categoria VARCHAR(10) NOT NULL
+    Categoria VARCHAR(20) NOT NULL
 );
 
 CREATE TABLE Carrello_Prodotto (

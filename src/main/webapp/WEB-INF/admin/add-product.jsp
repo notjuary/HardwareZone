@@ -16,6 +16,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/script/eventManager.js"></script>
 
+    <% ArrayList<CategoryBean> listCategories = (ArrayList<CategoryBean>) request.getAttribute("categories"); %>
+
 </head>
 <body>
 
@@ -54,16 +56,11 @@
                     <input type="file" id="image" name="image" class="product">
                 </div>
 
-                <%
-                    CategoryDAO service = new CategoryDAO();
-                    ArrayList<CategoryBean> categories = service.doRetrieveAll();
-                %>
-
                 <div class="product-category">
                     <label for="category">Categoria</label>
                     <input list="category_name" id="category" name="category" class="product" placeholder="Categoria">
                     <datalist id="category_name">
-                        <% for (CategoryBean category: categories) { %>
+                        <% for (CategoryBean category: listCategories) { %>
                             <option value="<%= category.getNome() %>">
                         <% } %>
                     </datalist>

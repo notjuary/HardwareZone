@@ -1,7 +1,7 @@
 <%@ page import="Model.ProductBean" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="Model.CategoryDAO" %>
 <%@ page import="Model.CategoryBean" %>
+<%@ page import="Model.CategoryDAO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="it-IT">
@@ -18,30 +18,13 @@
     <script src='https://kit.fontawesome.com/c6b30e1924.js' crossorigin='anonymous'></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/script/eventManager.js"></script>
 
-    <script>
-        $(".next").click(function(){
-            $.ajax({
-                url: "show-catalog-servlet?first=1&last=18",
-                type: 'GET',
-
-                success: function() {
-                    alert("Va")
-                    $("#containerProduct").load("#containerProduct");
-                }
-            });
-        });
-    </script>
+    <% ArrayList<CategoryBean> listCategories = (ArrayList<CategoryBean>) request.getAttribute("categories"); %>
+    <% ArrayList<ProductBean> productsList = (ArrayList<ProductBean>) request.getAttribute("products"); %>
 
 </head>
 <body>
 
     <%@ include file="/menu.jsp"%>
-
-    <% ArrayList<ProductBean> productsList = (ArrayList<ProductBean>) request.getAttribute("products"); %>
-    <%
-        CategoryDAO service = new CategoryDAO();
-        ArrayList<CategoryBean> categories = service.doRetrieveAll();
-    %>
 
     <div class="bodyCatalog">
         <div class="filterBar">
@@ -50,7 +33,7 @@
             </div>
             <div class="filterCategory">
                 <span>Categoria</span>
-                <% for(CategoryBean category: categories) { %>
+                <% for(CategoryBean category: listCategories) { %>
                 <div class="categoryName">
                     <input type="checkbox" id="<%= category.getNome() %>">
                     <label for="<%= category.getNome() %>"><%= category.getNome() %></label>
@@ -62,7 +45,7 @@
             </div>
         </div>
 
-        <div class="containerProduct">
+        <div class="containerProduct" id="containerProduct">
             <% for (ProductBean product: productsList) { %>
                 <div class="productCard">
                     <div class="image"><img src="<%= product.getImage() %>" alt="<%= product.getName() %>"></div>
@@ -73,8 +56,8 @@
             <% } %>
 
             <div class="arrow-container">
-                <div class="previous"><i class="fa-solid fa-circle-arrow-left"></i></div>
-                <div class="next"><i class="fa-solid fa-circle-arrow-right"></i></div>
+                <div class="previous"><a href="${pageContext.request.contextPath}/show-catalog-servlet?first=<%= productsList.get(0).getId() + 9 %>&last=<%= productsList.get(productsList.size() - 1).getId() + 9 %>"><i class="fa-solid fa-circle-arrow-left"></i></a></div>
+                <div class="next"><a href="${pageContext.request.contextPath}/show-catalog-servlet?first=<%= productsList.get(0).getId() + 9 %>&last=<%= productsList.get(productsList.size() - 1).getId() + 9 %>"><i class="fa-solid fa-circle-arrow-right"></i></a></div>
             </div>
         </div>
     </div>

@@ -28,6 +28,7 @@ div.filterPrice, div.filterCategory {
     height: calc(100% / 2 - 30px);
     width: 100%;
     color: #0f1a20;
+    overflow: scroll;
 }
 
 div.filterSearch {
@@ -62,8 +63,13 @@ div.productCard {
     margin: 10px;
 }
 
+div.image {
+    max-width: 100%;
+    margin: auto;
+}
+
 div.productCard img {
-    width: 100px;
+    height: 90px;
 }
 
 div.arrow-container {
