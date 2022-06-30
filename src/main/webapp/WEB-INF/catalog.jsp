@@ -56,7 +56,7 @@
             <% } %>
 
             <div class="arrow-container">
-                <div class="previous"><a href="${pageContext.request.contextPath}/show-catalog-servlet?first=<%= productsList.get(0).getId() + 9 %>&last=<%= productsList.get(productsList.size() - 1).getId() + 9 %>"><i class="fa-solid fa-circle-arrow-left"></i></a></div>
+                <div class="previous"><a href="${pageContext.request.contextPath}/show-catalog-servlet?first=<%= productsList.get(0).getId() - 9 %>&last=<%= productsList.get(productsList.size() - 1).getId() - 2 %>"><i class="fa-solid fa-circle-arrow-left"></i></a></div>
                 <div class="next"><a href="${pageContext.request.contextPath}/show-catalog-servlet?first=<%= productsList.get(0).getId() + 9 %>&last=<%= productsList.get(productsList.size() - 1).getId() + 9 %>"><i class="fa-solid fa-circle-arrow-right"></i></a></div>
             </div>
         </div>
