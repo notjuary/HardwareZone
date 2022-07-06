@@ -50,14 +50,20 @@
                 <div class="productCard">
                     <div class="image"><img src="<%= product.getImage() %>" alt="<%= product.getName() %>"></div>
                     <div class="name"><%= product.getName() %></div>
-                    <div class="price">€<%= product.getPrice() %></div>
+
+                    <% if (product.getSales() > 0) {
+                        double sale = product.getPrice() - ((product.getPrice() * product.getSales() / 100)); %>
+                        <div class="price" style="color: red"><span style="color: black; text-decoration: line-through;">€<%= String.format("%.2f", product.getPrice()) %></span> €<%= String.format("%.2f", sale) %></div>
+                    <% } else { %>
+                        <div class="price">€<%= String.format("%.2f", product.getPrice()) %></div>
+                    <% } %>
                     <div><i class="fa-solid fa-cart-plus"></i></div>
                 </div>
             <% } %>
 
             <div class="arrow-container">
-                <div class="previous"><a href="${pageContext.request.contextPath}/show-catalog-servlet?first=<%= productsList.get(0).getId() - 9 %>&last=<%= productsList.get(productsList.size() - 1).getId() - 2 %>"><i class="fa-solid fa-circle-arrow-left"></i></a></div>
-                <div class="next"><a href="${pageContext.request.contextPath}/show-catalog-servlet?first=<%= productsList.get(0).getId() + 9 %>&last=<%= productsList.get(productsList.size() - 1).getId() + 9 %>"><i class="fa-solid fa-circle-arrow-right"></i></a></div>
+                <div class="previous"><i class="fa-solid fa-circle-arrow-left"></i></div>
+                <div class="next"><i class="fa-solid fa-circle-arrow-right"></i></div>
             </div>
         </div>
     </div>

@@ -23,7 +23,7 @@ CREATE TABLE Utente (
 CREATE TABLE Carrello (
 	ID_Carrello INT AUTO_INCREMENT PRIMARY KEY,
     Utente INT REFERENCES Utente(ID_Utente),
-    Totale DOUBLE NOT NULL,
+    Totale DOUBLE(10, 2) NOT NULL,
     Numero_Prodotti INT NOT NULL DEFAULT 0
 );
 
@@ -31,7 +31,7 @@ CREATE TABLE Prodotto (
 	ID_Prodotto INT AUTO_INCREMENT PRIMARY KEY,
     Nome VARCHAR(20) NOT NULL,
     Descrizione VARCHAR(255) NOT NULL,
-    Prezzo DOUBLE NOT NULL,
+    Prezzo DOUBLE(10, 2) NOT NULL,
     Quantità_Disponibile INT NOT NULL DEFAULT 0,
     Sconto INT NOT NULL DEFAULT 0,
     Immagine VARCHAR(255) NOT NULL,
@@ -48,8 +48,8 @@ CREATE TABLE Carrello_Prodotto (
 CREATE TABLE Ordine (
 	ID_Ordine INT AUTO_INCREMENT PRIMARY KEY,
     Utente INT REFERENCES Utente(ID_Utente),
-    Costi_Spedizione DOUBLE,
-    Totale DOUBLE NOT NULL
+    Costi_Spedizione DOUBLE(10, 2),
+    Totale DOUBLE(10, 2) NOT NULL
 );
 
 CREATE TABLE Ordine_Prodotto (
