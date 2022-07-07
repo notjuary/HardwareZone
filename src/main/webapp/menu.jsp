@@ -83,9 +83,9 @@
             <div class="item-menu" onclick="location.href='#'" data-name="Chi siamo"><i class="fa-solid fa-circle-info iconMenu"></i>Chi siamo</div>
             <div class="item-menu" onclick="<%= url %>" style="position: relative" data-name="Login"><i class="fa-solid fa-user iconMenu"></i><%= name %>
                 <div class="sub-menu" data-name="Login">
-                    <div class="item-submenu" onclick="location.href='user-profile-servlet'">Profilo</div>
+                    <div class="item-submenu" onclick="location.href='${pageContext.request.contextPath}/user-profile-servlet'">Profilo</div>
                     <div class="item-submenu" onclick="location.href='#'">Ordini</div>
-                    <div class="item-submenu" onclick="location.href='logout-servlet'">Logout</div>
+                    <div class="item-submenu" onclick="location.href='${pageContext.request.contextPath}/logout-servlet'">Logout</div>
                 </div>
             </div>
         </div>

@@ -36,6 +36,25 @@ public class ProductDAO {
         }
     }
 
+    public boolean isAlreadyRegistered(String name, String description) {
+        try (Connection con = ConPool.getConnection()) {
+            PreparedStatement ps = con.prepareStatement(
+                    "SELECT * " +
+                            "FROM Prodotto " +
+                            "WHERE Nome=? AND Descrizione=?");
+
+            ps.setString(1, name);
+            ps.setString(2, description);
+
+            ResultSet rs = ps.executeQuery();
+
+            return rs.next();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public ProductBean doRetrieveById(int id) {
 
         try (Connection con = ConPool.getConnection()) {

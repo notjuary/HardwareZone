@@ -19,7 +19,16 @@ public class UserProfile extends HttpServlet {
 
         request.setAttribute("profileJSP", user);
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/user/profile-user.jsp");
-        dispatcher.include(request, response);
+        if (user.isAdmin().equalsIgnoreCase("true")) {
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/admin/profile-admin.jsp");
+            dispatcher.include(request, response);
+        }
+
+        else {
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/user/profile-user.jsp");
+            dispatcher.include(request, response);
+        }
     }
 }

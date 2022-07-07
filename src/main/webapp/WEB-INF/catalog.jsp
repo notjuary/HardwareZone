@@ -32,11 +32,11 @@
                     <span>Prezzo</span>
                     <div class="range">
                         <label for="min">Prezzo minimo</label><br>
-                        <input type="number" min="1" max="10000" id="min" name="min" value="1" placeholder="1">
+                        <input type="text" pattern="[0-9]+" id="min" name="min" value="1" placeholder="1">
                     </div>
                     <div class="range">
                         <label for="max">Prezzo massimo</label><br>
-                        <input type="number" min="0" max="10000" id="max" name="max" value="10000" placeholder="10000">
+                        <input type="text" pattern="[0-9]+" id="max" name="max" value="10000" placeholder="10000">
                     </div>
                     <input type="checkbox" id="isInSale" name="inSale" value="inSale">
                     <label for="isInSale">Articoli in saldo</label><br>
@@ -73,7 +73,7 @@
 
                     <% if (product.getSales() > 0) {
                         double sale = product.getPrice() - ((product.getPrice() * product.getSales() / 100)); %>
-                        <div class="price" style="color: red"><span style="color: black; text-decoration: line-through;">€<%= String.format("%.2f", product.getPrice()) %></span> €<%= String.format("%.2f", sale) %></div>
+                        <div class="price" style="color: red"><span style="color: black; text-decoration: line-through;">€<%= String.format("%.2f", product.getPrice()) %></span> €<%= String.format("%.2f", sale) %> -<%= product.getSales() %>%</div>
                     <% } else { %>
                         <div class="price">€<%= String.format("%.2f", product.getPrice()) %></div>
                     <% } %>

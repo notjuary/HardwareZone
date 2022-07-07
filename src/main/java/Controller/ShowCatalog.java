@@ -30,11 +30,10 @@ public class ShowCatalog extends HttpServlet {
         request.setAttribute("categories", listCategories);
         request.setAttribute("products", listProducts);
 
-        if (first == 1) {
-            String address = "/WEB-INF/catalog.jsp";
-            RequestDispatcher dispatcher = request.getRequestDispatcher(address);
-            dispatcher.forward(request, response);
-        }
+
+        String address = "/WEB-INF/catalog.jsp";
+        RequestDispatcher dispatcher = request.getRequestDispatcher(address);
+        dispatcher.forward(request, response);
     }
 
     /*

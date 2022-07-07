@@ -28,37 +28,37 @@
             <div class="containerProduct">
                 <div class="product-name">
                     <label for="name">Nome</label>
-                    <input type="text" id="name" name="name" class="product" placeholder="Nome" maxlength="20">
+                    <input type="text" id="name" name="name" class="product" placeholder="Nome" maxlength="20" required>
                 </div>
 
                 <div class="product-description">
                     <label for="description">Descrizione</label>
-                    <textarea id="description" name="description" class="product" placeholder="Descrizione" rows="6" maxlength="255"></textarea>
+                    <textarea id="description" name="description" class="product" placeholder="Descrizione" rows="6" maxlength="255" required></textarea>
                 </div>
 
                 <div class="product-price">
                     <label for="price">Prezzo</label>
-                    <input type="text" id="price" name="price" class="product" placeholder="Prezzo" maxlength="20">
+                    <input type="text" id="price" name="price" class="product" placeholder="Prezzo" pattern="^[1-9]\d*(\.\d+)?$" required>
                 </div>
 
                 <div class="product-quantity">
                     <label for="quantity">Quantità</label>
-                    <input type="text" id="quantity" name="quantity" class="product" placeholder="Quantità" maxlength="20">
+                    <input type="text" id="quantity" name="quantity" class="product" placeholder="Quantità" pattern="[0-9]+" required>
                 </div>
 
                 <div class="product-sales">
                     <label for="sales">Sconto</label>
-                    <input type="text" id="sales" name="sales" class="product" placeholder="Sconto" maxlength="20">
+                    <input type="text" id="sales" name="sales" class="product" placeholder="Sconto" pattern="[0-9]+" required>
                 </div>
 
                 <div class="product-image">
                     <label for="image">Immagine</label>
-                    <input type="file" id="image" name="image" class="product" maxlength="20">
+                    <input type="file" id="image" name="image" class="product" required>
                 </div>
 
                 <div class="product-category">
                     <label for="category">Categoria</label>
-                    <input list="category_name" id="category" name="category" class="product" placeholder="Categoria" maxlength="20">
+                    <input list="category_name" id="category" name="category" class="product" placeholder="Categoria" maxlength="20" required>
                     <datalist id="category_name">
                         <% for (CategoryBean category: listCategories) { %>
                             <option value="<%= category.getNome() %>">

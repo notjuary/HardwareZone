@@ -37,6 +37,17 @@ div.filterSearch {
     justify-content: center;
 }
 
+div.range input[type=text] {
+    height: 30px;
+    padding-left: 10px;
+    border-radius: 15px;
+    background: #eee5e9;
+    border: #0f1a20 solid 1px;
+    margin-bottom: 5px;
+    width: 100%;
+    outline: none;
+}
+
 div.filterSearch input {
     height: 50px;
     border-radius: 15px;
