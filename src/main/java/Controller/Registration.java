@@ -125,28 +125,20 @@ public class Registration extends HttpServlet {
 
         else if (level != 10) {
 
-            PrintWriter out = response.getWriter();
-            out.println("<div class=\"alert\">\n" +
-                    "    <span class=\"closebtn\" onclick=\"clearDiv();\">&times;</span> \n" +
-                    "    <strong>Attenzione!</strong> Errore inserimento\n" +
-                    "    </div>");
-
-            RequestDispatcher dispatcher = request.getRequestDispatcher("register.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/error.jsp");
+            request.setAttribute("type", "alert");
+            request.setAttribute("msg", "Errore registrazione");
+            request.setAttribute("redirect", "register.jsp");
             dispatcher.include(request, response);
-            out.close();
         }
 
         else {
 
-            PrintWriter out = response.getWriter();
-            out.println("<div class=\"alert\">\n" +
-                    "    <span class=\"closebtn\" onclick=\"clearDiv();\">&times;</span> \n" +
-                    "    <strong>Attenzione!</strong> Email già in uso\n" +
-                    "    </div>");
-
-            RequestDispatcher dispatcher = request.getRequestDispatcher("register.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/error.jsp");
+            request.setAttribute("type", "alert");
+            request.setAttribute("msg", "Email già in uso");
+            request.setAttribute("redirect", "login.jsp");
             dispatcher.include(request, response);
-            out.close();
         }
     }
 }

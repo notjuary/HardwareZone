@@ -12,24 +12,32 @@ body {
 }
 
 div.warning {
+    text-align: center;
     padding: 20px;
     background-color: #c27000;
     color: white;
 }
 
 div.alert {
+    text-align: center;
     padding: 20px;
     background-color: #f44336;
     color: #EEE5E9;
 }
 
 div.success {
+    text-align: center;
     padding: 20px;
     background-color: #2eb885;
     color: #EEE5E9;
 }
 
+div.success a, div.warning a, div.alert a {
+    text-decoration: none;
+}
+
 span.closebtn {
+    text-align: center;
     margin-left: 15px;
     color: #EEE5E9;
     font-weight: bold;

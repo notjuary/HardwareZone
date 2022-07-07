@@ -53,15 +53,11 @@ public class SetAdmin extends HttpServlet {
 
         else {
 
-            PrintWriter out = response.getWriter();
-            out.println("<div class=\"alert\">\n" +
-                    "    <span class=\"closebtn\" onclick=\"clearDiv();\">&times;</span> \n" +
-                    "    Utente non attivo\n" +
-                    "    </div>");
-
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/users-servlet");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/error.jsp");
+            request.setAttribute("type", "alert");
+            request.setAttribute("msg", "Utente non attivo");
+            request.setAttribute("redirect", "/users-servlet");
             dispatcher.include(request, response);
-            out.close();
         }
     }
 }

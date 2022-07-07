@@ -73,7 +73,7 @@
 
                     <% if (product.getSales() > 0) {
                         double sale = product.getPrice() - ((product.getPrice() * product.getSales() / 100)); %>
-                        <div class="price" style="color: red"><span style="color: black; text-decoration: line-through;">€<%= String.format("%.2f", product.getPrice()) %></span> €<%= String.format("%.2f", sale) %> -<%= product.getSales() %>%</div>
+                        <div class="price onSale"><span style="color: black; text-decoration: line-through;">€<%= String.format("%.2f", product.getPrice()) %></span> €<%= String.format("%.2f", sale) %> -<%= product.getSales() %>%</div>
                     <% } else { %>
                         <div class="price">€<%= String.format("%.2f", product.getPrice()) %></div>
                     <% } %>

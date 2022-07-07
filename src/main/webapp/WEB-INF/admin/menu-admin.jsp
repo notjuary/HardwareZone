@@ -82,7 +82,7 @@
             <div class="admin-item-menu" onclick="showSubMenu(this)" style="position: relative" data-name="Prodotti"><i class="fa-solid fa-book-open iconMenu"></i>Prodotti
                 <div class="sub-menu" data-name="Prodotti">
                     <div class="item-submenu" onclick="location.href='${pageContext.request.contextPath}/add-product-servlet'" data-name="Prodotti">Aggiungi</div>
-                    <div class="item-submenu" onclick="location.href='#'" data-name="Prodotti">Gestione</div>
+                    <div class="item-submenu" onclick="location.href='${pageContext.request.contextPath}/products-servlet'" data-name="Prodotti">Gestione</div>
                 </div>
             </div>
             <div class="admin-item-menu" onclick="<%= url %>" style="position: relative" data-name="Login"><i class="fa-solid fa-user iconMenu"></i><%= name %>

@@ -52,41 +52,29 @@ public class Login extends HttpServlet {
 
         else if (user == null) {
 
-            PrintWriter out = response.getWriter();
-            out.println("<div class=\"alert\">\n" +
-                    "    <span class=\"closebtn\" onclick=\"clearDiv();\">&times;</span> \n" +
-                    "    <strong>Attenzione!</strong> Email o password errate\n" +
-                    "    </div>");
-
-            RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/error.jsp");
+            request.setAttribute("type", "alert");
+            request.setAttribute("msg", "Email o password errati");
+            request.setAttribute("redirect", "login.jsp");
             dispatcher.include(request, response);
-            out.close();
         }
 
         else if (user.isActive().equalsIgnoreCase("false")) {
 
-            PrintWriter out = response.getWriter();
-            out.println("<div class=\"alert\">\n" +
-                    "    <span class=\"closebtn\" onclick=\"clearDiv();\">&times;</span> \n" +
-                    "    <strong>Attenzione!</strong> Account disabilitato\n" +
-                    "    </div>");
-
-            RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/error.jsp");
+            request.setAttribute("type", "alert");
+            request.setAttribute("msg", "Account disabilitato");
+            request.setAttribute("redirect", "login.jsp");
             dispatcher.include(request, response);
-            out.close();
         }
 
         else {
 
-            PrintWriter out = response.getWriter();
-            out.println("<div class=\"alert\">\n" +
-                    "    <span class=\"closebtn\" onclick=\"clearDiv();\">&times;</span> \n" +
-                    "    <strong>Attenzione!</strong> Errore imprevisto\n" +
-                    "    </div>");
-
-            RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/error.jsp");
+            request.setAttribute("type", "alert");
+            request.setAttribute("msg", "Errore imprevisto");
+            request.setAttribute("redirect", "login.jsp");
             dispatcher.include(request, response);
-            out.close();
         }
     }
 }

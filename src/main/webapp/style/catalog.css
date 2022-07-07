@@ -112,6 +112,10 @@ div.productCard i {
 }
 
 div.productCard i:hover {
-    color: #c92403;
+    color: #C92403;
     cursor: pointer;
+}
+
+div.onSale {
+    color: #C92403;
 }

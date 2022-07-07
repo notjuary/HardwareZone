@@ -10,7 +10,7 @@
     <title>Utenti</title>
 
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/style/general.css">
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/style/users.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/style/list.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/script/eventManager.js"></script>
@@ -20,7 +20,7 @@
 
     <%@ include file="/WEB-INF/admin/menu-admin.jsp"%>
 
-    <div class="containerProductDiv">
+    <div class="containerListDiv">
         <div class="headerTable">
             <div>ID</div>
             <div>Nome</div>
@@ -31,10 +31,11 @@
 
         <div class="bodyTable">
 
-            <% ArrayList<UserBean> usersList = (ArrayList<UserBean>) request.getAttribute("users");
+            <%  @SuppressWarnings("unchecked")
+                ArrayList<UserBean> usersList = (ArrayList<UserBean>) request.getAttribute("users");
 
             for (UserBean user: usersList) { %>
-                <div class="single-user">
+                <div class="single-item">
                     <div><%= user.getId() %></div>
                     <div><%= user.getName() %></div>
                     <div><%= user.getSurname() %></div>
@@ -53,7 +54,7 @@
                     <div class="show-more"><a href="${pageContext.request.contextPath}/user-info-servlet?id=<%= user.getId() %>">Altro <i class="fas fa-info-circle"></i></a></div>
 
                 </div>
-             <% } %>
+            <% } %>
         </div>
     </div>
 

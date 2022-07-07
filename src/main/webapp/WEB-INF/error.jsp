@@ -1,14 +1,31 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isErrorPage="true" %>
-<!DOCTYPE html>.
+<%@ page isErrorPage="true" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
 <html lang="it-IT">
 <head>
 
-    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Errore</title>
+
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/style/general.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/script/eventManager.js"></script>
 
 </head>
 <body>
 
+    <%@ include file="/menu.jsp"%>
 
+    <script>
+        setTimeout("window.location.href='<%= (String) request.getAttribute("redirect") %>'", 5000)
+    </script>
+
+    <div class="<%= (String) request.getAttribute("type") %>">
+        <h1><%= (String) request.getAttribute("msg") %></h1>
+        <h2><a href="<%= (String) request.getAttribute("redirect") %>">Procedi</a></h2>
+    </div>
 
 </body>
 </html>

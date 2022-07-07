@@ -20,7 +20,7 @@ div.set-state a {
     color: #EEE5E9;
 }
 
-div.single-user {
+div.single-item {
     margin-top: 30px;
     color: #EEE5E9;
     display: grid;
@@ -46,6 +46,10 @@ button.button-show-more:hover {
     background: #C92403;
 }
 
+div.alertQuantity {
+    color: #C92403;
+}
+
 @media screen and (max-width: 1160px) {
     div.headerTable {
         display: none;
@@ -55,7 +59,7 @@ button.button-show-more:hover {
         margin-top: 80px;
     }
 
-    div.single-user {
+    div.single-item {
         display: block;
         width: 90%;
         margin: 16px auto;

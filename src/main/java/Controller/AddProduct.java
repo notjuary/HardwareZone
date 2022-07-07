@@ -115,5 +115,14 @@ public class AddProduct extends HttpServlet {
             RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/add-product.jsp");
             dispatcher.include(request, response);
         }
+
+        else {
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/error.jsp");
+            request.setAttribute("type", "alert");
+            request.setAttribute("msg", "Errore inserimento");
+            request.setAttribute("redirect", "/WEB-INF/admin/add-product.jsp");
+            dispatcher.include(request, response);
+        }
     }
 }
