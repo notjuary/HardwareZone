@@ -5,7 +5,9 @@ public class ProductBean {
     private String name, description, image, category;
     private double price;
 
-    public ProductBean() {}
+    public ProductBean() {
+
+    }
 
     public int getId() {
 
