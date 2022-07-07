@@ -105,7 +105,7 @@ public class ProductDAO {
 
         try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps = con.prepareStatement(
-                    "SELECT * FROM Prodotto WHERE ID_Prodotto >= ? AND ID_Prodotto <= ? ORDER BY ID_Prodotto");
+                    "SELECT * FROM Prodotto WHERE ID_Prodotto >= ? AND ID_Prodotto <= ? ORDER BY Categoria");
 
             ps.setInt(1, first);
             ps.setInt(2, last);

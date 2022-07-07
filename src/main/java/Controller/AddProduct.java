@@ -10,6 +10,7 @@ import jakarta.servlet.annotation.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 @MultipartConfig(fileSizeThreshold = 1024 * 1024,
@@ -17,6 +18,19 @@ import java.util.ArrayList;
         maxRequestSize = 1024 * 1024 * 5 * 5)
 @WebServlet(name = "addProductServlet", value = "/add-product-servlet")
 public class AddProduct extends HttpServlet {
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html");
+
+        CategoryDAO service = new CategoryDAO();
+        ArrayList<CategoryBean> listCategories = service.doRetrieveAll();
+
+        request.setAttribute("categories", listCategories);
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/add-product.jsp");
+        dispatcher.include(request, response);
+    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -62,5 +76,8 @@ public class AddProduct extends HttpServlet {
         product.setImage(subpath);
 
         service.doSave(product);
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("${pageContext.request.contextPath}/add-product-servlet");
+        dispatcher.include(request, response);
     }
 }

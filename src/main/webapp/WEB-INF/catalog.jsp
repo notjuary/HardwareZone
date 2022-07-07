@@ -26,33 +26,41 @@
     <%@ include file="/menu.jsp"%>
 
     <div class="bodyCatalog">
-        <div class="filterBar">
-            <div class="filterPrice">
-                <span>Prezzo</span>
-                <div class="range">
-                    <label for="min"></label>
-                    <input type="number" min="1" max="10000" id="min">
-                </div>
-                <div class="range">
-                    <label for="max"></label>
-                    <input type="number" min="0" max="10000" id="max">
-                </div>
-            </div>
-
-            <div class="filterCategory">
-                <span>Categoria</span>
-                <% for(CategoryBean category: listCategories) { %>
-                    <div class="categoryName">
-                        <input type="radio" name="category" id="<%= category.getNome() %>" value="<%= category.getNome() %>">
-                        <label for="<%= category.getNome() %>"><%= category.getNome() %></label>
+        <form action="${pageContext.request.contextPath}/show-catalog-servlet" method="post">
+            <div class="filterBar">
+                <div class="filterPrice">
+                    <span>Prezzo</span>
+                    <div class="range">
+                        <label for="min">Prezzo minimo</label><br>
+                        <input type="number" min="1" max="10000" id="min" name="min" value="1" placeholder="1">
                     </div>
-                <% } %>
-            </div>
+                    <div class="range">
+                        <label for="max">Prezzo massimo</label><br>
+                        <input type="number" min="0" max="10000" id="max" name="max" value="10000" placeholder="10000">
+                    </div>
+                    <input type="checkbox" id="isInSale" name="inSale" value="inSale">
+                    <label for="isInSale">Articoli in saldo</label><br>
+                </div>
 
-            <div class="filterSearch">
-                <input type="button" value="Filtra" onclick="">
+                <div class="filterCategory">
+                    <span>Categoria</span>
+                    <div class="categoryName">
+                        <input type="radio" name="category" id="all" value="all" checked>
+                        <label for="all">Mostra tutto</label>
+                    </div>
+                    <% for(CategoryBean category: listCategories) { %>
+                        <div class="categoryName">
+                            <input type="radio" name="category" id="<%= category.getNome() %>" value="<%= category.getNome() %>">
+                            <label for="<%= category.getNome() %>"><%= category.getNome() %></label>
+                        </div>
+                    <% } %>
+                </div>
+
+                <div class="filterSearch">
+                    <input type="submit" value="Filtra">
+                </div>
             </div>
-        </div>
+        </form>
 
         <div class="containerProduct" id="containerProduct">
             <%  @SuppressWarnings("unchecked")
@@ -75,7 +83,7 @@
             <% } %>
 
             <div class="arrow-container">
-                <div class="previous"><a onclick="nextButton()"><i class="fa-solid fa-circle-arrow-left"></i></a></div>
+                <div class="previous"><a onclick="more()"><i class="fa-solid fa-circle-arrow-left"></i></a></div>
                 <div class="next"><i class="fa-solid fa-circle-arrow-right"></i></div>
             </div>
         </div>

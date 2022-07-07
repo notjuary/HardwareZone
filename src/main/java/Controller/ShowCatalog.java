@@ -30,8 +30,27 @@ public class ShowCatalog extends HttpServlet {
         request.setAttribute("categories", listCategories);
         request.setAttribute("products", listProducts);
 
-        String address = "/WEB-INF/catalog.jsp";
-        RequestDispatcher dispatcher = request.getRequestDispatcher(address);
-        dispatcher.forward(request,response);
+        if (first == 1) {
+            String address = "/WEB-INF/catalog.jsp";
+            RequestDispatcher dispatcher = request.getRequestDispatcher(address);
+            dispatcher.forward(request, response);
+        }
     }
+
+    /*
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html");
+
+        int min = Integer.parseInt(request.getParameter("min"));
+        int max = Integer.parseInt(request.getParameter("max"));
+        String category = request.getParameter("category");
+        String inSale = request.getParameter("inSale");
+
+        System.out.println(min);
+        System.out.println(max);
+        System.out.println(category);
+        System.out.println(inSale);
+
+
+    }*/
 }
