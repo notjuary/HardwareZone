@@ -30,7 +30,6 @@ public class ShowCatalog extends HttpServlet {
         request.setAttribute("categories", listCategories);
         request.setAttribute("products", listProducts);
 
-
         String address = "/WEB-INF/catalog.jsp";
         RequestDispatcher dispatcher = request.getRequestDispatcher(address);
         dispatcher.forward(request, response);
@@ -49,7 +48,5 @@ public class ShowCatalog extends HttpServlet {
         System.out.println(max);
         System.out.println(category);
         System.out.println(inSale);
-
-
     }*/
 }

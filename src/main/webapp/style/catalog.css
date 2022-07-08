@@ -63,6 +63,7 @@ div.filterSearch input:hover {
 }
 
 div.productCard {
+    box-shadow: 2px 2px 1px #c92403;
     padding: 10px;
     text-align: center;
     background: #EEE5E9;

@@ -155,6 +155,40 @@ public class ProductDAO {
         }
     }
 
+    public ArrayList<ProductBean> doRetrieveSales() {
+
+        try (Connection con = ConPool.getConnection()) {
+            PreparedStatement ps = con.prepareStatement(
+                    "SELECT * " +
+                            "FROM Prodotto " +
+                            "WHERE Sconto > 0");
+
+            ArrayList<ProductBean> productsList = new ArrayList<ProductBean>();
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                ProductBean product = new ProductBean();
+
+                product.setId(rs.getInt(1));
+                product.setName(rs.getString(2));
+                product.setDescription(rs.getString(3));
+                product.setPrice(rs.getDouble(4));
+                product.setQuantity(rs.getInt(5));
+                product.setSales(rs.getInt(6));
+                product.setImage(rs.getString(7));
+                product.setCategory(rs.getString(8));
+
+                productsList.add(product);
+            }
+
+            return productsList;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public ArrayList<ProductBean> doRetrieveByCategory(String category) {
 
         try (Connection con = ConPool.getConnection()) {

@@ -83,8 +83,8 @@
             <% } %>
 
             <div class="arrow-container">
-                <div class="previous"><a onclick="more()"><i class="fa-solid fa-circle-arrow-left"></i></a></div>
-                <div class="next"><i class="fa-solid fa-circle-arrow-right"></i></div>
+                <div class="previous"><a href=""><i class="fa-solid fa-circle-arrow-left"></i></a></div>
+                <div class="next"><a href=""><i class="fa-solid fa-circle-arrow-right"></i></a></div>
             </div>
         </div>
     </div>

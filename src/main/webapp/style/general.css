@@ -55,3 +55,8 @@ span.closebtn:hover {
 div.slide-show {
     min-height: 600px;
 }
+
+a.error, span.error {
+    text-decoration: none;
+    color: #EEE5E9;
+}

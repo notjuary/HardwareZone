@@ -14,17 +14,26 @@
     <script type="text/javascript" src="${pageContext.request.contextPath}/script/eventManager.js"></script>
 
 </head>
-<body>
+<body onload="updateCount()">
 
     <%@ include file="/menu.jsp"%>
 
     <script>
+        let count = 6;
+
+        function updateCount() {
+            count = count - 1;
+            document.getElementById("timer").innerHTML = count;
+            setTimeout(updateCount, 1000);
+        }
+
         setTimeout("window.location.href='<%= (String) request.getAttribute("redirect") %>'", 5000)
     </script>
 
     <div class="<%= (String) request.getAttribute("type") %>">
         <h1><%= (String) request.getAttribute("msg") %></h1>
-        <h2><a href="<%= (String) request.getAttribute("redirect") %>">Procedi</a></h2>
+        <h2><a href="<%= (String) request.getAttribute("redirect") %>" class="error">Procedi</a></h2>
+        <span id="timer" class="error"></span>
     </div>
 
 </body>
