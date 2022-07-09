@@ -20,13 +20,58 @@
     <%  @SuppressWarnings("unchecked")
         ArrayList<CategoryBean> listCategories = (ArrayList<CategoryBean>) request.getAttribute("categories"); %>
 
+    <script>
+        function filterAjax() {
+
+            let form = $("#formFilter");
+
+            $.ajax({
+                type: "POST",
+                url: "${pageContext.request.contextPath}/filter-product-servlet",
+                data: form.serialize(),
+                success: function(data) {
+
+                    let products = JSON.parse(data);
+                    $("#containerProduct *").remove();
+
+                    for (let i = 0; i < products.length; i++) {
+
+                        let icon = "";
+                        if (products[i].quantity > 0)
+                            icon = " fa-cart-plus"
+                        else
+                            icon = " fa-ban"
+
+                        let salesDiv = "";
+                        if (products[i].sales === 0)
+                            salesDiv = '<div class="price">€' + products[i].price.toFixed(2) + '</div>'
+                        else {
+                            let sale = products[i].price - ((products[i].price * products[i].sales / 100));
+                            salesDiv = '<div class="price onSale"><span style="color: black; text-decoration: line-through;">€' + products[i].price.toFixed(2) + '</span> €' + sale.toFixed(2) + ' -' + products[i].sales + '%</div>'
+                        }
+
+
+                        $("#containerProduct").append(
+                            '<div class="productCard">' +
+                            '<div class="image"><img src="' + products[i].image + '" alt="' + products[i].name + '"></div>' +
+                            '<div class="name">' + products[i].name + '</div>' +
+                            salesDiv +
+                            '<div><i class="fa-solid' +  icon + '"></i></div>' +
+                            '</div>'
+                        );
+                    }
+                }
+            });
+        }
+    </script>
+
 </head>
 <body>
 
     <%@ include file="/menu.jsp"%>
 
     <div class="bodyCatalog">
-        <form action="${pageContext.request.contextPath}/show-catalog-servlet" method="post">
+        <form id="formFilter">
             <div class="filterBar">
                 <div class="filterPrice">
                     <span>Prezzo</span>
@@ -38,26 +83,24 @@
                         <label for="max">Prezzo massimo</label><br>
                         <input type="text" pattern="[0-9]+" id="max" name="max" value="10000" placeholder="10000">
                     </div>
-                    <input type="checkbox" id="isInSale" name="inSale" value="inSale">
-                    <label for="isInSale">Articoli in saldo</label><br>
                 </div>
 
                 <div class="filterCategory">
                     <span>Categoria</span>
                     <div class="categoryName">
-                        <input type="radio" name="category" id="all" value="all" checked>
+                        <input type="radio" class="categoryName" name="category" id="all" value="all" checked>
                         <label for="all">Mostra tutto</label>
                     </div>
                     <% for(CategoryBean category: listCategories) { %>
                         <div class="categoryName">
-                            <input type="radio" name="category" id="<%= category.getNome() %>" value="<%= category.getNome() %>">
+                            <input type="radio" class="categoryName" name="category" id="<%= category.getNome() %>" value="<%= category.getNome() %>">
                             <label for="<%= category.getNome() %>"><%= category.getNome() %></label>
                         </div>
                     <% } %>
                 </div>
 
                 <div class="filterSearch">
-                    <input type="submit" value="Filtra">
+                    <input type="button" onclick="filterAjax()" value="Filtra">
                 </div>
             </div>
         </form>
@@ -78,14 +121,13 @@
                         <div class="price">€<%= String.format("%.2f", product.getPrice()) %></div>
                     <% } %>
 
-                    <div><i class="fa-solid fa-cart-plus"></i></div>
+                    <% if (product.getQuantity() > 0) { %>
+                        <div><i class="fa-solid fa-cart-plus"></i></div>
+                    <% } else {%>
+                        <div><i class="fa-solid fa-ban"></i></div>
+                    <% } %>
                 </div>
             <% } %>
-
-            <div class="arrow-container">
-                <div class="previous"><a href=""><i class="fa-solid fa-circle-arrow-left"></i></a></div>
-                <div class="next"><a href=""><i class="fa-solid fa-circle-arrow-right"></i></a></div>
-            </div>
         </div>
     </div>
 

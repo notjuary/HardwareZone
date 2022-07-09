@@ -77,7 +77,7 @@
         <div class="menu">
             <div class="item-menu item-logo" onclick="location.href='index.jsp'"><img src="img/Logo_NoScritta.png" class="logo" alt="logo"></div>
             <div class="item-menu" onclick="location.href='index.jsp'" data-name="HomePage"><i class="fa-solid fa-house iconMenu"></i>HomePage</div>
-            <div class="item-menu" onclick="location.href='show-catalog-servlet?first=1&last=9'" data-name="Catalogo"><i class="fa-solid fa-book-open iconMenu"></i>Catalogo</div>
+            <div class="item-menu" onclick="location.href='show-catalog-servlet'" data-name="Catalogo"><i class="fa-solid fa-book-open iconMenu"></i>Catalogo</div>
             <div class="item-menu" onclick="location.href='show-sales-servlet'" data-name="Offerte"><i class="fa-solid fa-dollar-sign iconMenu"></i>Offerte</div>
             <div class="item-menu" onclick="location.href='#'" data-name="Carrello"><i class="fa-solid fa-cart-shopping iconMenu"></i>Carrello</div>
             <div class="item-menu" onclick="location.href='#'" data-name="Chi siamo"><i class="fa-solid fa-circle-info iconMenu"></i>Chi siamo</div>

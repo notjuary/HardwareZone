@@ -18,14 +18,11 @@ public class ShowCatalog extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
 
-        int first = Integer.parseInt(request.getParameter("first"));
-        int last = Integer.parseInt(request.getParameter("last"));
-
         CategoryDAO serviceCategory = new CategoryDAO();
         ArrayList<CategoryBean> listCategories = serviceCategory.doRetrieveAll();
 
         ProductDAO service = new ProductDAO();
-        ArrayList<ProductBean> listProducts = service.doRetrieveAll(first, last);
+        ArrayList<ProductBean> listProducts = service.doRetrieveAll();
 
         request.setAttribute("categories", listCategories);
         request.setAttribute("products", listProducts);
@@ -34,19 +31,4 @@ public class ShowCatalog extends HttpServlet {
         RequestDispatcher dispatcher = request.getRequestDispatcher(address);
         dispatcher.forward(request, response);
     }
-
-    /*
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html");
-
-        int min = Integer.parseInt(request.getParameter("min"));
-        int max = Integer.parseInt(request.getParameter("max"));
-        String category = request.getParameter("category");
-        String inSale = request.getParameter("inSale");
-
-        System.out.println(min);
-        System.out.println(max);
-        System.out.println(category);
-        System.out.println(inSale);
-    }*/
 }

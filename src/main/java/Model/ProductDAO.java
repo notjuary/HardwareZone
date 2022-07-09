@@ -120,41 +120,6 @@ public class ProductDAO {
         }
     }
 
-    public ArrayList<ProductBean> doRetrieveAll(int first, int last) {
-
-        try (Connection con = ConPool.getConnection()) {
-            PreparedStatement ps = con.prepareStatement(
-                    "SELECT * FROM Prodotto WHERE ID_Prodotto >= ? AND ID_Prodotto <= ? ORDER BY Categoria");
-
-            ps.setInt(1, first);
-            ps.setInt(2, last);
-
-            ArrayList<ProductBean> productsList = new ArrayList<ProductBean>();
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-
-                ProductBean product = new ProductBean();
-
-                product.setId(rs.getInt(1));
-                product.setName(rs.getString(2));
-                product.setDescription(rs.getString(3));
-                product.setPrice(rs.getDouble(4));
-                product.setQuantity(rs.getInt(5));
-                product.setSales(rs.getInt(6));
-                product.setImage(rs.getString(7));
-                product.setCategory(rs.getString(8));
-
-                productsList.add(product);
-            }
-
-            return productsList;
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public ArrayList<ProductBean> doRetrieveSales() {
 
         try (Connection con = ConPool.getConnection()) {
@@ -189,13 +154,32 @@ public class ProductDAO {
         }
     }
 
-    public ArrayList<ProductBean> doRetrieveByCategory(String category) {
+    public ArrayList<ProductBean> doRetrieveByFilter(int minPrice, int maxPrice, String category) {
 
         try (Connection con = ConPool.getConnection()) {
-            PreparedStatement ps = con.prepareStatement(
-                    "SELECT * FROM Prodotto WHERE Categoria=? ORDER BY ID_Prodotto");
 
-            ps.setString(1, category);
+            PreparedStatement ps;
+
+            if (category.equalsIgnoreCase("all")) {
+                ps = con.prepareStatement(
+                        "SELECT * " +
+                                "FROM Prodotto " +
+                                "WHERE Prezzo > ? AND Prezzo < ?");
+
+                ps.setInt(1, minPrice);
+                ps.setInt(2, maxPrice);
+            }
+
+            else {
+                ps = con.prepareStatement(
+                        "SELECT * " +
+                                "FROM Prodotto " +
+                                "WHERE Prezzo > ? AND Prezzo < ? AND Categoria = ?");
+
+                ps.setInt(1, minPrice);
+                ps.setInt(2, maxPrice);
+                ps.setString(3, category);
+            }
 
             ArrayList<ProductBean> productsList = new ArrayList<ProductBean>();
             ResultSet rs = ps.executeQuery();
@@ -214,41 +198,6 @@ public class ProductDAO {
                 product.setCategory(rs.getString(8));
 
                 productsList.add(product);
-            }
-
-            return productsList;
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public ArrayList<ProductBean> doRetrieveByRangePrice(Double min, Double max) {
-
-        try (Connection con = ConPool.getConnection()) {
-            PreparedStatement ps = con.prepareStatement(
-                    "SELECT *" +
-                            "FROM Prodotto " +
-                            "ORDER BY Prezzo");
-
-            ArrayList<ProductBean> productsList = new ArrayList<ProductBean>();
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-
-                ProductBean product = new ProductBean();
-
-                product.setId(rs.getInt(1));
-                product.setName(rs.getString(2));
-                product.setDescription(rs.getString(3));
-                product.setPrice(rs.getDouble(4));
-                product.setQuantity(rs.getInt(5));
-                product.setSales(rs.getInt(6));
-                product.setImage(rs.getString(7));
-                product.setCategory(rs.getString(8));
-
-                if (product.getPrice() >= min && product.getPrice() <= max)
-                    productsList.add(product);
             }
 
             return productsList;

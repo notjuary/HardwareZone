@@ -7,6 +7,8 @@ div.bodyCatalog {
 div.containerProduct {
     position: relative;
     width: 100%;
+    height: 550px;
+    overflow: scroll;
 }
 
 div.filterBar {
@@ -117,6 +119,6 @@ div.productCard i:hover {
     cursor: pointer;
 }
 
-div.onSale {
+div.productCard > div.onSale {
     color: #C92403;
 }
