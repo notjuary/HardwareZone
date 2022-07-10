@@ -1,5 +1,7 @@
 package Controller;
 
+import Model.CategoryBean;
+import Model.CategoryDAO;
 import Model.ProductBean;
 import Model.ProductDAO;
 import jakarta.servlet.*;
@@ -8,6 +10,7 @@ import jakarta.servlet.annotation.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,6 +28,7 @@ public class EditProduct extends HttpServlet {
         final Pattern int_String = Pattern.compile("^\\d+$");
         int level = 0;
 
+        ProductDAO service = new ProductDAO();
         int id = Integer.parseInt(request.getParameter("id"));
 
         String name = request.getParameter("name");
@@ -58,12 +62,18 @@ public class EditProduct extends HttpServlet {
             level++;
 
         Part part = request.getPart("image");
-        String uploadPath = getServletContext().getRealPath("") + "\\img\\products";
-        String imagepath = uploadPath + File.separator + part.getSubmittedFileName();
-        part.write(imagepath);
-        String subpath = "./img/products/" + part.getSubmittedFileName();
 
-        ProductDAO service = new ProductDAO();
+        String subpath;
+        if (!part.getSubmittedFileName().isEmpty()) {
+            String uploadPath = getServletContext().getRealPath("") + "\\img\\products";
+            String imagepath = uploadPath + File.separator + part.getSubmittedFileName();
+            part.write(imagepath);
+            subpath = "./img/products/" + part.getSubmittedFileName();
+        }
+
+        else {
+            subpath = service.doRetrieveById(id).getImage();
+        }
 
         if (level == 6) {
 
@@ -79,6 +89,8 @@ public class EditProduct extends HttpServlet {
             product.setImage(subpath);
 
             service.doUpdate(product);
+
+            response.sendRedirect("products-servlet");
         }
     }
 }

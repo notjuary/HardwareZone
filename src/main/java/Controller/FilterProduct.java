@@ -24,6 +24,9 @@ public class FilterProduct extends HttpServlet {
         int maxPrice = Integer.parseInt(request.getParameter("max"));
         String category = request.getParameter("category");
 
+        if (maxPrice < minPrice)
+            maxPrice = minPrice;
+
         ProductDAO service = new ProductDAO();
         ArrayList<ProductBean> listProducts = service.doRetrieveByFilter(minPrice, maxPrice, category);
 

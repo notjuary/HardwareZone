@@ -147,7 +147,7 @@ div.item-submenu:hover {
         margin-bottom: 10px;
     }
 
-    div.admin-item-menu {
+    div.admin-item-menu, div.item-menu {
         padding: 10px;
         font-size: 12px;
         width: 80%;

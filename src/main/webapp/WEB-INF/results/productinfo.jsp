@@ -68,9 +68,9 @@
 
                 <div class="product-image">
                     <label for="image" id="imageUpload">Immagine
-                        <i class="fa-solid fa-file-arrow-up"></i>
-                        <input type="file" id="image" name="image" class="product" accept="image/*" onchange="imageUpload(event)"></label>
-                        <img src="<%= product.getImage() %>" alt="<%= product.getName() %>" class="preview">
+                    <i class="fa-solid fa-file-arrow-up"></i>
+                    <input type="file" id="image" name="image" class="product" accept="image/*" onchange="imageUpload(event)"></label>
+                    <img src="<%= product.getImage() %>" alt="<%= product.getName() %>" class="preview">
                 </div>
 
                 <div class="product-category">
