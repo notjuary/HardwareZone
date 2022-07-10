@@ -1,7 +1,5 @@
 package Controller;
 
-import Model.CategoryBean;
-import Model.CategoryDAO;
 import Model.ProductBean;
 import Model.ProductDAO;
 import jakarta.servlet.*;
@@ -10,28 +8,14 @@ import jakarta.servlet.annotation.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @MultipartConfig(fileSizeThreshold = 1024 * 1024,
         maxFileSize = 1024 * 1024 * 5,
         maxRequestSize = 1024 * 1024 * 5 * 5)
-@WebServlet(name = "addProductServlet", value = "/add-product-servlet")
-public class AddProduct extends HttpServlet {
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html");
-
-        CategoryDAO service = new CategoryDAO();
-        ArrayList<CategoryBean> categoryList = service.doRetrieveAll();
-
-        request.setAttribute("categories", categoryList);
-
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/add-product.jsp");
-        dispatcher.include(request, response);
-    }
+@WebServlet(name = "editProductServlet", value = "/edit-product-servlet")
+public class EditProduct extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -40,6 +24,8 @@ public class AddProduct extends HttpServlet {
         final Pattern decimal_String = Pattern.compile("^\\d*\\.?\\d*$");
         final Pattern int_String = Pattern.compile("^\\d+$");
         int level = 0;
+
+        int id = Integer.parseInt(request.getParameter("id"));
 
         String name = request.getParameter("name");
         if (name.length() <= 20 && name.length() != 0)
@@ -79,23 +65,11 @@ public class AddProduct extends HttpServlet {
 
         ProductDAO service = new ProductDAO();
 
-        if (level == 6 && !service.isAlreadyRegistered(name, description)) {
+        if (level == 6) {
+
             ProductBean product = new ProductBean();
 
-            CategoryDAO serviceCategory = new CategoryDAO();
-            ArrayList<CategoryBean> categoryList = serviceCategory.doRetrieveAll();
-
-            boolean categoryExist = false;
-            for (CategoryBean categorySaved : categoryList) {
-
-                if (categorySaved.getNome().equalsIgnoreCase(category)) {
-                    categoryExist = true;
-                    break;
-                }
-            }
-            if (!categoryExist)
-                serviceCategory.doSave(category);
-
+            product.setId(id);
             product.setName(name);
             product.setDescription(description);
             product.setPrice(Double.parseDouble(price));
@@ -104,23 +78,7 @@ public class AddProduct extends HttpServlet {
             product.setCategory(category);
             product.setImage(subpath);
 
-            service.doSave(product);
-
-            ArrayList<CategoryBean> listCategories = serviceCategory.doRetrieveAll();
-
-            request.setAttribute("categories", listCategories);
-
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/add-product.jsp");
-            dispatcher.include(request, response);
-        }
-
-        else {
-
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/error.jsp");
-            request.setAttribute("type", "alert");
-            request.setAttribute("msg", "Errore inserimento");
-            request.setAttribute("redirect", "/WEB-INF/admin/add-product.jsp");
-            dispatcher.include(request, response);
+            service.doUpdate(product);
         }
     }
 }

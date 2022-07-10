@@ -36,6 +36,22 @@ public class ProductDAO {
         }
     }
 
+    public void doUpdate(ProductBean productBean)
+    {
+        try (Connection con = ConPool.getConnection()) {
+
+            Statement st = con.createStatement();
+            String query = "UPDATE Prodotto SET Nome = '" + productBean.getName() + "', Descrizione = '" + productBean.getDescription() + "', Prezzo = '" + productBean.getPrice() + "', Quantità_Disponibile = '" + productBean.getQuantity() + "', Sconto = '" + productBean.getSales() + "', Immagine = '" + productBean.getImage() +  "', Categoria = '" + productBean.getCategory() +
+                    "'WHERE ID_Prodotto = " + productBean.getId();
+            st.executeUpdate(query);
+
+            st.executeUpdate(query);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public boolean isAlreadyRegistered(String name, String description) {
         try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps = con.prepareStatement(

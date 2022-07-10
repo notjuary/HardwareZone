@@ -17,7 +17,7 @@ public class UserInfo extends HttpServlet {
 
         UserDAO service = new UserDAO();
         int id = Integer.parseInt(request.getParameter("id"));
-        UserBean user = (UserBean) service.doRetrieveById(id);
+        UserBean user = service.doRetrieveById(id);
 
         request.setAttribute("profileJSP", user);
 

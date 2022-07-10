@@ -1,5 +1,6 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="Model.ProductBean" %>
+<%@ page import="Model.CategoryBean" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="it-IT">
@@ -14,6 +15,9 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/script/eventManager.js"></script>
+
+    <%  @SuppressWarnings("unchecked")
+        ArrayList<CategoryBean> listCategories = (ArrayList<CategoryBean>) request.getAttribute("categories"); %>
 
 </head>
 <body>
@@ -51,7 +55,7 @@
                         <div><%= product.getQuantity() %></div>
                     <% } %>
 
-                    <div class="show-more"><a href="${pageContext.request.contextPath}/user-info-servlet?id=<%= product.getId() %>">Altro <i class="fas fa-info-circle"></i></a></div>
+                    <div class="show-more"><a href="${pageContext.request.contextPath}/product-info-servlet?id=<%= product.getId() %>">Altro <i class="fas fa-info-circle"></i></a></div>
 
                 </div>
             <% } %>

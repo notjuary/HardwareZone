@@ -36,25 +36,26 @@
 
                     for (let i = 0; i < products.length; i++) {
 
+
                         let icon = "";
-                        if (products[i].quantity > 0)
+                        if (products[i]["quantity"] > 0)
                             icon = " fa-cart-plus"
                         else
                             icon = " fa-ban"
 
                         let salesDiv = "";
-                        if (products[i].sales === 0)
-                            salesDiv = '<div class="price">€' + products[i].price.toFixed(2) + '</div>'
+                        if (products[i]["sales"] === 0)
+                            salesDiv = '<div class="price">€' + products[i]["price"].toFixed(2) + '</div>'
                         else {
-                            let sale = products[i].price - ((products[i].price * products[i].sales / 100));
-                            salesDiv = '<div class="price onSale"><span style="color: black; text-decoration: line-through;">€' + products[i].price.toFixed(2) + '</span> €' + sale.toFixed(2) + ' -' + products[i].sales + '%</div>'
+                            let sale = products[i]["price"] - ((products[i]["price"] * products[i]["sales"] / 100));
+                            salesDiv = '<div class="price onSale"><span style="color: black; text-decoration: line-through;">€' + products[i]["price"].toFixed(2) + '</span> €' + sale.toFixed(2) + ' -' + products[i]["sales"] + '%</div>'
                         }
 
 
                         $("#containerProduct").append(
                             '<div class="productCard">' +
-                            '<div class="image"><img src="' + products[i].image + '" alt="' + products[i].name + '"></div>' +
-                            '<div class="name">' + products[i].name + '</div>' +
+                            '<div class="image"><img src="' + products[i]["image"] + '" alt="' + products[i]["name"] + '"></div>' +
+                            '<div class="name">' + products[i]["name"] + '</div>' +
                             salesDiv +
                             '<div><i class="fa-solid' +  icon + '"></i></div>' +
                             '</div>'

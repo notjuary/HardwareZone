@@ -49,18 +49,6 @@ label.text-section {
     text-decoration: underline;
 }
 
-div.containerProductDiv {
-    display: flex;
-}
-
-div.containerProductDiv > div {
-    display: inline-block;
-    padding: 15px;
-    box-sizing: border-box;
-    width: calc(100% / 3);
-    float: left;
-}
-
 div.edit-form div {
     margin-bottom: 15px;
 }
@@ -101,16 +89,6 @@ input[type = "submit"]:hover {
         display: block;
         margin-top: 100px;
         max-width: 400px;
-    }
-
-    div.containerProductDiv {
-        display: block;
-    }
-
-    div.containerProductDiv > div {
-        display: block;
-        width: 100%;
-        position: relative;
     }
 }
 

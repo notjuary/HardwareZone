@@ -55,6 +55,35 @@ div.add-product > input:hover {
     background: #EEE5E9;
 }
 
+input[type="file"] {
+    display: none;
+}
+
+input[type = "submit"] {
+    background: #EEE5E9;
+    color: #0F1A20;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+}
+
+label#imageUpload {
+    display: block;
+    width: 100%;
+    border-radius: 10px;
+    background: none;
+    color: #EEE5E9;
+    height: 40px;
+    line-height: 40px;
+    cursor: pointer;
+}
+
+img.preview {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    width: 150px;
+}
+
 @media screen and (max-width: 1160px) {
     div.containerProductDiv {
         margin-top: 80px;
