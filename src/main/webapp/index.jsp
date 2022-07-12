@@ -8,6 +8,7 @@
     <title>HomePage</title>
 
     <link rel="stylesheet" type="text/css" href="style/general.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/style/homepage.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script type="text/javascript" src="script/eventManager.js"></script>
@@ -20,9 +21,29 @@
                 success: function(data) {
 
                     let products = JSON.parse(data);
+
                     for (let i = 0; i < products.length; i++) {
-                        $(".slide-show").append(
-                            '<div>' + products[i]["name"] + '</div>'
+                        let icon = "";
+                        if (products[i]["quantity"] > 0)
+                            icon = " fa-cart-plus"
+                        else
+                            icon = " fa-ban"
+
+                        let salesDiv = "";
+                        if (products[i]["sales"] === 0)
+                            salesDiv = '<div class="price">€' + products[i]["price"].toFixed(2) + '</div>'
+                        else {
+                            let sale = products[i]["price"] - ((products[i]["price"] * products[i]["sales"] / 100));
+                            salesDiv = '<div class="price onSale"><span style="color: black; text-decoration: line-through;">€' + products[i]["price"].toFixed(2) + '</span> €' + sale.toFixed(2) + ' -' + products[i]["sales"] + '%</div>'
+                        }
+
+                        $(".slide-show").append (
+                            ('<div class="productCard">' +
+                            '<div class="image"><img src="' + products[i]["image"] + '" alt="' + products[i]["name"] + '"></div>' +
+                            '<div class="name">' + products[i]["name"] + '</div>' +
+                            salesDiv +
+                            '<div><i class="fa-solid' +  icon + '"></i></div>' +
+                            '</div>')
                         );
                     }
                 }
@@ -35,9 +56,8 @@
 
     <%@ include file="menu.jsp"%>
 
-    <div class="slide-show">
-
-    </div>
+        <div class="slide-show">
+        </div>
 
     <%@ include file="/footer.jsp"%>
 

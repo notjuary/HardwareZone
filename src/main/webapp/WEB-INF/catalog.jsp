@@ -16,6 +16,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src='https://kit.fontawesome.com/c6b30e1924.js' crossorigin='anonymous'></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/script/eventManager.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/script/validateForm.js"></script>
 
     <%  @SuppressWarnings("unchecked")
         ArrayList<CategoryBean> listCategories = (ArrayList<CategoryBean>) request.getAttribute("categories"); %>
@@ -101,7 +102,7 @@
                 </div>
 
                 <div class="filterSearch">
-                    <input type="button" onclick="filterAjax()" value="Filtra">
+                    <input type="button" onclick="validateFilterPrice()" value="Filtra">
                 </div>
             </div>
         </form>

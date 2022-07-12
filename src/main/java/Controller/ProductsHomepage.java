@@ -19,7 +19,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Random;
 
-@WebServlet(name = "productsServlet", value = "/products-homepage-servlet")
+@WebServlet(name = "productsHomepageServlet", value = "/products-homepage-servlet")
 public class ProductsHomepage extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

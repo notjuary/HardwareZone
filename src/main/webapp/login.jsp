@@ -26,7 +26,7 @@
     %>
 
     <div class="login-form">
-        <form action="login-servlet" method="post">
+        <form action="login-servlet" method="post" id="loginForm">
             <div class="user-email">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" placeholder="Email">
@@ -38,7 +38,7 @@
             </div>
 
             <div class="login-button">
-                <input type="submit" value="Login">
+                <input type="button" value="Login" onclick="validateLogin()">
             </div>
 
             <div class="register-button">

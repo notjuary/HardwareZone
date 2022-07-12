@@ -75,6 +75,7 @@ div.productCard {
     border-radius: 20px;
     overflow: hidden;
     margin: 10px;
+    min-height: 180px;
 }
 
 div.image {
@@ -84,27 +85,6 @@ div.image {
 
 div.productCard img {
     height: 90px;
-}
-
-div.arrow-container {
-    z-index: 1;
-    position: absolute;
-    bottom: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #EEE5E9;
-    font-size: 28px;
-    width: 100%;
-}
-
-div.arrow-container div {
-    margin: 0 20px;
-    padding: 10px;
-}
-
-div.arrow-container i:hover {
-    cursor: pointer;
 }
 
 div.productCard i {
