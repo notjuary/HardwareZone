@@ -2,8 +2,6 @@ package Controller;
 
 import Model.ProductBean;
 import Model.ProductDAO;
-import Model.UserBean;
-import Model.UserDAO;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
