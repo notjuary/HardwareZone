@@ -1,5 +1,6 @@
 package Controller;
 
+import Model.Cart;
 import Model.UserBean;
 import Model.UserDAO;
 import jakarta.servlet.RequestDispatcher;
@@ -37,6 +38,9 @@ public class Login extends HttpServlet {
             }
 
             else {
+
+                Cart cart = new Cart();
+                session.setAttribute("cart", cart);
                 dispatcher = request.getRequestDispatcher("index.jsp");
             }
 

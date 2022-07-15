@@ -14,6 +14,7 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/script/eventManager.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/script/validateForm.js"></script>
 
     <script>
         function imageUpload(event) {
@@ -32,7 +33,7 @@
     <%@ include file="/WEB-INF/admin/menu-admin.jsp"%>
 
     <div class="containerProductDiv">
-        <form action="${pageContext.request.contextPath}/add-product-servlet" method="post" enctype="multipart/form-data">
+        <form action="${pageContext.request.contextPath}/add-product-servlet" method="post" enctype="multipart/form-data" id="add-product-form">
             <div class="containerProduct">
                 <div class="product-name">
                     <label for="name">Nome</label>
@@ -77,7 +78,7 @@
                 </div>
 
                 <div class="add-product">
-                    <input type="submit" value="Inserisci">
+                    <input type="button" onclick="validateAddProduct()" value="Inserisci">
                 </div>
             </div>
         </form>

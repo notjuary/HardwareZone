@@ -5,7 +5,8 @@ const phone_string = /^\d{10}$/;
 const province_string = /^([a-zA-Z]{2})$/;
 const postalcode_string = /^\d{5}$/;
 const address_string = /^([a-zA-Z\d\xE0\xE8\xE9\xF9\xF2\xEC\x27\x2C]\s?){2,20}$/;
-const number = /^\d+$/;
+const number_string = /^\d+$/;
+const double_string = /^(\d+(?:[.,]\d{2})?)$/;
 
 $(document).ready(function() {
     showTabPersonalInformation();
@@ -197,15 +198,36 @@ function validateFilterPrice() {
     let price1 = document.getElementById("min").value;
     let price2 = document.getElementById("max").value;
 
-    if (number.test(price1) && number.test(price2)) {
+    if (number_string.test(price1) && number_string.test(price2)) {
         $("input").css("border-color", "#0f1a20");
         filterAjax();
     }
 
     else {
-        if (!(number.test(price1)))
+        if (!(number_string.test(price1)))
             $("#min").css("border-color", "#C92403");
-        if (!(number.test(price2)))
+        if (!(number_string.test(price2)))
             $("#max").css("border-color", "#C92403");
+    }
+}
+
+function validateEditProfile() {
+
+    if (validateName() & validateSurname() & validateBirthday() &
+        validateEmail() & validatePassword() & validatePhone() &
+        validateCity() & validateProvince() & validatePostalCode() & validateAddress()) {
+
+        document.getElementById("edit-profile").submit();
+    }
+}
+
+function validateAddProduct() {
+
+    let price = document.getElementById("price").value;
+    let quantity = document.getElementById("quantity").value;
+
+    if (double_string.test(price) && number_string.test(quantity)) {
+
+        document.getElementById("add-product-form").submit();
     }
 }

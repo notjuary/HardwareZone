@@ -37,7 +37,7 @@ public class AddProduct extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
 
-        final Pattern decimal_String = Pattern.compile("^\\d*\\.?\\d*$");
+        final Pattern decimal_String = Pattern.compile("^(\\d+(?:[.,]\\d{2})?)$");
         final Pattern int_String = Pattern.compile("^\\d+$");
         int level = 0;
 
@@ -49,7 +49,7 @@ public class AddProduct extends HttpServlet {
         if (description.length() <= 255 && description.length() != 0)
             level++;
 
-        String price = request.getParameter("price");
+        String price = request.getParameter("price").replace(",", ".");
         Matcher matcher = decimal_String.matcher(price);
         boolean matchFound = matcher.find();
         if (matchFound)

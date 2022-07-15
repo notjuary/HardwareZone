@@ -12,6 +12,7 @@
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/style/profile.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="${pageContext.request.contextPath}/script/validateForm.js"></script>
 
 </head>
 <body>
@@ -20,7 +21,7 @@
     <%@ include file="/menu.jsp"%>
 
     <div class="edit-form">
-        <form action="edit-profile-servlet" method="post">
+        <form action="edit-profile-servlet" method="post" id="edit-profile">
             <div class="container">
                 <div class="personal-information">
                     <label class="text-section">Dati personali</label>
@@ -65,7 +66,9 @@
                 </div>
             </div>
 
-            <div class="register-button"><input type="submit" value="Salva"></div>
+            <div class="register-button">
+                <input type="button" onclick="validateEditProfile()" value="Salva">
+            </div>
         </form>
     </div>
 

@@ -16,6 +16,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src='https://kit.fontawesome.com/c6b30e1924.js' crossorigin='anonymous'></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/script/eventManager.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/script/product.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/script/validateForm.js"></script>
 
     <%  @SuppressWarnings("unchecked")
@@ -37,12 +38,11 @@
 
                     for (let i = 0; i < products.length; i++) {
 
-
                         let icon = "";
                         if (products[i]["quantity"] > 0)
-                            icon = " fa-cart-plus"
+                            icon = '<a class="shop" href="${pageContext.request.contextPath}/add-to-cart-servlet?productId=' + products[i]["id"] + '"><i class="fa-solid fa-cart-plus"></i></a>'
                         else
-                            icon = " fa-ban"
+                            icon = '<i class="fa-solid fa-ban"></i>'
 
                         let salesDiv = "";
                         if (products[i]["sales"] === 0)
@@ -58,7 +58,7 @@
                             '<div class="image"><img src="' + products[i]["image"] + '" alt="' + products[i]["name"] + '"></div>' +
                             '<div class="name">' + products[i]["name"] + '</div>' +
                             salesDiv +
-                            '<div><i class="fa-solid' +  icon + '"></i></div>' +
+                            '<div>' + icon + '</div>' +
                             '</div>'
                         );
                     }
@@ -124,7 +124,7 @@
                     <% } %>
 
                     <% if (product.getQuantity() > 0) { %>
-                        <div><i class="fa-solid fa-cart-plus"></i></div>
+                        <div><a class="shop" href="${pageContext.request.contextPath}/add-to-cart-servlet?productId=<%= product.getId() %>"><i class="fa-solid fa-cart-plus"></i></a></div>
                     <% } else {%>
                         <div><i class="fa-solid fa-ban"></i></div>
                     <% } %>

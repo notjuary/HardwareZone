@@ -22,9 +22,7 @@ CREATE TABLE Utente (
 
 CREATE TABLE Carrello (
 	ID_Carrello INT AUTO_INCREMENT PRIMARY KEY,
-    Utente INT REFERENCES Utente(ID_Utente),
-    Totale DOUBLE(10, 2) NOT NULL,
-    Numero_Prodotti INT NOT NULL DEFAULT 0
+    Utente INT REFERENCES Utente(ID_Utente)
 );
 
 CREATE TABLE Prodotto (

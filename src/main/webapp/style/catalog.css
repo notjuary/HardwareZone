@@ -51,6 +51,7 @@ div.range input[type=text] {
 }
 
 div.filterSearch input {
+    font-family: 'Poppins', sans-serif;
     height: 50px;
     border-radius: 15px;
     background: #c92403;
@@ -101,4 +102,13 @@ div.productCard i:hover {
 
 div.productCard > div.onSale {
     color: #C92403;
+}
+
+a.shop > i.fa-solid {
+    color: #0f1a20;
+}
+
+a.shop > i.fa-solid:hover {
+    color: #C92403;
+    cursor: pointer;
 }

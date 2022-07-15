@@ -32,7 +32,7 @@ public class ProductsHomepage extends HttpServlet {
         Random rand = new Random();
         boolean in;
 
-        while (listProduct.size() != 10) {
+        while (listProduct.size() != 9) {
             in = false;
             int random = rand.nextInt(max) + 1;
 

@@ -23,11 +23,12 @@
                     let products = JSON.parse(data);
 
                     for (let i = 0; i < products.length; i++) {
+
                         let icon = "";
                         if (products[i]["quantity"] > 0)
-                            icon = " fa-cart-plus"
+                            icon = '<a class="shop" href="${pageContext.request.contextPath}/add-to-cart-servlet?productId=' + products[i]["id"] + '"><i class="fa-solid fa-cart-plus"></i></a>'
                         else
-                            icon = " fa-ban"
+                            icon = '<i class="fa-solid fa-ban"></i>'
 
                         let salesDiv = "";
                         if (products[i]["sales"] === 0)
@@ -37,13 +38,14 @@
                             salesDiv = '<div class="price onSale"><span style="color: black; text-decoration: line-through;">€' + products[i]["price"].toFixed(2) + '</span> €' + sale.toFixed(2) + ' -' + products[i]["sales"] + '%</div>'
                         }
 
-                        $(".slide-show").append (
-                            ('<div class="productCard">' +
+
+                        $(".slide-show").append(
+                            '<div class="productCard">' +
                             '<div class="image"><img src="' + products[i]["image"] + '" alt="' + products[i]["name"] + '"></div>' +
                             '<div class="name">' + products[i]["name"] + '</div>' +
                             salesDiv +
-                            '<div><i class="fa-solid' +  icon + '"></i></div>' +
-                            '</div>')
+                            '<div>' + icon + '</div>' +
+                            '</div>'
                         );
                     }
                 }

@@ -32,6 +32,15 @@ div.productCard i:hover {
     cursor: pointer;
 }
 
+a.shop > i.fa-solid {
+    color: #0f1a20;
+}
+
+a.shop > i.fa-solid:hover {
+    color: #C92403;
+    cursor: pointer;
+}
+
 div.productCard > div.onSale {
     color: #C92403;
 }

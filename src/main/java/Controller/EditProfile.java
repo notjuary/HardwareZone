@@ -86,8 +86,6 @@ public class EditProfile extends HttpServlet {
         if (date != null)
             level++;
 
-        System.out.println(level);
-
         UserDAO service = new UserDAO();
 
         if (level == 10) {
@@ -108,21 +106,19 @@ public class EditProfile extends HttpServlet {
             user.setBirthday(date);
             user.setRegister();
             user.setState("true");
-            user.setAdmin("false");
+            user.setAdmin(user.isAdmin());
 
             service.doUpdate(user);
 
             request.setAttribute("profileJSP", user);
 
-            PrintWriter out = response.getWriter();
-            out.println("<div class=\"success\">\n" +
-                    "    <span class=\"closebtn\" onclick=\"clearDiv();\">&times;</span> \n" +
-                    "    Modifica effettuata\n" +
-                    "    </div>");
+            RequestDispatcher dispatcher;
+            if (user.isAdmin().equalsIgnoreCase("true"))
+                dispatcher = request.getRequestDispatcher("WEB-INF/admin/profile-admin.jsp");
+            else
+                dispatcher = request.getRequestDispatcher("WEB-INF/user/profile-user.jsp");
 
-            RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/user/profile-user.jsp");
             dispatcher.include(request, response);
-            out.close();
         }
     }
 }

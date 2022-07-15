@@ -42,7 +42,11 @@
                 <div class="price">€<%= String.format("%.2f", product.getPrice()) %></div>
                 <% } %>
 
-                <div><i class="fa-solid fa-cart-plus"></i></div>
+                <% if (product.getQuantity() > 0) { %>
+                <div><a class="shop" href="${pageContext.request.contextPath}/add-to-cart-servlet?productId=<%= product.getId() %>"><i class="fa-solid fa-cart-plus"></i></a></div>
+                <% } else {%>
+                <div><i class="fa-solid fa-ban"></i></div>
+                <% } %>
             </div>
             <% } %>
         </div>
