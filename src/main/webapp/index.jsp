@@ -12,6 +12,7 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script type="text/javascript" src="script/eventManager.js"></script>
+    <script type="text/javascript" src="script/product.js"></script>
 
     <script>
         $(document).ready(function() {
@@ -26,7 +27,7 @@
 
                         let icon = "";
                         if (products[i]["quantity"] > 0)
-                            icon = '<a class="shop" href="${pageContext.request.contextPath}/add-to-cart-servlet?productId=' + products[i]["id"] + '"><i class="fa-solid fa-cart-plus"></i></a>'
+                            icon = '<a class="shop" onclick="addProductCard(' + products[i]["id"] + ', 1)"><i class="fa-solid fa-cart-plus"></i></a>'
                         else
                             icon = '<i class="fa-solid fa-ban"></i>'
 

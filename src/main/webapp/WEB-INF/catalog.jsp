@@ -40,7 +40,7 @@
 
                         let icon = "";
                         if (products[i]["quantity"] > 0)
-                            icon = '<a class="shop" href="${pageContext.request.contextPath}/add-to-cart-servlet?productId=' + products[i]["id"] + '"><i class="fa-solid fa-cart-plus"></i></a>'
+                            icon = '<a class="shop" onclick="addProductCard(' + products[i]["id"] + ', 1)"><i class="fa-solid fa-cart-plus"></i></a>'
                         else
                             icon = '<i class="fa-solid fa-ban"></i>'
 
@@ -51,7 +51,6 @@
                             let sale = products[i]["price"] - ((products[i]["price"] * products[i]["sales"] / 100));
                             salesDiv = '<div class="price onSale"><span style="color: black; text-decoration: line-through;">€' + products[i]["price"].toFixed(2) + '</span> €' + sale.toFixed(2) + ' -' + products[i]["sales"] + '%</div>'
                         }
-
 
                         $("#containerProduct").append(
                             '<div class="productCard">' +
@@ -124,7 +123,7 @@
                     <% } %>
 
                     <% if (product.getQuantity() > 0) { %>
-                        <div><a class="shop" href="${pageContext.request.contextPath}/add-to-cart-servlet?productId=<%= product.getId() %>"><i class="fa-solid fa-cart-plus"></i></a></div>
+                        <div><a class="shop" onclick="addProductCard(<%= product.getId() %>, 1)"><i class="fa-solid fa-cart-plus"></i></a></div>
                     <% } else {%>
                         <div><i class="fa-solid fa-ban"></i></div>
                     <% } %>

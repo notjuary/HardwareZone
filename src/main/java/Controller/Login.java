@@ -43,15 +43,6 @@ public class Login extends HttpServlet {
                 session.setAttribute("cart", cart);
                 dispatcher = request.getRequestDispatcher("index.jsp");
             }
-
-            PrintWriter out = response.getWriter();
-            out.println("<div class=\"success\">\n" +
-                    "    <span class=\"closebtn\" onclick=\"clearDiv();\">&times;</span> \n" +
-                    "    <strong>Login eseguito</strong> \n" +
-                    "    </div>");
-
-            dispatcher.include(request, response);
-            out.close();
         }
 
         else if (user == null) {

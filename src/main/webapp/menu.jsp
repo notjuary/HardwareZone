@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/style/nav-menu.css">
     <script src='https://kit.fontawesome.com/c6b30e1924.js' crossorigin='anonymous'></script>
     <script type="text/javascript" src="script/eventManager.js"></script>
+    <script type="text/javascript" src="script/product.js"></script>
 
     <script>
         <%
@@ -86,7 +87,7 @@
             <div class="item-menu" onclick="location.href='index.jsp'" data-name="HomePage"><i class="fa-solid fa-house iconMenu"></i>HomePage</div>
             <div class="item-menu" onclick="location.href='show-catalog-servlet'" data-name="Catalogo"><i class="fa-solid fa-book-open iconMenu"></i>Catalogo</div>
             <div class="item-menu" onclick="location.href='show-sales-servlet'" data-name="Offerte"><i class="fa-solid fa-dollar-sign iconMenu"></i>Offerte</div>
-            <div class="item-menu" onclick="location.href='${pageContext.request.contextPath}/Cart.jsp'" data-name="Carrello"><i class="fa-solid fa-cart-shopping iconMenu"></i>Carrello <span><%= numberObject %></span></div>
+            <div class="item-menu" onclick="location.href='${pageContext.request.contextPath}/Cart.jsp'" data-name="Carrello"><i class="fa-solid fa-cart-shopping iconMenu"></i>Carrello <span id="count"><%= numberObject %></span></div>
             <div class="item-menu" onclick="location.href='#'" data-name="Chi siamo"><i class="fa-solid fa-circle-info iconMenu"></i>Chi siamo</div>
             <div class="item-menu" onclick="<%= url %>" style="position: relative" data-name="Login"><i class="fa-solid fa-user iconMenu"></i><%= name %>
                 <div class="sub-menu" data-name="Login">

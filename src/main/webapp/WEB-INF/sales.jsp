@@ -16,6 +16,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src='https://kit.fontawesome.com/c6b30e1924.js' crossorigin='anonymous'></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/script/eventManager.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/script/product.js"></script>
 
     <%  @SuppressWarnings("unchecked")
         ArrayList<CategoryBean> listCategories = (ArrayList<CategoryBean>) request.getAttribute("categories"); %>
@@ -28,7 +29,7 @@
     <div class="bodyCatalog">
         <div class="containerProduct" id="containerProduct">
             <%  @SuppressWarnings("unchecked")
-            ArrayList<ProductBean> productsList = (ArrayList<ProductBean>) request.getAttribute("products"); %>
+                ArrayList<ProductBean> productsList = (ArrayList<ProductBean>) request.getAttribute("products"); %>
 
             <% for (ProductBean product: productsList) { %>
             <div class="productCard">
@@ -43,7 +44,7 @@
                 <% } %>
 
                 <% if (product.getQuantity() > 0) { %>
-                <div><a class="shop" href="${pageContext.request.contextPath}/add-to-cart-servlet?productId=<%= product.getId() %>"><i class="fa-solid fa-cart-plus"></i></a></div>
+                <div><a class="shop" onclick="addProductCard(<%= product.getId() %>, 1)"><i class="fa-solid fa-cart-plus"></i></a></div>
                 <% } else {%>
                 <div><i class="fa-solid fa-ban"></i></div>
                 <% } %>
