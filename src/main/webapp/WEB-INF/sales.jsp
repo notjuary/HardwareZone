@@ -32,6 +32,8 @@
                 ArrayList<ProductBean> productsList = (ArrayList<ProductBean>) request.getAttribute("products"); %>
 
             <% for (ProductBean product: productsList) { %>
+
+            <a class="productCard" href="${pageContext.request.contextPath}/show-product-servlet?productId=<%= product.getId() %>">
             <div class="productCard">
                 <div class="image"><img src="<%= product.getImage() %>" alt="<%= product.getName() %>"></div>
                 <div class="name"><%= product.getName() %></div>
@@ -48,7 +50,7 @@
                 <% } else {%>
                 <div><i class="fa-solid fa-ban"></i></div>
                 <% } %>
-            </div>
+            </div></a>
             <% } %>
         </div>
     </div>

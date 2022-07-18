@@ -53,12 +53,13 @@
                         }
 
                         $("#containerProduct").append(
+                            '<a class="productCard" href="${pageContext.request.contextPath}/show-product-servlet?productId=' + products[i]["id"] + '">' +
                             '<div class="productCard">' +
                             '<div class="image"><img src="' + products[i]["image"] + '" alt="' + products[i]["name"] + '"></div>' +
                             '<div class="name">' + products[i]["name"] + '</div>' +
                             salesDiv +
                             '<div>' + icon + '</div>' +
-                            '</div>'
+                            '</div></a>'
                         );
                     }
                 }
@@ -111,6 +112,8 @@
                 ArrayList<ProductBean> productsList = (ArrayList<ProductBean>) request.getAttribute("products"); %>
 
             <% for (ProductBean product: productsList) { %>
+
+                <a class="productCard" href="${pageContext.request.contextPath}/show-product-servlet?productId=<%= product.getId() %>">
                 <div class="productCard">
                     <div class="image"><img src="<%= product.getImage() %>" alt="<%= product.getName() %>"></div>
                     <div class="name"><%= product.getName() %></div>
@@ -127,7 +130,7 @@
                     <% } else {%>
                         <div><i class="fa-solid fa-ban"></i></div>
                     <% } %>
-                </div>
+                </div></a>
             <% } %>
         </div>
     </div>

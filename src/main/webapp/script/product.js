@@ -9,6 +9,11 @@ function addProductCard(ID, quantity) {
             let newQuantity = parseInt($("#count").text());
             newQuantity += quantity;
             $("#count").text(newQuantity);
+        },
+
+        error: function () {
+
+            window.location.reload();
         }
     });
 }

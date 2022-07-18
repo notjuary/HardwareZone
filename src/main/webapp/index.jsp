@@ -41,12 +41,13 @@
 
 
                         $(".slide-show").append(
+                            '<a class="productCard" href="${pageContext.request.contextPath}/show-product-servlet?productId=' + products[i]["id"] + '">' +
                             '<div class="productCard">' +
                             '<div class="image"><img src="' + products[i]["image"] + '" alt="' + products[i]["name"] + '"></div>' +
                             '<div class="name">' + products[i]["name"] + '</div>' +
                             salesDiv +
                             '<div>' + icon + '</div>' +
-                            '</div>'
+                            '</div></a>'
                         );
                     }
                 }

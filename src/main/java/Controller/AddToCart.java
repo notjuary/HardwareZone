@@ -35,11 +35,7 @@ public class AddToCart extends HttpServlet {
         }
 
         else {
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/error.jsp");
-            request.setAttribute("type", "alert");
-            request.setAttribute("msg", "Quantità non disponibile");
-            request.setAttribute("redirect", "${pageContext.request.contextPath}/show-product-servlet?productId=" + productId);
-            dispatcher.include(request, response);
+            response.sendError(400);
         }
 
         session.setAttribute("cart", cart);

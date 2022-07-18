@@ -11,6 +11,11 @@ body {
     background-color: #0F1A20;
 }
 
+a.productCard {
+    text-decoration: none;
+    color: black;
+}
+
 div.warning {
     text-align: center;
     padding: 20px;

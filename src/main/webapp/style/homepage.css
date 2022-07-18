@@ -41,6 +41,6 @@ a.shop > i.fa-solid:hover {
     cursor: pointer;
 }
 
-div.productCard > div.onSale {
+div.onSale {
     color: #C92403;
 }
