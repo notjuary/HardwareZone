@@ -1,11 +1,14 @@
 package Controller;
 
+import Model.CartBean;
+import Model.CartDAO;
+import Model.ProductCartBean;
+import Model.UserBean;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 @WebServlet(name = "logoutServlet", value = "/logout-servlet")
 public class Logout extends HttpServlet {
@@ -14,16 +17,19 @@ public class Logout extends HttpServlet {
         response.setContentType("text/html");
 
         HttpSession session = request.getSession();
-        session.invalidate();
+        UserBean user = (UserBean) session.getAttribute("user");
+        CartBean cartBean = (CartBean) session.getAttribute("cart");
+        CartDAO serviceCart = new CartDAO();
 
-        PrintWriter out = response.getWriter();
-        out.println("<div class=\"success\">\n" +
-                "    <span class=\"closebtn\" onclick=\"clearDiv();\">&times;</span> \n" +
-                "    <strong>Logout eseguito</strong>\n" +
-                "    </div>");
+        serviceCart.doDelete(user.getId());
+        for (ProductCartBean product: cartBean.getCartList()) {
+
+            serviceCart.doSave(user.getId(), product.getId(), product.getQuantity());
+        }
+
+        session.invalidate();
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
         dispatcher.include(request, response);
-        out.close();
     }
 }

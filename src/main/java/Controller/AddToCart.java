@@ -1,6 +1,6 @@
 package Controller;
 
-import Model.Cart;
+import Model.CartBean;
 import Model.ProductBean;
 import Model.ProductDAO;
 import jakarta.servlet.*;
@@ -21,15 +21,15 @@ public class AddToCart extends HttpServlet {
 
         ProductDAO service = new ProductDAO();
         HttpSession session = request.getSession();
-        Cart cart = (Cart) session.getAttribute("cart");
+        CartBean cartBean = (CartBean) session.getAttribute("cart");
 
-        if (cart == null)
-            cart = new Cart();
+        if (cartBean == null)
+            cartBean = new CartBean();
 
         ProductBean productBean = service.doRetrieveById(productId);
 
         if (productBean.getQuantity() >= quantity) {
-            cart.addProduct(productId, quantity);
+            cartBean.addProduct(productId, quantity);
             productBean.setQuantity(productBean.getQuantity() - quantity);
             service.doUpdate(productBean);
         }
@@ -38,13 +38,6 @@ public class AddToCart extends HttpServlet {
             response.sendError(400);
         }
 
-        session.setAttribute("cart", cart);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html");
-
-        System.out.println(" we ");
+        session.setAttribute("cart", cartBean);
     }
 }

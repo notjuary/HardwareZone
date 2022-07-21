@@ -1,8 +1,6 @@
 package Controller;
 
-import Model.Cart;
-import Model.UserBean;
-import Model.UserDAO;
+import Model.*;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -12,7 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.ArrayList;
 
 @WebServlet(name = "loginServlet", value = "/login-servlet")
 public class Login extends HttpServlet {
@@ -39,10 +37,16 @@ public class Login extends HttpServlet {
 
             else {
 
-                Cart cart = new Cart();
-                session.setAttribute("cart", cart);
+                CartBean cartBean = new CartBean();
+                CartDAO serviceCart = new CartDAO();
+
+                cartBean.setCartList(serviceCart.getCart(user.getId()));
+
+                session.setAttribute("cart", cartBean);
                 dispatcher = request.getRequestDispatcher("index.jsp");
             }
+
+            dispatcher.include(request, response);
         }
 
         else if (user == null) {

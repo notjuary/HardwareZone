@@ -6,8 +6,7 @@ function addProductCard(ID, quantity) {
         data: {"productId": ID, "quantity": quantity},
         success: function() {
 
-            let newQuantity = parseInt($("#count").text());
-            newQuantity += quantity;
+            let newQuantity = parseInt($("#count").text()) + parseInt(quantity);
             $("#count").text(newQuantity);
         },
 

@@ -1,0 +1,36 @@
+div.productCard {
+    display: inline-block;
+    background: white;
+    margin: 20px auto;
+    padding: 15px;
+    border-radius: 15px;
+    border: solid 1px white;
+    text-align: center;
+}
+
+div.image > img {
+    width: 200px;
+}
+
+div.onSale {
+    color: #C92403;
+}
+
+input[type="button"] {
+    border-radius: 15px;
+    display: inline-block;
+    color: #0F1A20;
+    margin: 10px;
+    text-align: center;
+    padding: 10px;
+    background-color: #EEE5E9;
+    cursor: pointer;
+    box-sizing: border-box;
+    border: none;
+    font-family: 'Poppins', sans-serif;
+}
+
+input[type="button"]:hover {
+    background-color: #C92403;
+    color: #EEE5E9;
+}

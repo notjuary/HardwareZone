@@ -1,5 +1,5 @@
 <%@ page import="Model.UserBean" %>
-<%@ page import="Model.Cart" %>
+<%@ page import="Model.CartBean" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="it-IT">
@@ -27,7 +27,7 @@
 
             int numberObject;
             if ((request.getSession().getAttribute("cart")) != null)
-                numberObject = ((Cart) request.getSession().getAttribute("cart")).getNumberObject();
+                numberObject = ((CartBean) request.getSession().getAttribute("cart")).getNumberObject();
             else
                 numberObject = 0;
         %>

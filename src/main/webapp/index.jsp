@@ -58,7 +58,7 @@
 </head>
 <body>
 
-    <%@ include file="menu.jsp"%>
+    <%@ include file="/menu.jsp"%>
 
         <div class="slide-show">
         </div>

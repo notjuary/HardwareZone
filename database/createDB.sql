@@ -20,11 +20,6 @@ CREATE TABLE Utente (
     Amministratore VARCHAR(5) DEFAULT "false"
 );
 
-CREATE TABLE Carrello (
-	ID_Carrello INT AUTO_INCREMENT PRIMARY KEY,
-    Utente INT REFERENCES Utente(ID_Utente)
-);
-
 CREATE TABLE Prodotto (
 	ID_Prodotto INT AUTO_INCREMENT PRIMARY KEY,
     Nome VARCHAR(20) NOT NULL,
@@ -36,31 +31,11 @@ CREATE TABLE Prodotto (
     Categoria VARCHAR(20) NOT NULL
 );
 
-CREATE TABLE Carrello_Prodotto (
-	ID_Carrello_Prodotto INT AUTO_INCREMENT PRIMARY KEY,
-    Prodotto INT REFERENCES Prodotto(ID_Prodotto),
-    Carrello INT REFERENCES Carrello(ID_Carrello),
-    Quantità INT NOT NULL DEFAULT 1
-);
-
 CREATE TABLE Ordine (
 	ID_Ordine INT AUTO_INCREMENT PRIMARY KEY,
     Utente INT REFERENCES Utente(ID_Utente),
     Costi_Spedizione DOUBLE(10, 2),
     Totale DOUBLE(10, 2) NOT NULL
-);
-
-CREATE TABLE Ordine_Prodotto (
-	ID_Ordine_Prodotto INT AUTO_INCREMENT PRIMARY KEY,
-	Ordine INT REFERENCES Ordine(ID_Ordine),
-    Prodotto INT REFERENCES Prodotto(ID_Prodotto)
-);
-
-CREATE TABLE Spedizione (
-	ID_Spedizione INT AUTO_INCREMENT PRIMARY KEY,
-    Data_Partenza DATE NOT NULL,
-    Data_Arrivo DATE NOT NULL,
-    Ordine INT REFERENCES Ordine(ID_Ordine)
 );
 
 CREATE TABLE Pagamento (
@@ -70,13 +45,10 @@ CREATE TABLE Pagamento (
     Stato BOOLEAN DEFAULT 0 NOT NULL
 );
 
-CREATE TABLE Fattura (
-	ID_Fattura INT AUTO_INCREMENT PRIMARY KEY,
-	ID_Pagamento INT REFERENCES Pagamento(ID_Pagamento),
-	Città VARCHAR(30) NOT NULL,
-    Provincia CHAR(2) NOT NULL,
-    Codice_Postale CHAR(5) NOT NULL,
-    Indirizzo VARCHAR(10) NOT NULL
+CREATE TABLE Carrello (
+	Prodotto INT NOT NULL REFERENCES Prodotto(ID_Prodotto),
+    Quantità INT NOT NULL,
+    Utente INT NOT NULL REFERENCES Utente(ID_Utente)
 );
 
 CREATE TABLE Categoria (

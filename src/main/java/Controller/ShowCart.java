@@ -1,6 +1,6 @@
 package Controller;
 
-import Model.Cart;
+import Model.CartBean;
 import Model.ProductBean;
 import Model.ProductCartBean;
 import Model.ProductDAO;
@@ -21,8 +21,8 @@ public class ShowCart extends HttpServlet {
         response.setContentType("text/html");
 
         HttpSession session = request.getSession();
-        Cart cart = (Cart) session.getAttribute("cart");
-        ArrayList<ProductCartBean> cartList = cart.getList();
+        CartBean cartBean = (CartBean) session.getAttribute("cart");
+        ArrayList<ProductCartBean> cartList = cartBean.getList();
         ProductDAO service = new ProductDAO();
         JSONArray ja = new JSONArray();
 
