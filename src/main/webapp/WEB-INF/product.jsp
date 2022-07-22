@@ -1,9 +1,13 @@
 <%@ page import="Model.ProductBean" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<!DOCTYPE html>
+<html lang="it-IT">
 <head>
 
     <% ProductBean product = (ProductBean) request.getAttribute("product"); %>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
 
     <title><%= product.getName() %></title>
 
@@ -34,16 +38,20 @@
 
             <div class="name"><%= product.getDescription() %></div>
 
+            <% if (product.getQuantity() > 0) { %>
             <form action="${pageContext.request.contextPath}/add-to-cart-servlet" method="get">
                 <input type="hidden" name="productId" id="productId" value="<%= product.getId() %>">
                 <label>
-                    <input type="number" name="quantity" id="quantity" min="1" max="<%= product.getQuantity() %>">
+                    <input type="number" name="quantity" id="quantity" value="1" min="1" max="<%= product.getQuantity() %>">
                 </label>
 
                 <label>
                     <input type="button" onclick="addProductCard(document.getElementById('productId').value, document.getElementById('quantity').value)" value="Aggiungi al carrello">
                 </label>
             </form>
+            <% } else { %>
+                <p style="text-align: center">Prodotto esaurito</p>
+            <% } %>
         </div>
     </div>
 

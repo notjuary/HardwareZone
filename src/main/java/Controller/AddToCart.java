@@ -28,15 +28,10 @@ public class AddToCart extends HttpServlet {
 
         ProductBean productBean = service.doRetrieveById(productId);
 
-        if (productBean.getQuantity() >= quantity) {
+        if (productBean.getQuantity() >= quantity)
             cartBean.addProduct(productId, quantity);
-            productBean.setQuantity(productBean.getQuantity() - quantity);
-            service.doUpdate(productBean);
-        }
-
-        else {
+        else
             response.sendError(400);
-        }
 
         session.setAttribute("cart", cartBean);
     }

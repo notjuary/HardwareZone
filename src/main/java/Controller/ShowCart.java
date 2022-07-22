@@ -22,7 +22,7 @@ public class ShowCart extends HttpServlet {
 
         HttpSession session = request.getSession();
         CartBean cartBean = (CartBean) session.getAttribute("cart");
-        ArrayList<ProductCartBean> cartList = cartBean.getList();
+        ArrayList<ProductCartBean> cartList = cartBean.getCartList();
         ProductDAO service = new ProductDAO();
         JSONArray ja = new JSONArray();
 

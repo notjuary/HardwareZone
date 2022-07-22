@@ -13,14 +13,12 @@ public class CartBean {
     }
 
     public int getNumberObject() {
+
         return numberObject;
     }
 
-    public void setNumberObject(int numberObject) {
-        this.numberObject = numberObject;
-    }
-
     public ArrayList<ProductCartBean> getCartList() {
+
         return cartList;
     }
 
@@ -40,7 +38,7 @@ public class CartBean {
             if (product.getId() == id) {
 
                 isOn = true;
-                int newQuantity = (product.getQuantity() + 1);
+                int newQuantity = (product.getQuantity() + quantity);
                 product.setQuantity(newQuantity);
             }
         }
@@ -59,19 +57,9 @@ public class CartBean {
         for (ProductCartBean product : cartList) {
 
             if (product.getId() == id) {
-
-                int newQuantity = (product.getQuantity() - 1);
-
-                if (newQuantity == 0)
-                    cartList.remove(product);
-                else
-                    product.setQuantity(newQuantity);
+                this.numberObject -= product.getQuantity();
+                cartList.remove(product);
             }
         }
-    }
-
-    public ArrayList<ProductCartBean> getList() {
-
-        return cartList;
     }
 }

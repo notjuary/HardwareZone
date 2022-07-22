@@ -1,5 +1,5 @@
 $("div.success div.alert").ready(function() {
-    setTimeout(clearDiv, 5000);
+    setTimeout(clearDiv, 10000);
 });
 
 function clearDiv() {
@@ -7,3 +7,7 @@ function clearDiv() {
     $("div.alert").fadeOut();
     $("div.warning").fadeOut();
 }
+
+window.onbeforeunload = function(e) {
+    alert("The Window is closing!");
+};

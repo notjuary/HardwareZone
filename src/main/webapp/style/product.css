@@ -6,14 +6,29 @@ div.productCard {
     border-radius: 15px;
     border: solid 1px white;
     text-align: center;
+    width: 600px;
 }
 
 div.image > img {
-    width: 200px;
+    height: 150px;
 }
 
 div.onSale {
     color: #C92403;
+}
+
+input[type="number"] {
+    border-radius: 15px;
+    display: inline-block;
+    color: #0F1A20;
+    margin: 10px;
+    text-align: center;
+    padding: 10px;
+    background-color: #EEE5E9;
+    cursor: pointer;
+    box-sizing: border-box;
+    border: none;
+    font-family: 'Poppins', sans-serif;
 }
 
 input[type="button"] {
@@ -33,4 +48,18 @@ input[type="button"] {
 input[type="button"]:hover {
     background-color: #C92403;
     color: #EEE5E9;
+}
+
+@media screen and (max-width: 1160px) {
+    div.productCard {
+        margin-top: 80px;
+    }
+}
+
+@media screen and (max-width: 650px) {
+    div.productCard {
+        display: block;
+        width: 100%;
+        margin-top: 80px;
+    }
 }

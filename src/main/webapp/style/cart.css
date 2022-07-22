@@ -11,20 +11,26 @@ div.section-cart-item {
     width: 600px;
     border-radius: 15px;
     margin: auto auto 15px;
+    min-height: 400px;
+}
+
+div.imageCart {
+    display: flex;
+    justify-content: center;
+    width: 300px;
 }
 
 div.imageCart img {
     margin-right: 20px;
-    width: 150px;
+    height: 150px;
+
 }
 
 div.productCard {
+    width: 100%;
     position: relative;
-}
-
-div.productCard > div {
     display: flex;
-    padding: 10px;
+    float: left;
 }
 
 div.infoProductCart {
@@ -48,7 +54,7 @@ div.buttonCart {
     text-align: center;
 }
 
-div.buttonCart input {
+div.buttonCart {
     font-family: 'Poppins', sans-serif;
     height: 50px;
     border-radius: 15px;
@@ -56,10 +62,20 @@ div.buttonCart input {
     color: #eee5e9;
     width: 250px;
     border-style: none;
-    margin: 10px 0;
+    margin: 10px auto;
+}
+
+a.button {
+    line-height: 50px;
+    text-decoration: none;
+    color: #eee5e9;
 }
 
 div.buttonCart input:hover {
     cursor: pointer;
     scale: 1.2;
+}
+
+div.onSale {
+    color: #C92403;
 }
