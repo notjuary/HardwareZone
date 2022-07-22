@@ -5,12 +5,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @WebServlet(name = "paymentServlet", value = "/payment-servlet")
 public class Payment extends HttpServlet {
