@@ -19,7 +19,7 @@
     <%@ include file="/menu.jsp"%>
 
     <script>
-        let count = 6;
+        let count = 11;
 
         function updateCount() {
             count = count - 1;

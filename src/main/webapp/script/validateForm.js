@@ -7,6 +7,7 @@ const postalcode_string = /^\d{5}$/;
 const address_string = /^([a-zA-Z\d\xE0\xE8\xE9\xF9\xF2\xEC\x27\x2C]\s?){2,20}$/;
 const number_string = /^\d+$/;
 const double_string = /^(\d+(?:[.,]\d{2})?)$/;
+const holder_string = /^([a-zA-Z\xE0\xE8\xE9\xF9\xF2\xEC\x27]\s?){2,255}$/;
 
 $(document).ready(function() {
     showTabPersonalInformation();
@@ -170,6 +171,59 @@ function validateAddress() {
     }
 }
 
+function validateNumberCart() {
+
+    let numberCard = document.getElementById("numberCard").value;
+    if (number_string.test(numberCard) && numberCard.length === 16) {
+        $("#numberCard").css("border-color", "#E5E5E5");
+        return true;
+    }
+    else {
+        $("#numberCard").css("border-color", "#C92403");
+        return false;
+    }
+}
+
+function validateCVV() {
+
+    let cvv = document.getElementById("CVV").value;
+    if (number_string.test(cvv) && cvv.length === 3) {
+        $("#CVV").css("border-color", "#E5E5E5");
+        return true;
+    }
+    else {
+        $("#CVV").css("border-color", "#C92403");
+        return false;
+    }
+}
+
+function validateDeadline() {
+
+    let deadline = new Date(document.getElementById("deadline").value);
+    let today = new Date();
+    if (deadline > today) {
+        $("#deadline").css("border-color", "#E5E5E5");
+        return true;
+    }
+    else {
+        $("#deadline").css("border-color", "#C92403");
+        return false;
+    }
+}
+
+function validateHolder() {
+
+    let holder = document.getElementById("holder").value;
+    if (holder_string.test(holder)) {
+        $("#holder").css("border-color", "#E5E5E5");
+        return true;
+    }
+    else {
+        $("#holder").css("border-color", "#C92403");
+        return false;
+    }
+}
+
 function validatePersonalInformation() {
 
     if (validateName() & validateSurname() & validateBirthday())
@@ -234,5 +288,6 @@ function validateAddProduct() {
 
 function validatePayment() {
 
-    document.getElementById("pay-form").submit();
+    if (validateNumberCart() & validateCVV() & validateDeadline() & validateHolder())
+        document.getElementById("pay-form").submit();
 }

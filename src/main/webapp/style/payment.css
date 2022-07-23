@@ -22,7 +22,7 @@ div.paymentCard label {
     margin-bottom: 5px;
 }
 
-div.paymentCard input {
+div.paymentCard input, textarea {
     display: block;
     margin: auto;
     background: none;

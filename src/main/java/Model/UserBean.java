@@ -135,12 +135,12 @@ public class UserBean {
         String[] dateSplit = date.split("-");
 
         int year = Integer.parseInt(dateSplit[0]);
-        int mouth = Integer.parseInt(dateSplit[1]);
+        int month = Integer.parseInt(dateSplit[1]);
         int day = Integer.parseInt(dateSplit[2]);
 
-        mouth--;
+        month--;
 
-        this.birthday = new GregorianCalendar(year, mouth, day);
+        this.birthday = new GregorianCalendar(year, month, day);
     }
 
     public String getRegister() {
@@ -155,12 +155,12 @@ public class UserBean {
         String[] dateSplit = date.split("-");
 
         int year = Integer.parseInt(dateSplit[0]);
-        int mouth = Integer.parseInt(dateSplit[1]);
+        int month = Integer.parseInt(dateSplit[1]);
         int day = Integer.parseInt(dateSplit[2]);
 
-        mouth--;
+        month--;
 
-        this.register = new GregorianCalendar(year, mouth, day);
+        this.register = new GregorianCalendar(year, month, day);
     }
 
     public void setRegister() {

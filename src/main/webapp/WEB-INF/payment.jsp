@@ -23,8 +23,8 @@
     <form action="${pageContext.request.contextPath}/payment-servlet" method="post" id="pay-form">
         <div class="paymentCard">
             <div class="creditCardNumber">
-                <label for="numero-carta">Numero Carta</label>
-                <input type="text" name="numero-carta" id="numero-carta" placeholder="Numero Carta">
+                <label for="numberCard">Numero Carta</label>
+                <input type="text" name="numero-carta" id="numberCard" placeholder="Numero Carta">
             </div>
 
             <div class="cvv">
@@ -33,13 +33,13 @@
             </div>
 
             <div class="deadline">
-                <label for="scadenza">Scadenza</label>
-                <input type="date" name="scadenza" id="scadenza">
+                <label for="deadline">Scadenza</label>
+                <input type="date" name="scadenza" id="deadline">
             </div>
 
             <div class="holder">
-                <label for="titolare">Titolare</label>
-                <input type="text" name="titolare" id="titolare" placeholder="Titolare">
+                <label for="holder">Titolare</label>
+                <textarea name="titolare" id="holder"></textarea>
             </div>
 
             <div class="total">
