@@ -4,6 +4,11 @@ div.bodyCatalog {
     height: auto;
 }
 
+a.productCard {
+    text-decoration: none;
+    color: black;
+}
+
 div.containerProduct {
     position: relative;
     width: 100%;

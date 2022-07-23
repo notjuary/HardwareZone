@@ -1,0 +1,71 @@
+div.containerListDiv {
+    min-height: 450px;
+}
+
+div.headerTable {
+    margin-top: 30px;
+    color: #EEE5E9;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-column-gap: 0;
+    grid-row-gap: 0;
+    text-align: center;
+    font-weight: bold;
+    padding: 20px;
+    border-bottom: 1px solid;
+}
+
+div.show-more a {
+    color: #EEE5E9;
+}
+
+div.set-state a {
+    text-decoration: none;
+    color: #EEE5E9;
+}
+
+div.single-item {
+    margin-top: 30px;
+    color: #EEE5E9;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-column-gap: 0;
+    grid-row-gap: 0;
+    text-align: center;
+    font-weight: bold;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid;
+    border-radius: 10px;
+}
+
+button.button-show-more {
+    transition: 0.5s;
+    color: #0F1A20;
+    padding: 5px;
+}
+
+button.button-show-more:hover {
+    transition: 0.5s;
+    background: #C92403;
+}
+
+div.alertQuantity {
+    color: #C92403;
+}
+
+@media screen and (max-width: 1160px) {
+    div.headerTable {
+        display: none;
+    }
+
+    div.bodyTable {
+        margin-top: 80px;
+    }
+
+    div.single-item {
+        display: block;
+        width: 90%;
+        margin: 16px auto;
+    }
+}
