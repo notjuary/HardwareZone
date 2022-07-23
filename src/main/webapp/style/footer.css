@@ -60,6 +60,7 @@ div.social a:hover {
 
     div.containerFooter > div {
         display: block;
+        margin: 0;
         float: none;
         width: 100%;
     }

@@ -15,6 +15,25 @@
     <script type="text/javascript" src="script/product.js"></script>
 
     <script>
+
+        let slideIndex = 0;
+        function showSlides() {
+            let i;
+            let slides = document.getElementsByClassName("mySlides");
+            let dots = document.getElementsByClassName("dot");
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            slideIndex++;
+            if (slideIndex > slides.length) {slideIndex = 1}
+            for (i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active", "");
+            }
+            slides[slideIndex-1].style.display = "block";
+            dots[slideIndex-1].className += " active";
+            setTimeout(showSlides, 5000);
+        }
+
         $(document).ready(function() {
             $.ajax({
                 type: "GET",
@@ -39,8 +58,7 @@
                             salesDiv = '<div class="price onSale"><span style="color: black; text-decoration: line-through;">€' + products[i]["price"].toFixed(2) + '</span> €' + sale.toFixed(2) + ' -' + products[i]["sales"] + '%</div>'
                         }
 
-
-                        $(".slide-show").append(
+                        $(".product-show").append(
                             '<a class="productCard" href="${pageContext.request.contextPath}/show-product-servlet?productId=' + products[i]["id"] + '">' +
                             '<div class="productCard">' +
                             '<div class="image"><img src="' + products[i]["image"] + '" alt="' + products[i]["name"] + '"></div>' +
@@ -56,12 +74,32 @@
     </script>
 
 </head>
-<body>
+<body onload="showSlides()">
 
     <%@ include file="/menu.jsp"%>
 
-        <div class="slide-show">
+    <div class="slideshow-container">
+        <div class="mySlides fade">
+            <img src="https://www.maxit.my/wp-content/uploads/2016/05/msivrg1.jpg">
         </div>
+
+        <div class="mySlides fade">
+            <img src="https://www.evetech.co.za/repository/ProductImages/CoolerMaster-Slider-Banner-980x380px-v1.jpg">
+        </div>
+
+        <div class="mySlides fade">
+            <img src="https://notebookspec.com/web/wp-content/uploads/2021/01/ROG-2021-Family-website-banner_1920-x-740_Fn.jpg">
+        </div>
+    </div>
+
+    <div style="text-align:center">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+    </div>
+
+    <div class="product-show">
+    </div>
 
     <%@ include file="/footer.jsp"%>
 

@@ -110,9 +110,9 @@ div.item-submenu:hover {
     div.show-menu {
         display: block;
         width: 100%;
-        text-align: center;
         color: #EEE5E9;
         font-size: 20px;
+        text-align: right;
     }
 
     div.navigation-bar {
@@ -121,6 +121,7 @@ div.item-submenu:hover {
         position: absolute;
         width: 100%;
         top: 0;
+        padding: 20px 30px;
     }
 
     div.menu {
