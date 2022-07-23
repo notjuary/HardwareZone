@@ -231,3 +231,8 @@ function validateAddProduct() {
         document.getElementById("add-product-form").submit();
     }
 }
+
+function validatePayment() {
+
+    document.getElementById("pay-form").submit();
+}

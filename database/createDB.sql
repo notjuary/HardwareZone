@@ -34,15 +34,24 @@ CREATE TABLE Prodotto (
 CREATE TABLE Ordine (
 	ID_Ordine INT AUTO_INCREMENT PRIMARY KEY,
     Utente INT REFERENCES Utente(ID_Utente),
-    Costi_Spedizione DOUBLE(10, 2),
     Totale DOUBLE(10, 2) NOT NULL
+);
+
+CREATE TABLE Ordine_Prodotto (
+	Prodotto INT NOT NULL,
+    Quantità INT NOT NULL,
+    Prezzo DOUBLE(10, 2),
+    Ordine INT REFERENCES Ordine(ID_Ordine)
 );
 
 CREATE TABLE Pagamento (
 	ID_Pagamento INT AUTO_INCREMENT PRIMARY KEY,
     Ordine INT REFERENCES Ordine(ID_Ordine),
     Data_Pagamento DATE NOT NULL,
-    Stato BOOLEAN DEFAULT 0 NOT NULL
+    Numero_Carta CHAR(16) NOT NULL,
+    CVV CHAR(3) NOT NULL,
+    Scadenza DATE NOT NULL,
+    Titolare_Carta VARCHAR(60) NOT NULL
 );
 
 CREATE TABLE Carrello (

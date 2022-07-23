@@ -1,0 +1,48 @@
+div.paymentCard {
+    display: block;
+    position: absolute;
+    margin-top: 20px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    border: solid 2px #EEE5E9;
+    border-radius: 15px;
+    padding: 20px;
+    color: #EEE5E9;
+    z-index: -1;
+}
+
+
+div.paymentCard div {
+    margin-bottom: 15px;
+}
+
+div.paymentCard label {
+    display: block;
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+div.paymentCard input {
+    display: block;
+    margin: auto;
+    background: none;
+    color: #EEE5E9;
+    border-radius: 10px;
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    outline: none;
+    border: solid 2px #EEE5E9;
+}
+
+input[type = "button"] {
+    text-align: center;
+    max-width: 300px;
+}
+
+input[type = "button"]:hover {
+    background: #EEE5E9;
+    color: #0F1A20;
+    cursor: pointer;
+}

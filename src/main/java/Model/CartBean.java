@@ -17,6 +17,11 @@ public class CartBean {
         return numberObject;
     }
 
+    public void setNumberObject(int number) {
+
+        this.numberObject = number;
+    }
+
     public ArrayList<ProductCartBean> getCartList() {
 
         return cartList;
