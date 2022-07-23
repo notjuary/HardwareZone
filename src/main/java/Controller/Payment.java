@@ -84,6 +84,15 @@ public class Payment extends HttpServlet {
 
         for (ProductCartBean product: cart.getCartList()) {
 
+            OrderProductBean orderProductBean = new OrderProductBean();
+            orderProductBean.setProduct(product.getId());
+            orderProductBean.setQuantity(product.getQuantity());
+            orderProductBean.setPrice(serviceProduct.doRetrieveById(product.getId()).getPrice());
+            orderProductBean.setOrder(orderId);
+
+            OrderProductDAO serviceOrderProduct = new OrderProductDAO();
+            serviceOrderProduct.doSave(orderProductBean);
+
             ProductBean productBean = serviceProduct.doRetrieveById(product.getId());
             productBean.setQuantity(productBean.getQuantity() - product.getQuantity());
             serviceProduct.doUpdate(productBean);
