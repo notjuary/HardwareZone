@@ -33,9 +33,11 @@ public class AddToCart extends HttpServlet {
         else
             response.sendError(400);
 
-        serviceCart.doDelete(user.getId());
-        for (ProductCartBean product : cartBean.getCartList()) {
-            serviceCart.doSave(user.getId(), product.getId(), product.getQuantity());
+        if (user != null) {
+            serviceCart.doDelete(user.getId());
+            for (ProductCartBean product : cartBean.getCartList()) {
+                serviceCart.doSave(user.getId(), product.getId(), product.getQuantity());
+            }
         }
 
         session.setAttribute("cart", cartBean);

@@ -7,7 +7,3 @@ function clearDiv() {
     $("div.alert").fadeOut();
     $("div.warning").fadeOut();
 }
-
-window.onbeforeunload = function(e) {
-    alert("The Window is closing!");
-};

@@ -1,8 +1,6 @@
 package Controller;
 
-import Model.CartBean;
-import Model.ProductBean;
-import Model.ProductDAO;
+import Model.*;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -19,8 +17,18 @@ public class RemoveFromCart extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("productId"));
         HttpSession session = request.getSession();
         CartBean cart = (CartBean) session.getAttribute("cart");
+        UserBean user = (UserBean) session.getAttribute("user");
+        CartDAO serviceCart = new CartDAO();
 
         cart.removeProduct(id);
+
+        if (user != null) {
+            serviceCart.doDelete(user.getId());
+            for (ProductCartBean product : cart.getCartList()) {
+                serviceCart.doSave(user.getId(), product.getId(), product.getQuantity());
+            }
+        }
+
         session.setAttribute("cart", cart);
     }
 }

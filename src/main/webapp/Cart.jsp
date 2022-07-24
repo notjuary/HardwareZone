@@ -26,6 +26,7 @@
                 },
 
                 error: function () {
+                    alert("error");
                     window.location.reload();
                 }
             })
