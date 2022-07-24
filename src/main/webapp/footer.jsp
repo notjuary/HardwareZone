@@ -12,20 +12,17 @@
     <div class="footer">
         <div class="containerFooter">
             <div class="info">
-                <h2>About Us</h2>
+                <h2>Hardware Zone</h2>
                 <p>
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                    when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                    Via Giovanni Paolo II, 132, 84084 Fisciano SA.
                 </p>
             </div>
 
             <div class="links">
                 <h2>Link Utili</h2>
-                <a href="#">Link1</a>
-                <a href="#">Link2</a>
-                <a href="#">Link3</a>
-                <a href="#">Link4</a>
+                <a href="#">Catalogo</a>
+                <a href="#">Offerte</a>
+                <a href="#">Chi siamo</a>
             </div>
 
             <div class="social">

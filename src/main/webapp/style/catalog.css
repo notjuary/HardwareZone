@@ -117,3 +117,25 @@ a.shop > i.fa-solid:hover {
 div.onSale {
     color: #C92403;
 }
+
+div.containerSearchBar{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+div.search-bar input{
+    border-radius: 10px;
+    padding: 5px;
+    background: #EEE5E9;
+    font-size: 15px;
+    outline: none;
+    height: 40px;
+    line-height: 40px;
+}
+
+div.search-bar i{
+    position: relative;
+    right: 25px;
+    cursor: pointer;
+}

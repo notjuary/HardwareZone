@@ -65,12 +65,27 @@
                 }
             });
         }
+
+        function searchProductAjax()
+        {
+            let text = $('.search-bar').find('input').val();
+
+            // chiamata Ajax
+        }
     </script>
 
 </head>
 <body>
 
     <%@ include file="/menu.jsp"%>
+
+    <div class="containerSearchBar">
+        <div class="search-bar">
+            <label>
+                <input onkeyup="searchProductAjax()" type="text" placeholder="Cerca.."><i class="fa-solid fa-magnifying-glass"></i>
+            </label>
+        </div>
+    </div>
 
     <div class="bodyCatalog">
         <form id="formFilter">
