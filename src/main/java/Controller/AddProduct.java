@@ -1,9 +1,6 @@
 package Controller;
 
-import Model.CategoryBean;
-import Model.CategoryDAO;
-import Model.ProductBean;
-import Model.ProductDAO;
+import Model.*;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -24,13 +21,24 @@ public class AddProduct extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
 
-        CategoryDAO service = new CategoryDAO();
-        ArrayList<CategoryBean> categoryList = service.doRetrieveAll();
+        HttpSession session = request.getSession();
+        UserBean user = (UserBean) session.getAttribute("user");
 
-        request.setAttribute("categories", categoryList);
+        if (user.isAdmin().equalsIgnoreCase("true")) {
+            CategoryDAO service = new CategoryDAO();
+            ArrayList<CategoryBean> categoryList = service.doRetrieveAll();
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/add-product.jsp");
-        dispatcher.include(request, response);
+            request.setAttribute("categories", categoryList);
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/add-product.jsp");
+            dispatcher.include(request, response);
+        }
+
+        else {
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+            dispatcher.include(request, response);
+        }
     }
 
     @Override

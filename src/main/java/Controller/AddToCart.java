@@ -1,8 +1,6 @@
 package Controller;
 
-import Model.CartBean;
-import Model.ProductBean;
-import Model.ProductDAO;
+import Model.*;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -22,6 +20,8 @@ public class AddToCart extends HttpServlet {
         ProductDAO service = new ProductDAO();
         HttpSession session = request.getSession();
         CartBean cartBean = (CartBean) session.getAttribute("cart");
+        CartDAO serviceCart = new CartDAO();
+        UserBean user = (UserBean) session.getAttribute("user");
 
         if (cartBean == null)
             cartBean = new CartBean();
@@ -32,6 +32,11 @@ public class AddToCart extends HttpServlet {
             cartBean.addProduct(productId, quantity);
         else
             response.sendError(400);
+
+        serviceCart.doDelete(user.getId());
+        for (ProductCartBean product : cartBean.getCartList()) {
+            serviceCart.doSave(user.getId(), product.getId(), product.getQuantity());
+        }
 
         session.setAttribute("cart", cartBean);
     }

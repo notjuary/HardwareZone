@@ -201,6 +201,7 @@ function validateDeadline() {
 
     let deadline = new Date(document.getElementById("deadline").value);
     let today = new Date();
+
     if (deadline > today) {
         $("#deadline").css("border-color", "#E5E5E5");
         return true;
@@ -275,12 +276,106 @@ function validateEditProfile() {
     }
 }
 
-function validateAddProduct() {
+function validateNameProduct() {
+
+    let name = document.getElementById("name").value;
+
+    if (name.length > 0 && name.length <= 20) {
+        $("#name").css("border-color", "#E5E5E5");
+        return true;
+    }
+    else {
+        $("#name").css("border-color", "#C92403");
+        return false;
+    }
+}
+
+function validateDescriptionProduct() {
+
+    let description = document.getElementById("description").value;
+
+    if (description.length > 0 && description.length <= 255) {
+        $("#description").css("border-color", "#E5E5E5");
+        return true;
+    }
+    else {
+        $("#description").css("border-color", "#C92403");
+        return false;
+    }
+}
+
+function validateCategoryProduct() {
+
+    let category = document.getElementById("category").value;
+
+    if (category.length > 0 && category.length <= 20) {
+        $("#category").css("border-color", "#E5E5E5");
+        return true;
+    }
+    else {
+        $("#category").css("border-color", "#C92403");
+        return false;
+    }
+}
+
+function validateSalesProduct() {
+
+    let sales = document.getElementById("sales").value;
+
+    if (parseInt(sales) >= 0 && parseInt(sales) <= 100) {
+        $("#sales").css("border-color", "#E5E5E5");
+        return true;
+    }
+    else {
+        $("#sales").css("border-color", "#C92403");
+        return false;
+    }
+}
+
+function validateImage() {
+
+    if ($(".image").attr("src") == null) {
+        $("label#imageUpload").css("color", "#E5E5E5");
+        return true;
+    }
+    else {
+        $("label#imageUpload").css("color", "#C92403");
+        return false;
+    }
+}
+
+function validatePriceProduct() {
 
     let price = document.getElementById("price").value;
+
+    if (double_string.test(price)) {
+        $("#price").css("border-color", "#E5E5E5");
+        return true;
+    }
+    else {
+        $("#price").css("border-color", "#C92403");
+        return false;
+    }
+}
+
+function validateQuantityProduct() {
+
     let quantity = document.getElementById("quantity").value;
 
-    if (double_string.test(price) && number_string.test(quantity)) {
+    if (number_string.test(quantity)) {
+        $("#quantity").css("border-color", "#E5E5E5");
+        return true;
+    }
+    else {
+        $("#quantity").css("border-color", "#C92403");
+        return false;
+    }
+}
+
+function validateAddProduct() {
+
+    if (validateNameProduct() & validateDescriptionProduct() & validateCategoryProduct() &
+        validateSalesProduct() & validatePriceProduct() & validateQuantityProduct() & validateImage()) {
 
         document.getElementById("add-product-form").submit();
     }

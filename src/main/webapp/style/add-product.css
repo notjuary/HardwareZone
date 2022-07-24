@@ -32,6 +32,7 @@ input.product, textarea.product {
     outline: none;
     height: 40px;
     line-height: 40px;
+    border: solid 2px;
 }
 
 textarea.product {
@@ -59,7 +60,7 @@ input[type="file"] {
     display: none;
 }
 
-input[type = "submit"] {
+input[type = "button"] {
     background: #EEE5E9;
     color: #0F1A20;
     cursor: pointer;
