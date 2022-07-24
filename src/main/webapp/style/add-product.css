@@ -85,6 +85,20 @@ img.preview {
     width: 150px;
 }
 
+div.return-products{
+    background: #EEE5E9;
+    padding: 8px;
+    display: inline-block;
+    border-radius: 10px;
+    cursor: pointer;
+    margin: 20px 40px;
+}
+
+div.return-products a{
+    text-decoration: none;
+    color: black;
+}
+
 @media screen and (max-width: 1160px) {
     div.containerProductDiv {
         margin-top: 80px;

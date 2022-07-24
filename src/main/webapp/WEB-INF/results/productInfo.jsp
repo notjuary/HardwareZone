@@ -35,7 +35,10 @@
 
     <%@ include file="/WEB-INF/admin/menu-admin.jsp"%>
 
+    <div class="return-products"><a href="/ecommerce_war_exploded/products-servlet">Indietro</a></div>
+
     <div class="containerProductDiv">
+
         <form action="${pageContext.request.contextPath}/edit-product-servlet" method="post" enctype="multipart/form-data">
             <div class="containerProduct">
                 <label>
