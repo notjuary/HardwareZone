@@ -1,6 +1,7 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.ListIterator;
 
 public class CartBean {
@@ -60,12 +61,24 @@ public class CartBean {
 
     public void removeProduct(int id) {
 
+        int position = 0;
+
+        for (ProductCartBean product : cartList) {
+            position++;
+
+            if(product.getId() == id)
+                numberObject -= product.getQuantity();
+        }
+
+        cartList.remove(position - 1);
+
+        /*
         for (ProductCartBean product : cartList) {
 
             if (product.getId() == id) {
                 this.numberObject -= product.getQuantity();
                 cartList.remove(product);
             }
-        }
+        }*/
     }
 }
