@@ -23,6 +23,38 @@
         ArrayList<CategoryBean> listCategories = (ArrayList<CategoryBean>) request.getAttribute("categories"); %>
 
     <script>
+        function printProduct(data) {
+            let products = JSON.parse(data);
+            $("#containerProduct *").remove();
+
+            for (let i = 0; i < products.length; i++) {
+
+                let icon = "";
+                if (products[i]["quantity"] > 0)
+                    icon = '<a class="shop" onclick="addProductCard(' + products[i]["id"] + ', 1)"><i class="fa-solid fa-cart-plus"></i></a>'
+                else
+                    icon = '<i class="fa-solid fa-ban"></i>'
+
+                let salesDiv = "";
+                if (products[i]["sales"] === 0)
+                    salesDiv = '<div class="price">€' + products[i]["price"].toFixed(2) + '</div>'
+                else {
+                    let sale = products[i]["price"] - ((products[i]["price"] * products[i]["sales"] / 100));
+                    salesDiv = '<div class="price onSale"><span style="color: black; text-decoration: line-through;">€' + products[i]["price"].toFixed(2) + '</span> €' + sale.toFixed(2) + ' -' + products[i]["sales"] + '%</div>'
+                }
+
+                $("#containerProduct").append(
+                    '<a class="productCard" href="${pageContext.request.contextPath}/show-product-servlet?productId=' + products[i]["id"] + '">' +
+                    '<div class="productCard">' +
+                    '<div class="image"><img src="' + products[i]["image"] + '" alt="' + products[i]["name"] + '"></div>' +
+                    '<div class="name">' + products[i]["name"] + '</div>' +
+                    salesDiv +
+                    '<div>' + icon + '</div>' +
+                    '</div></a>'
+                );
+            }
+        }
+
         function filterAjax() {
 
             let form = $("#formFilter");
@@ -32,45 +64,22 @@
                 url: "${pageContext.request.contextPath}/filter-product-servlet",
                 data: form.serialize(),
                 success: function(data) {
-
-                    let products = JSON.parse(data);
-                    $("#containerProduct *").remove();
-
-                    for (let i = 0; i < products.length; i++) {
-
-                        let icon = "";
-                        if (products[i]["quantity"] > 0)
-                            icon = '<a class="shop" onclick="addProductCard(' + products[i]["id"] + ', 1)"><i class="fa-solid fa-cart-plus"></i></a>'
-                        else
-                            icon = '<i class="fa-solid fa-ban"></i>'
-
-                        let salesDiv = "";
-                        if (products[i]["sales"] === 0)
-                            salesDiv = '<div class="price">€' + products[i]["price"].toFixed(2) + '</div>'
-                        else {
-                            let sale = products[i]["price"] - ((products[i]["price"] * products[i]["sales"] / 100));
-                            salesDiv = '<div class="price onSale"><span style="color: black; text-decoration: line-through;">€' + products[i]["price"].toFixed(2) + '</span> €' + sale.toFixed(2) + ' -' + products[i]["sales"] + '%</div>'
-                        }
-
-                        $("#containerProduct").append(
-                            '<a class="productCard" href="${pageContext.request.contextPath}/show-product-servlet?productId=' + products[i]["id"] + '">' +
-                            '<div class="productCard">' +
-                            '<div class="image"><img src="' + products[i]["image"] + '" alt="' + products[i]["name"] + '"></div>' +
-                            '<div class="name">' + products[i]["name"] + '</div>' +
-                            salesDiv +
-                            '<div>' + icon + '</div>' +
-                            '</div></a>'
-                        );
-                    }
+                    printProduct(data);
                 }
             });
         }
 
-        function searchProductAjax()
-        {
+        function searchProductAjax() {
             let text = $('.search-bar').find('input').val();
 
-            // chiamata Ajax
+            $.ajax({
+                type: "POST",
+                url: "${pageContext.request.contextPath}/search-product-servlet",
+                data: {"searchQuery": text},
+                success: function(data) {
+                    printProduct(data);
+                }
+            });
         }
     </script>
 

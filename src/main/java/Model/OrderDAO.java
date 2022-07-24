@@ -57,4 +57,29 @@ public class OrderDAO {
             throw new RuntimeException(e);
         }
     }
+
+    public ArrayList<OrderBean> doRetrieveAll()
+    {
+        try (Connection con = ConPool.getConnection()) {
+            PreparedStatement ps = con.prepareStatement(
+                    "SELECT * " +
+                            "FROM Ordine ");
+
+            ResultSet rs = ps.executeQuery();
+            ArrayList<OrderBean> orders = new ArrayList<>();
+
+            while (rs.next()) {
+                OrderBean orderBean = new OrderBean();
+                orderBean.setId(rs.getInt(1));
+                orderBean.setUser(rs.getInt(2));
+                orderBean.setTotal(rs.getDouble(3));
+                orders.add(orderBean);
+            }
+
+            return orders;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

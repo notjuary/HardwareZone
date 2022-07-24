@@ -21,10 +21,12 @@ public class Logout extends HttpServlet {
         CartBean cartBean = (CartBean) session.getAttribute("cart");
         CartDAO serviceCart = new CartDAO();
 
-        serviceCart.doDelete(user.getId());
-        for (ProductCartBean product: cartBean.getCartList()) {
+        if (user.isAdmin().equalsIgnoreCase("false")) {
 
-            serviceCart.doSave(user.getId(), product.getId(), product.getQuantity());
+            serviceCart.doDelete(user.getId());
+            for (ProductCartBean product : cartBean.getCartList()) {
+                serviceCart.doSave(user.getId(), product.getId(), product.getQuantity());
+            }
         }
 
         session.invalidate();

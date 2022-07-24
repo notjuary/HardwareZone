@@ -1,6 +1,5 @@
-<%@ page import="Model.OrderBean" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="Model.OrderProductBean" %>
+<%@ page import="Model.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="it-IT">
@@ -24,17 +23,24 @@
     <%  @SuppressWarnings("unchecked")
         ArrayList<OrderProductBean> products = (ArrayList<OrderProductBean>) request.getAttribute("products"); %>
 
+    <%  @SuppressWarnings("unchecked")
+        ArrayList<ProductBean> catalog = (ArrayList<ProductBean>) request.getAttribute("catalog"); %>
+
     <div class="containerListDiv">
         <div class="headerTable">
-            <div>ID</div>
-            <div>Totale</div>
+            <div>Nome</div>
+            <div>Quantità</div>
         </div>
 
         <div class="bodyTable">
-            <% for (OrderProductBean order: products) { %>
+            <% for (OrderProductBean productOrder: products) { %>
             <div class="single-item">
-                <div><%= order.getProduct() %></div>
-                <div><%= order.getQuantity() %></div>
+                <% for (ProductBean productBean: catalog) { %>
+                    <% if (productBean.getId() == productOrder.getProduct()) { %>
+                        <div><%= productBean.getName() %></div>
+                        <div><%= productOrder.getQuantity() %></div>
+                    <% } %>
+                <% } %>
             </div>
             <% } %>
         </div>

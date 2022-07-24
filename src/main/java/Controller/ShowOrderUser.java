@@ -1,7 +1,6 @@
 package Controller;
 
 import Model.*;
-import com.oracle.wls.shaded.org.apache.xpath.operations.Or;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -17,10 +16,21 @@ public class ShowOrderUser extends HttpServlet {
 
         HttpSession session = request.getSession();
         UserBean user = (UserBean) session.getAttribute("user");
-        OrderDAO serviceOrder = new OrderDAO();
-        ArrayList<OrderBean> orders = serviceOrder.doRetrieveById(user.getId());
 
-        request.setAttribute("orders", orders);
+        if (user.isAdmin().equalsIgnoreCase("false")) {
+
+            OrderDAO serviceOrder = new OrderDAO();
+            ArrayList<OrderBean> orders = serviceOrder.doRetrieveById(user.getId());
+
+            request.setAttribute("orders", orders);
+        }
+
+        else if (user.isAdmin().equalsIgnoreCase("true")) {
+            OrderDAO serviceOrder = new OrderDAO();
+            ArrayList<OrderBean> orders = serviceOrder.doRetrieveAll();
+
+            request.setAttribute("orders", orders);
+        }
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/user/orders.jsp");
         dispatcher.include(request, response);

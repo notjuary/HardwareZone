@@ -80,7 +80,7 @@
 
     <div class="slideshow-container">
         <div class="mySlides fade">
-            <img src="https://www.maxit.my/wp-content/uploads/2016/05/msivrg1.jpg">
+            <img src="https://newgendistribution.com/wp-content/uploads/2020/10/cooler-master-banner-brand-scaled.jpg">
         </div>
 
         <div class="mySlides fade">

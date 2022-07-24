@@ -78,7 +78,7 @@
         <div class="menu">
             <div class="admin-item-menu item-logo" onclick="location.href='#'"><img src="${pageContext.request.contextPath}/img/Logo_NoScritta.png" class="logo" alt="logo"></div>
             <div class="admin-item-menu" onclick="location.href='${pageContext.request.contextPath}/users-servlet'" data-name="HomePage"><i class="fas fa-users iconMenu"></i>Utenti</div>
-            <div class="admin-item-menu" onclick="location.href='#'" data-name="Ordini"><i class="fa-solid fa-dollar-sign iconMenu"></i>Ordini</div>
+            <div class="admin-item-menu" onclick="location.href='${pageContext.request.contextPath}/show-order-user-servlet'" data-name="Ordini"><i class="fa-solid fa-dollar-sign iconMenu"></i>Ordini</div>
             <div class="admin-item-menu" onclick="showSubMenu(this)" style="position: relative" data-name="Prodotti"><i class="fa-solid fa-book-open iconMenu"></i>Prodotti
                 <div class="sub-menu" data-name="Prodotti">
                     <div class="item-submenu" onclick="location.href='${pageContext.request.contextPath}/add-product-servlet'" data-name="Prodotti">Aggiungi</div>

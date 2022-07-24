@@ -132,6 +132,7 @@ div.search-bar input{
     outline: none;
     height: 40px;
     line-height: 40px;
+    width: 300px;
 }
 
 div.search-bar i{
