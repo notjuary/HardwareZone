@@ -66,8 +66,10 @@ public class CartBean {
         for (ProductCartBean product : cartList) {
             position++;
 
-            if(product.getId() == id)
+            if(product.getId() == id) {
                 numberObject -= product.getQuantity();
+                break;
+            }
         }
 
         cartList.remove(position - 1);
