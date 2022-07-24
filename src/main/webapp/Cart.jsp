@@ -15,23 +15,6 @@
 
     <script>
 
-        function removeProduct(productId) {
-
-            $.ajax({
-                type: "GET",
-                url: "remove-from-cart-servlet",
-                data: {"productId": productId},
-                success: function() {
-                    loadProductAjax();
-                },
-
-                error: function () {
-                    alert("error");
-                    window.location.reload();
-                }
-            })
-        }
-
         function loadProductAjax() {
 
             $.ajax({
@@ -66,7 +49,7 @@
                                 '<div class="quantityCart">Quantità: ' + products[i]["quantity"] + '</div>'
                                 + salesDiv +
                                 '</div>' +
-                                '<div class="remove"><a onclick="removeProduct(' + products[i]["id"] + ')"><i class="fa-solid fa-trash"></i></a></div>' +
+                                '<div class="remove"><a href="remove-from-cart-servlet?productId=' + products[i]["id"] + '"><i class="fa-solid fa-trash"></i></a></div>' +
                                 '</div>'
                             )
                         }

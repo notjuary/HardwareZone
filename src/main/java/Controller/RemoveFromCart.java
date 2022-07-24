@@ -30,5 +30,8 @@ public class RemoveFromCart extends HttpServlet {
         }
 
         session.setAttribute("cart", cart);
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("Cart.jsp");
+        dispatcher.include(request, response);
     }
 }
