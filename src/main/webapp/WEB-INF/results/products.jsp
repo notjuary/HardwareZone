@@ -52,7 +52,7 @@
                         <div><%= product.getQuantity() %></div>
                     <% } %>
 
-                    <div class="show-more"><a href="${pageContext.request.contextPath}/order-info-servlet?id=<%= product.getId() %>">Altro <i class="fas fa-info-circle"></i></a></div>
+                    <div class="show-more"><a href="${pageContext.request.contextPath}/product-info-servlet?id=<%= product.getId() %>">Altro <i class="fas fa-info-circle"></i></a></div>
 
                 </div>
             <% } %>

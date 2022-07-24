@@ -15,6 +15,19 @@ div.headerTable {
     border-bottom: 1px solid;
 }
 
+div.headerTableAdmin {
+    margin-top: 30px;
+    color: #EEE5E9;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-column-gap: 0;
+    grid-row-gap: 0;
+    text-align: center;
+    font-weight: bold;
+    padding: 20px;
+    border-bottom: 1px solid;
+}
+
 div.show-more a {
     color: #EEE5E9;
 }
@@ -29,6 +42,21 @@ div.single-item {
     color: #EEE5E9;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    grid-column-gap: 0;
+    grid-row-gap: 0;
+    text-align: center;
+    font-weight: bold;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid;
+    border-radius: 10px;
+}
+
+div.single-item-admin {
+    margin-top: 30px;
+    color: #EEE5E9;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     grid-column-gap: 0;
     grid-row-gap: 0;
     text-align: center;
@@ -54,6 +82,20 @@ div.alertQuantity {
     color: #C92403;
 }
 
+div.return-orders{
+    background: #EEE5E9;
+    padding: 8px;
+    display: inline-block;
+    border-radius: 10px;
+    cursor: pointer;
+    margin: 20px 40px;
+}
+
+div.return-orders a{
+    text-decoration: none;
+    color: black;
+}
+
 @media screen and (max-width: 1160px) {
     div.headerTable {
         display: none;
@@ -64,6 +106,12 @@ div.alertQuantity {
     }
 
     div.single-item {
+        display: block;
+        width: 90%;
+        margin: 16px auto;
+    }
+
+    div.single-item-admin {
         display: block;
         width: 90%;
         margin: 16px auto;

@@ -23,6 +23,9 @@ public class ShowOrderUser extends HttpServlet {
             ArrayList<OrderBean> orders = serviceOrder.doRetrieveById(user.getId());
 
             request.setAttribute("orders", orders);
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/user/orders.jsp");
+            dispatcher.include(request, response);
         }
 
         else if (user.isAdmin().equalsIgnoreCase("true")) {
@@ -30,9 +33,11 @@ public class ShowOrderUser extends HttpServlet {
             ArrayList<OrderBean> orders = serviceOrder.doRetrieveAll();
 
             request.setAttribute("orders", orders);
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/results/orders.jsp");
+            dispatcher.include(request, response);
         }
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/user/orders.jsp");
-        dispatcher.include(request, response);
+
     }
 }

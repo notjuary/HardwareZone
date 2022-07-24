@@ -24,9 +24,13 @@ public class OrderInfoServlet extends HttpServlet {
             OrderProductDAO service = new OrderProductDAO();
             ArrayList<OrderProductBean> products = service.doRetrieveById(id);
 
-            request.setAttribute("products", products);
+            ProductDAO serviceProduct = new ProductDAO();
+            ArrayList<ProductBean> catalog = serviceProduct.doRetrieveAll();
 
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/user/orderinfo.jsp");
+            request.setAttribute("products", products);
+            request.setAttribute("catalog", catalog);
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/results/orderInfo.jsp");
             dispatcher.include(request, response);
 
         } else {
@@ -47,7 +51,7 @@ public class OrderInfoServlet extends HttpServlet {
                     request.setAttribute("products", products);
                     request.setAttribute("catalog", catalog);
 
-                    RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/user/orderinfo.jsp");
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/user/orderInfo.jsp");
                     dispatcher.include(request, response);
                 }
             }

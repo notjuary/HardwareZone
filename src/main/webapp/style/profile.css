@@ -8,7 +8,6 @@ div.edit-form {
     border-radius: 15px;
     padding: 20px;
     color: #EEE5E9;
-    z-index: -1;
     min-width: 340px;
     min-height: 340px;
 }
@@ -89,6 +88,10 @@ input[type = "button"]:hover {
         display: block;
         margin-top: 100px;
         max-width: 400px;
+    }
+
+    div.edit-form{
+        z-index: -1;
     }
 }
 

@@ -12,8 +12,9 @@ a.productCard {
 div.containerProduct {
     position: relative;
     width: 100%;
-    height: 560px;
+    height: 600px;
     overflow: scroll;
+    padding: 10px;
 }
 
 div.filterBar {
@@ -139,4 +140,61 @@ div.search-bar i{
     position: relative;
     right: 25px;
     cursor: pointer;
+}
+
+@media screen and (max-width: 1160px) {
+    div.slideshow-container {
+        margin-top: 80px;
+    }
+
+    div.productCard {
+        width: calc(100% / 3 - 20px);
+    }
+
+    div.containerSearchBar {
+        margin-top: 70px;
+    }
+
+    div.bodyCatalog{
+        margin-top: 50px;
+    }
+}
+
+@media screen and (max-width: 990px) {
+    div.productCard {
+        width: calc(100% / 2 - 20px);
+    }
+}
+
+@media screen and (max-width: 770px){
+    div.filterBar{
+        width: 200px;
+    }
+
+    div.productCard {
+        width: calc(100% / 1 - 20px);
+    }
+}
+
+@media screen and (max-width: 600px) {
+    div.productCard {
+        display: block;
+        margin: 10px 0;
+        width: 100%;
+    }
+
+    div.containerProduct{
+        height: 690px;
+    }
+
+    div.filterBar{
+        width: 150px;
+    }
+}
+
+
+@media screen and (max-width: 400px) {
+    div.search-bar input{
+        width: 150px;
+    }
 }

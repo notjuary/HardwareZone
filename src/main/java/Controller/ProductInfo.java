@@ -25,7 +25,7 @@ public class ProductInfo extends HttpServlet {
         request.setAttribute("productJSP", product);
         request.setAttribute("categories", listCategories);
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/results/productinfo.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/results/productInfo.jsp");
         dispatcher.include(request, response);
     }
 }
