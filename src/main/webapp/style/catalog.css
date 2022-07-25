@@ -160,13 +160,13 @@ div.search-bar i{
     }
 }
 
-@media screen and (max-width: 990px) {
+@media screen and (max-width: 1024px) {
     div.productCard {
         width: calc(100% / 2 - 20px);
     }
 }
 
-@media screen and (max-width: 770px){
+@media screen and (max-width: 810px){
     div.filterBar{
         width: 200px;
     }
@@ -184,14 +184,23 @@ div.search-bar i{
     }
 
     div.containerProduct{
-        height: 690px;
+        height: auto;
+    }
+
+    div.bodyCatalog {
+        display: block;
+        width: 90%;
+        margin: 0 auto;
+        position: relative;
+        padding: 0;
+        height: auto;
     }
 
     div.filterBar{
-        width: 150px;
+        width: 100%;
+        margin: 20px 0 0 0;
     }
 }
-
 
 @media screen and (max-width: 400px) {
     div.search-bar input{

@@ -112,15 +112,11 @@ public class Registration extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
 
-            PrintWriter out = response.getWriter();
-            out.println("<div class=\"success\">\n" +
-                    "    <span class=\"closebtn\" onclick=\"clearDiv();\">&times;</span> \n" +
-                    "    Registrazione effettuata\n" +
-                    "    </div>");
-
-            RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/error.jsp");
+            request.setAttribute("type", "success");
+            request.setAttribute("msg", "Registrazione effettuata");
+            request.setAttribute("redirect", "index.jsp");
             dispatcher.include(request, response);
-            out.close();
         }
 
         else if (level != 10) {

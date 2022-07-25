@@ -7,7 +7,6 @@ import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 @WebServlet(name = "setAdminServlet", value = "/set-admin-servlet")
 public class SetAdmin extends HttpServlet {
@@ -24,30 +23,22 @@ public class SetAdmin extends HttpServlet {
 
             if (user.isAdmin().equalsIgnoreCase("true")) {
 
-                PrintWriter out = response.getWriter();
-                out.println("<div class=\"warning\">\n" +
-                        "    <span class=\"closebtn\" onclick=\"clearDiv();\">&times;</span> \n" +
-                        "    L'utente selezionato è già un amministratore\n" +
-                        "    </div>");
-
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/users-servlet");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/error.jsp");
+                request.setAttribute("type", "warning");
+                request.setAttribute("msg", " L'utente selezionato è già un amministratore");
+                request.setAttribute("redirect", "users-servlet");
                 dispatcher.include(request, response);
-                out.close();
             }
 
             else {
 
                 service.doUpdateAdmin(user);
 
-                PrintWriter out = response.getWriter();
-                out.println("<div class=\"success\">\n" +
-                        "    <span class=\"closebtn\" onclick=\"clearDiv();\">&times;</span> \n" +
-                        "    L'utente ora è amministratore\n" +
-                        "    </div>");
-
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/users-servlet");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/error.jsp");
+                request.setAttribute("type", "success");
+                request.setAttribute("msg", "Operazione effettuata");
+                request.setAttribute("redirect", "users-servlet");
                 dispatcher.include(request, response);
-                out.close();
             }
         }
 
