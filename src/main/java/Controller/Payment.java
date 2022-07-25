@@ -72,11 +72,15 @@ public class Payment extends HttpServlet {
         HttpSession session = request.getSession();
 
         String creditCardNumber = request.getParameter("numero-carta");
-        if (creditCardNumber.length() == 16)
+        Matcher matcher = number_string.matcher(creditCardNumber);
+        boolean matchFound = matcher.find();
+        if (creditCardNumber.length() == 16  && matchFound)
             level++;
 
         String cvv = request.getParameter("CVV");
-        if (cvv.length() == 3)
+        matcher = number_string.matcher(cvv);
+        matchFound = matcher.find();
+        if (cvv.length() == 3 && matchFound)
             level++;
 
         String deadline = request.getParameter("scadenza");
@@ -91,8 +95,8 @@ public class Payment extends HttpServlet {
             level++;
 
         String holder = request.getParameter("titolare");
-        Matcher matcher = holder_string.matcher(holder);
-        boolean matchFound = matcher.find();
+        matcher = holder_string.matcher(holder);
+        matchFound = matcher.find();
         if (matchFound)
             level++;
 

@@ -14,20 +14,32 @@ public class SetStateUser extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
 
-        String state = request.getParameter("active");
-        int id = Integer.parseInt(request.getParameter("id"));
+        HttpSession session = request.getSession();
+        UserBean userAdmin = (UserBean) session.getAttribute("user");
 
-        UserDAO service = new UserDAO();
-        UserBean user = service.doRetrieveById(id);
+        if (userAdmin.isAdmin().equalsIgnoreCase("true")) {
 
-        if (state.equalsIgnoreCase("true"))
-            user.setState("false");
-        else
-            user.setState("true");
+            String state = request.getParameter("active");
+            int id = Integer.parseInt(request.getParameter("id"));
 
-        service.doUpdateState(user);
+            UserDAO service = new UserDAO();
+            UserBean user = service.doRetrieveById(id);
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/users-servlet");
-        dispatcher.include(request, response);
+            if (state.equalsIgnoreCase("true"))
+                user.setState("false");
+            else
+                user.setState("true");
+
+            service.doUpdateState(user);
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/users-servlet");
+            dispatcher.include(request, response);
+        }
+
+        else {
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+            dispatcher.include(request, response);
+        }
     }
 }

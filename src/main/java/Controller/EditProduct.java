@@ -1,9 +1,6 @@
 package Controller;
 
-import Model.CategoryBean;
-import Model.CategoryDAO;
-import Model.ProductBean;
-import Model.ProductDAO;
+import Model.*;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -24,73 +21,83 @@ public class EditProduct extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
 
-        final Pattern decimal_String = Pattern.compile("^\\d*\\.?\\d*$");
-        final Pattern int_String = Pattern.compile("^\\d+$");
-        int level = 0;
+        HttpSession session = request.getSession();
+        UserBean user = (UserBean) session.getAttribute("user");
 
-        ProductDAO service = new ProductDAO();
-        int id = Integer.parseInt(request.getParameter("id"));
+        if (user.isAdmin().equalsIgnoreCase("true")) {
+            final Pattern decimal_String = Pattern.compile("^\\d*\\.?\\d*$");
+            final Pattern int_String = Pattern.compile("^\\d+$");
+            int level = 0;
 
-        String name = request.getParameter("name");
-        if (name.length() <= 20 && name.length() != 0)
-            level++;
+            ProductDAO service = new ProductDAO();
+            int id = Integer.parseInt(request.getParameter("id"));
 
-        String description = request.getParameter("description");
-        if (description.length() <= 255 && description.length() != 0)
-            level++;
+            String name = request.getParameter("name");
+            if (name.length() <= 20 && name.length() != 0)
+                level++;
 
-        String price = request.getParameter("price");
-        Matcher matcher = decimal_String.matcher(price);
-        boolean matchFound = matcher.find();
-        if (matchFound)
-            level++;
+            String description = request.getParameter("description");
+            if (description.length() <= 255 && description.length() != 0)
+                level++;
 
-        String quantity = request.getParameter("quantity");
-        matcher = int_String.matcher(quantity);
-        matchFound = matcher.find();
-        if (matchFound)
-            level++;
+            String price = request.getParameter("price");
+            Matcher matcher = decimal_String.matcher(price);
+            boolean matchFound = matcher.find();
+            if (matchFound)
+                level++;
 
-        String sales = request.getParameter("sales");
-        matcher = int_String.matcher(sales);
-        matchFound = matcher.find();
-        if (matchFound)
-            level++;
+            String quantity = request.getParameter("quantity");
+            matcher = int_String.matcher(quantity);
+            matchFound = matcher.find();
+            if (matchFound)
+                level++;
 
-        String category = request.getParameter("category");
-        if (category.length() <= 20 && category.length() != 0)
-            level++;
+            String sales = request.getParameter("sales");
+            matcher = int_String.matcher(sales);
+            matchFound = matcher.find();
+            if (matchFound)
+                level++;
 
-        Part part = request.getPart("image");
+            String category = request.getParameter("category");
+            if (category.length() <= 20 && category.length() != 0)
+                level++;
 
-        String subpath;
-        if (!part.getSubmittedFileName().isEmpty()) {
-            String uploadPath = getServletContext().getRealPath("") + "\\img\\products";
-            String imagepath = uploadPath + File.separator + part.getSubmittedFileName();
-            part.write(imagepath);
-            subpath = "./img/products/" + part.getSubmittedFileName();
+            Part part = request.getPart("image");
+
+            String subpath;
+            if (!part.getSubmittedFileName().isEmpty()) {
+                String uploadPath = getServletContext().getRealPath("") + "\\img\\products";
+                String imagepath = uploadPath + File.separator + part.getSubmittedFileName();
+                part.write(imagepath);
+                subpath = "./img/products/" + part.getSubmittedFileName();
+            }
+
+            else {
+                subpath = service.doRetrieveById(id).getImage();
+            }
+
+            if (level == 6) {
+
+                ProductBean product = new ProductBean();
+
+                product.setId(id);
+                product.setName(name);
+                product.setDescription(description);
+                product.setPrice(Double.parseDouble(price));
+                product.setQuantity(Integer.parseInt(quantity));
+                product.setSales(Integer.parseInt(sales));
+                product.setCategory(category);
+                product.setImage(subpath);
+
+                service.doUpdate(product);
+
+                response.sendRedirect("products-servlet");
+            }
         }
 
         else {
-            subpath = service.doRetrieveById(id).getImage();
-        }
-
-        if (level == 6) {
-
-            ProductBean product = new ProductBean();
-
-            product.setId(id);
-            product.setName(name);
-            product.setDescription(description);
-            product.setPrice(Double.parseDouble(price));
-            product.setQuantity(Integer.parseInt(quantity));
-            product.setSales(Integer.parseInt(sales));
-            product.setCategory(category);
-            product.setImage(subpath);
-
-            service.doUpdate(product);
-
-            response.sendRedirect("products-servlet");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+            dispatcher.include(request, response);
         }
     }
 }

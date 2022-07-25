@@ -100,7 +100,13 @@ div.return-products a{
 }
 
 @media screen and (max-width: 1160px) {
-    div.containerProductDiv {
+
+    div.return-products{
+        background: #EEE5E9;
+        padding: 8px;
+        display: inline-block;
+        border-radius: 10px;
+        cursor: pointer;
         margin-top: 80px;
     }
 }
@@ -110,6 +116,11 @@ div.return-products a{
         display: block;
         margin: 0 auto;
         min-width: unset;
+        width: 90%;
+    }
+
+    div.containerProductDiv {
         width: 100%;
+        display: block;
     }
 }

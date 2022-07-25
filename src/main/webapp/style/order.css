@@ -3,6 +3,15 @@ div.containerListDiv {
     margin-bottom: 30px;
 }
 
+div.orderInfoUser {
+    padding: 10px;
+    color: #EEE5E9;
+}
+
+div.orderInfoUser div {
+    margin-left: 30px;
+}
+
 div.headerTable {
     margin-top: 30px;
     color: #EEE5E9;

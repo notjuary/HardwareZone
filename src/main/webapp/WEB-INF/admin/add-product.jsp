@@ -13,7 +13,6 @@
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/style/add-product.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/script/eventManager.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/script/validateForm.js"></script>
 
     <script>
@@ -31,6 +30,8 @@
 <body>
 
     <%@ include file="/WEB-INF/admin/menu-admin.jsp"%>
+
+    <div class="return-products"><a href="/ecommerce_war_exploded/products-servlet">Indietro</a></div>
 
     <div class="containerProductDiv">
         <form action="${pageContext.request.contextPath}/add-product-servlet" method="post" enctype="multipart/form-data" id="add-product-form">

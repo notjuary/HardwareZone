@@ -45,90 +45,119 @@ public class AddProduct extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
 
-        final Pattern decimal_String = Pattern.compile("^(\\d+(?:[.,]\\d{2})?)$");
-        final Pattern int_String = Pattern.compile("^\\d+$");
-        int level = 0;
+        HttpSession session = request.getSession();
+        UserBean user = (UserBean) session.getAttribute("user");
 
-        String name = request.getParameter("name");
-        if (name.length() <= 20 && name.length() != 0)
-            level++;
+        if (user.isAdmin().equalsIgnoreCase("true")) {
 
-        String description = request.getParameter("description");
-        if (description.length() <= 255 && description.length() != 0)
-            level++;
+            final Pattern decimal_String = Pattern.compile("^(\\d+(?:[.,]\\d{2})?)$");
+            final Pattern int_String = Pattern.compile("^\\d+$");
+            int level = 0;
 
-        String price = request.getParameter("price").replace(",", ".");
-        Matcher matcher = decimal_String.matcher(price);
-        boolean matchFound = matcher.find();
-        if (matchFound)
-            level++;
+            String name = request.getParameter("name");
+            if (name.length() <= 20 && name.length() != 0)
+                level++;
 
-        String quantity = request.getParameter("quantity");
-        matcher = int_String.matcher(quantity);
-        matchFound = matcher.find();
-        if (matchFound)
-            level++;
+            String description = request.getParameter("description");
+            if (description.length() <= 255 && description.length() != 0)
+                level++;
 
-        String sales = request.getParameter("sales");
-        matcher = int_String.matcher(sales);
-        matchFound = matcher.find();
-        if (matchFound)
-            level++;
+            String price = request.getParameter("price").replace(",", ".");
+            Matcher matcher = decimal_String.matcher(price);
+            boolean matchFound = matcher.find();
+            if (matchFound)
+                level++;
 
-        String category = request.getParameter("category");
-        if (category.length() <= 20 && category.length() != 0)
-            level++;
+            String quantity = request.getParameter("quantity");
+            matcher = int_String.matcher(quantity);
+            matchFound = matcher.find();
+            if (matchFound)
+                level++;
 
-        Part part = request.getPart("image");
-        String uploadPath = getServletContext().getRealPath("") + "\\img\\products";
-        String imagepath = uploadPath + File.separator + part.getSubmittedFileName();
-        part.write(imagepath);
-        String subpath = "./img/products/" + part.getSubmittedFileName();
+            String sales = request.getParameter("sales");
+            matcher = int_String.matcher(sales);
+            matchFound = matcher.find();
+            if (matchFound)
+                level++;
 
-        ProductDAO service = new ProductDAO();
+            String category = request.getParameter("category");
+            if (category.length() <= 20 && category.length() != 0)
+                level++;
 
-        if (level == 6 && !service.isAlreadyRegistered(name, description)) {
-            ProductBean product = new ProductBean();
+            Part part = request.getPart("image");
+            String subpath;
+            if (!part.getSubmittedFileName().isEmpty()) {
+                String uploadPath = getServletContext().getRealPath("") + "\\img\\products";
+                String imagepath = uploadPath + File.separator + part.getSubmittedFileName();
+                part.write(imagepath);
+                subpath = "./img/products/" + part.getSubmittedFileName();
+            }
+            else {
+                subpath = "./img/products/nophoto.png";
+            }
 
-            CategoryDAO serviceCategory = new CategoryDAO();
-            ArrayList<CategoryBean> categoryList = serviceCategory.doRetrieveAll();
+            ProductDAO service = new ProductDAO();
 
-            boolean categoryExist = false;
-            for (CategoryBean categorySaved : categoryList) {
+            if (level == 6 && !service.isAlreadyRegistered(name, description)) {
+                ProductBean product = new ProductBean();
 
-                if (categorySaved.getNome().equalsIgnoreCase(category)) {
-                    categoryExist = true;
-                    break;
+                CategoryDAO serviceCategory = new CategoryDAO();
+                ArrayList<CategoryBean> categoryList = serviceCategory.doRetrieveAll();
+
+                boolean categoryExist = false;
+                for (CategoryBean categorySaved : categoryList) {
+
+                    if (categorySaved.getNome().equalsIgnoreCase(category)) {
+                        categoryExist = true;
+                        break;
+                    }
+                }
+                if (!categoryExist)
+                    serviceCategory.doSave(category);
+
+                product.setName(name);
+                product.setDescription(description);
+                product.setPrice(Double.parseDouble(price));
+                product.setQuantity(Integer.parseInt(quantity));
+                product.setSales(Integer.parseInt(sales));
+                product.setCategory(category);
+                product.setImage(subpath);
+
+                service.doSave(product);
+
+                ArrayList<CategoryBean> listCategories = serviceCategory.doRetrieveAll();
+
+                request.setAttribute("categories", listCategories);
+
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/add-product.jsp");
+                dispatcher.include(request, response);
+            }
+
+            else {
+
+                if (service.isAlreadyRegistered(name, description)) {
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/error.jsp");
+                    request.setAttribute("type", "alert");
+                    request.setAttribute("msg", "Prodotto già presente");
+                    request.setAttribute("redirect", "add-product-servlet");
+                    dispatcher.include(request, response);
+                }
+
+                else {
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/error.jsp");
+                    request.setAttribute("type", "alert");
+                    request.setAttribute("msg", "Errore inserimento");
+                    request.setAttribute("redirect", "add-product-servlet");
+                    dispatcher.include(request, response);
                 }
             }
-            if (!categoryExist)
-                serviceCategory.doSave(category);
-
-            product.setName(name);
-            product.setDescription(description);
-            product.setPrice(Double.parseDouble(price));
-            product.setQuantity(Integer.parseInt(quantity));
-            product.setSales(Integer.parseInt(sales));
-            product.setCategory(category);
-            product.setImage(subpath);
-
-            service.doSave(product);
-
-            ArrayList<CategoryBean> listCategories = serviceCategory.doRetrieveAll();
-
-            request.setAttribute("categories", listCategories);
-
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/add-product.jsp");
-            dispatcher.include(request, response);
         }
 
         else {
 
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/error.jsp");
-            request.setAttribute("type", "alert");
-            request.setAttribute("msg", "Errore inserimento");
-            request.setAttribute("redirect", "/WEB-INF/admin/add-product.jsp");
-            dispatcher.include(request, response);
+            String address = "/WEB-INF/results/products.jsp";
+            RequestDispatcher dispatcher = request.getRequestDispatcher(address);
+            dispatcher.forward(request,response);
         }
     }
 }

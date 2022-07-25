@@ -2,6 +2,7 @@ package Controller;
 
 import Model.ProductBean;
 import Model.ProductDAO;
+import Model.UserBean;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -15,14 +16,25 @@ public class Products extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
 
-        ProductDAO service = new ProductDAO();
+        HttpSession session = request.getSession();
+        UserBean user = (UserBean) session.getAttribute("user");
 
-        List<ProductBean> listProducts = service.doRetrieveAll();
+        if (user.isAdmin().equalsIgnoreCase("true")) {
 
-        request.setAttribute("products", listProducts);
+            ProductDAO service = new ProductDAO();
+            List<ProductBean> listProducts = service.doRetrieveAll();
 
-        String address = "/WEB-INF/results/products.jsp";
-        RequestDispatcher dispatcher = request.getRequestDispatcher(address);
-        dispatcher.forward(request,response);
+            request.setAttribute("products", listProducts);
+
+            String address = "/WEB-INF/results/products.jsp";
+            RequestDispatcher dispatcher = request.getRequestDispatcher(address);
+            dispatcher.forward(request, response);
+        }
+
+        else {
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+            dispatcher.include(request, response);
+        }
     }
 }

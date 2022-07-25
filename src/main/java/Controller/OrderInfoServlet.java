@@ -27,13 +27,23 @@ public class OrderInfoServlet extends HttpServlet {
             ProductDAO serviceProduct = new ProductDAO();
             ArrayList<ProductBean> catalog = serviceProduct.doRetrieveAll();
 
+            OrderDAO orderDAO = new OrderDAO();
+            OrderBean orderBean = orderDAO.doRetrieveByIdOrder(id);
+
+            UserDAO userDAO = new UserDAO();
+            UserBean userOrder = userDAO.doRetrieveById(orderBean.getUser());
+
+            System.out.println(orderBean.getUser());
+
             request.setAttribute("products", products);
             request.setAttribute("catalog", catalog);
+            request.setAttribute("userOrder", userOrder);
 
             RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/results/orderInfo.jsp");
             dispatcher.include(request, response);
+        }
 
-        } else {
+        else {
 
             OrderDAO serviceOrder = new OrderDAO();
             ArrayList<OrderBean> orderBean = serviceOrder.doRetrieveById(user.getId());
@@ -54,13 +64,16 @@ public class OrderInfoServlet extends HttpServlet {
                     RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/user/orderInfo.jsp");
                     dispatcher.include(request, response);
                 }
-            }
 
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/error.jsp");
-            request.setAttribute("type", "alert");
-            request.setAttribute("msg", "Ordine non disponibile");
-            request.setAttribute("redirect", "show-order-user-servlet");
-            dispatcher.include(request, response);
+                else {
+
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/error.jsp");
+                    request.setAttribute("type", "alert");
+                    request.setAttribute("msg", "Ordine non disponibile");
+                    request.setAttribute("redirect", "show-order-user-servlet");
+                    dispatcher.include(request, response);
+                }
+            }
         }
     }
 }

@@ -15,13 +15,25 @@ public class UserInfo extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
 
-        UserDAO service = new UserDAO();
-        int id = Integer.parseInt(request.getParameter("id"));
-        UserBean user = service.doRetrieveById(id);
+        HttpSession session = request.getSession();
+        UserBean userAdmin = (UserBean) session.getAttribute("user");
 
-        request.setAttribute("profileJSP", user);
+        if (userAdmin.isAdmin().equalsIgnoreCase("true")) {
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/results/userinfo.jsp");
-        dispatcher.include(request, response);
+            UserDAO service = new UserDAO();
+            int id = Integer.parseInt(request.getParameter("id"));
+            UserBean user = service.doRetrieveById(id);
+
+            request.setAttribute("profileJSP", user);
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/results/userinfo.jsp");
+            dispatcher.include(request, response);
+        }
+
+        else {
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+            dispatcher.include(request, response);
+        }
     }
 }

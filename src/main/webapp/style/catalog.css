@@ -147,6 +147,10 @@ div.search-bar i{
         margin-top: 80px;
     }
 
+    div.bodySales {
+        margin-top: 80px;
+    }
+
     div.productCard {
         width: calc(100% / 3 - 20px);
     }

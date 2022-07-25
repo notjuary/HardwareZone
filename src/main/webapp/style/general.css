@@ -89,6 +89,7 @@ div.container-page-chiSiamo div.single-student img{
     height: 0;
     overflow: hidden;
 }
+
 .google-maps > iframe {
     position: absolute;
     top: 50%;
@@ -96,4 +97,10 @@ div.container-page-chiSiamo div.single-student img{
     transform: translate(-50%, -50%);
     width: 60% !important;
     height: 60% !important;
+}
+
+@media screen and (max-width: 660px) {
+    div.alert, div.warning, div.alert {
+        margin-top: 80px;
+    }
 }

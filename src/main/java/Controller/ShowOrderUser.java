@@ -37,7 +37,5 @@ public class ShowOrderUser extends HttpServlet {
             RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/results/orders.jsp");
             dispatcher.include(request, response);
         }
-
-
     }
 }

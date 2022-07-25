@@ -7,7 +7,6 @@
     <title>Admin Menu</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/style/nav-menu.css">
     <script src='https://kit.fontawesome.com/c6b30e1924.js' crossorigin='anonymous'></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/script/eventManager.js"></script>
 
     <script>
         <%

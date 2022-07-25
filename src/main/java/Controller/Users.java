@@ -15,14 +15,26 @@ public class Users extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
 
-        UserDAO service = new UserDAO();
+        HttpSession session = request.getSession();
+        UserBean userAdmin = (UserBean) session.getAttribute("user");
 
-        List<UserBean> listUsers = service.doRetrieveAll();
+        if (userAdmin.isAdmin().equalsIgnoreCase("true")) {
 
-        request.setAttribute("users", listUsers);
+            UserDAO service = new UserDAO();
 
-        String address = "/WEB-INF/results/users.jsp";
-        RequestDispatcher dispatcher = request.getRequestDispatcher(address);
-        dispatcher.forward(request,response);
+            List<UserBean> listUsers = service.doRetrieveAll();
+
+            request.setAttribute("users", listUsers);
+
+            String address = "/WEB-INF/results/users.jsp";
+            RequestDispatcher dispatcher = request.getRequestDispatcher(address);
+            dispatcher.forward(request, response);
+        }
+
+        else {
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+            dispatcher.include(request, response);
+        }
     }
 }

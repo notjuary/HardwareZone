@@ -334,13 +334,13 @@ function validateSalesProduct() {
 
 function validateImage() {
 
-    if ($(".image").attr("src") == null) {
-        $("label#imageUpload").css("color", "#E5E5E5");
-        return true;
-    }
-    else {
+    if ($(".preview").attr("src") === "") {
         $("label#imageUpload").css("color", "#C92403");
         return false;
+    }
+    else {
+        $("label#imageUpload").css("color", "#E5E5E5");
+        return true;
     }
 }
 
