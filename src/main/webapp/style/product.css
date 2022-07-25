@@ -7,6 +7,7 @@ div.productCard {
     border: solid 1px white;
     text-align: center;
     width: 600px;
+    min-height: 400px;
 }
 
 div.image > img {

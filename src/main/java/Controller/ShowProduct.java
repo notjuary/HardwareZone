@@ -16,26 +16,14 @@ public class ShowProduct extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
 
-        HttpSession session = request.getSession();
-        UserBean userAdmin = (UserBean) session.getAttribute("user");
+        int productId = Integer.parseInt(request.getParameter("productId"));
 
-        if (userAdmin.isAdmin().equalsIgnoreCase("true")) {
+        ProductDAO service = new ProductDAO();
+        ProductBean product = service.doRetrieveById(productId);
 
-            int productId = Integer.parseInt(request.getParameter("productId"));
+        request.setAttribute("product", product);
 
-            ProductDAO service = new ProductDAO();
-            ProductBean product = service.doRetrieveById(productId);
-
-            request.setAttribute("product", product);
-
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/product.jsp");
-            dispatcher.include(request, response);
-        }
-
-        else {
-
-            RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
-            dispatcher.include(request, response);
-        }
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/product.jsp");
+        dispatcher.include(request, response);
     }
 }

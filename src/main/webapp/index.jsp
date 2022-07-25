@@ -79,7 +79,7 @@
 
     <div class="slideshow-container">
         <div class="mySlides fade">
-            <img src="https://newgendistribution.com/wp-content/uploads/2020/10/cooler-master-banner-brand-scaled.jpg">
+            <img src="https://it.aorus.com/upload/Admin/images/01-Event-Page-banner-1280x480-NVHDC.jpg">
         </div>
 
         <div class="mySlides fade">

@@ -50,6 +50,12 @@ div.register-button {
     text-align: center;
 }
 
+@media screen and (max-width: 1160px) {
+    div.login-form {
+        margin-top: 80px;
+    }
+}
+
 @media screen and (max-width: 600px) {
     div.login-form {
         margin-top: 80px;

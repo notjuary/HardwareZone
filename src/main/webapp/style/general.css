@@ -57,48 +57,6 @@ a.error, span.error {
     color: #EEE5E9;
 }
 
-div.container-page-chiSiamo{
-    margin: 20px;
-}
-
-div.doveSiamo{
-    margin-bottom: 20px;
-    text-align: center;
-    color: #EEE5E9;
-}
-
-div.students{
-    display: flex;
-}
-
-div.single-student{
-    width: calc(100% / 3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #EEE5E9;
-}
-
-div.container-page-chiSiamo div.single-student img{
-    width: 100px;
-}
-
-.google-maps {
-    position: relative;
-    padding-bottom: 50%;
-    height: 0;
-    overflow: hidden;
-}
-
-.google-maps > iframe {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 60% !important;
-    height: 60% !important;
-}
-
 @media screen and (max-width: 660px) {
     div.alert, div.warning, div.alert {
         margin-top: 80px;

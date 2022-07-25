@@ -69,8 +69,10 @@ function validateSurname() {
 
 function validateBirthday() {
 
-    let birthday = document.getElementById("birthday").value;
-    if (birthday !== "") {
+    let birthday = new Date(document.getElementById("birthday").value);
+    let today = new Date();
+
+    if (today > birthday) {
         $("#birthday").css("border-color", "#E5E5E5");
         return true;
     }

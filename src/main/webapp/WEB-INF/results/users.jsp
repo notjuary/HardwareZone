@@ -35,19 +35,24 @@
 
             for (UserBean user: usersList) { %>
                 <div class="single-item">
+
+                    <%
+                        String active, activeText;
+                        if (user.isActive().equalsIgnoreCase("true")) {
+                            active = "Disattiva";
+                            activeText = "Attivo";
+                        }
+                        else {
+                            active = "Attiva";
+                            activeText = "Disattivo";
+                        }
+                    %>
+
                     <div><%= user.getId() %></div>
                     <div><%= user.getName() %></div>
                     <div><%= user.getSurname() %></div>
                     <div><%= user.getEmail() %></div>
-                    <div><%= user.isActive() %></div>
-
-                    <%
-                        String active;
-                        if (user.isActive().equalsIgnoreCase("true"))
-                            active = "Disattiva";
-                        else
-                            active = "Attiva";
-                    %>
+                    <div><%= activeText %></div>
 
                     <div class="set-state"><a href="${pageContext.request.contextPath}/set-state-user-servlet?id=<%= user.getId() %>&active=<%= user.isActive()%>"><%= active %></a></div>
                     <div class="show-more"><a href="${pageContext.request.contextPath}/user-info-servlet?id=<%= user.getId() %>">Altro <i class="fas fa-info-circle"></i></a></div>
