@@ -18,6 +18,7 @@
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/style/add-product.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="${pageContext.request.contextPath}/script/validateForm.js"></script>
 
     <script>
         function imageUpload(event) {
@@ -38,7 +39,7 @@
 
     <div class="containerProductDiv">
 
-        <form action="${pageContext.request.contextPath}/edit-product-servlet" method="post" enctype="multipart/form-data">
+        <form action="${pageContext.request.contextPath}/edit-product-servlet" method="post" enctype="multipart/form-data" id="edit-product-form">
             <div class="containerProduct">
                 <label>
                     <input type="text" value="<%= product.getId() %>" name="id" hidden>
@@ -86,7 +87,7 @@
                 </div>
 
                 <div class="add-product">
-                    <input type="submit" value="Modifica">
+                    <input type="button" onclick="validateEditProduct()" value="Modifica">
                 </div>
             </div>
         </form>

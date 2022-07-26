@@ -383,6 +383,15 @@ function validateAddProduct() {
     }
 }
 
+function validateEditProduct() {
+
+    if (validateNameProduct() & validateDescriptionProduct() & validateCategoryProduct() &
+        validateSalesProduct() & validatePriceProduct() & validateQuantityProduct()) {
+
+        document.getElementById("edit-product-form").submit();
+    }
+}
+
 function validatePayment() {
 
     if (validateNumberCart() & validateCVV() & validateDeadline() & validateHolder())
