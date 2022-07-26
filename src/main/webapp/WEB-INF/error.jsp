@@ -26,7 +26,7 @@
             setTimeout(updateCount, 1000);
         }
 
-        setTimeout("window.location.href='<%= (String) request.getAttribute("redirect") %>'", 100000)
+        setTimeout("window.location.href='<%= (String) request.getAttribute("redirect") %>'", 10000)
     </script>
 
     <div class="<%= (String) request.getAttribute("type") %>">
