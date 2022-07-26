@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 @WebServlet(name = "showOrderUserServlet", value = "/show-order-user-servlet")
-public class ShowOrderUser extends HttpServlet {
+public class Orders extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
