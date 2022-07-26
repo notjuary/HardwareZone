@@ -120,5 +120,13 @@ public class EditProfile extends HttpServlet {
 
             dispatcher.include(request, response);
         }
+
+        else {
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/error.jsp");
+            request.setAttribute("type", "alert");
+            request.setAttribute("msg", "Errore modifica");
+            request.setAttribute("redirect", "user-profile-servlet");
+            dispatcher.include(request, response);
+        }
     }
 }

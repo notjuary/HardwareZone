@@ -93,6 +93,14 @@ public class EditProduct extends HttpServlet {
 
                 response.sendRedirect("products-servlet");
             }
+
+            else {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/error.jsp");
+                request.setAttribute("type", "alert");
+                request.setAttribute("msg", "Errore modifica");
+                request.setAttribute("redirect", "products-servlet");
+                dispatcher.include(request, response);
+            }
         }
 
         else {
