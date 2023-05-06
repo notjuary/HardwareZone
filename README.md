@@ -23,7 +23,7 @@ Per eseguire il progetto è necessario disporre dei seguenti elementi:
 
 1. Un server Tomcat, che ospiterà il file [war](https://github.com/grauso-t/ecommerce/blob/master/ecommerce-1.0-SNAPSHOT.war). È possibile installare Tomcat seguendo le istruzioni del sito ufficiale e successivamente caricare il file war nella cartella webapps.
 
-2. Un database MySql, dove verranno importati i [file](https://github.com/grauso-t/ecommerce/tree/master/database) relativi al progetto. Per creare il database, è possibile utilizzare uno strumento come phpMyAdmin o MySQL Workbench, e importare i file SQL contenuti nella cartella "database".
+2. Un database MySql, dove verranno importati i [file](https://github.com/grauso-t/ecommerce/tree/master/database) relativi al progetto. Per creare il database, è possibile utilizzare uno strumento come MySQL Workbench, e importare i file SQL contenuti nella cartella "database".
 
 Una volta che sia il server Tomcat che il database MySql sono stati configurati correttamente, il progetto può essere avviato. Assicurarsi che il database sia accessibile e che il server Tomcat sia in esecuzione, dopodiché accedere al sito web.
 ## 🚀 About Me
