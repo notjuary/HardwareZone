@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  tomcat:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      MYSQL_HOST: db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: teograuso01
+    networks:
+      - ecommerce-net
+
+  db:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: teograuso01
+      MYSQL_DATABASE: ecommerce
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./database/createDB.sql:/docker-entrypoint-initdb.d/createDB.sql
+
+    networks:
+      - ecommerce-net
+
+networks:
+  ecommerce-net:

@@ -9,10 +9,15 @@ import java.util.TimeZone;
 
 public class ConPool {
 	private static DataSource datasource;
+
 	public static Connection getConnection() throws SQLException {
 		if (datasource == null) {
 			PoolProperties p = new PoolProperties();
-			p.setUrl("jdbc:mysql://localhost:3306/ecommerce?user=root" + TimeZone.getDefault().getID());
+			String dbHost = System.getenv("MYSQL_HOST");
+			if (dbHost == null) {
+				dbHost = "localhost";  // o un valore di default
+			}
+			p.setUrl("jdbc:mysql://db:3306/ecommerce?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC");
 			p.setDriverClassName("com.mysql.cj.jdbc.Driver");
 			p.setUsername("root");
 			p.setPassword("teograuso01");

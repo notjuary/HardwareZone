@@ -10,7 +10,7 @@ public class ProductDAO {
         try (Connection con = ConPool.getConnection()) {
 
             PreparedStatement ps = con.prepareStatement(
-                    "INSERT INTO Prodotto (Nome, Descrizione, Prezzo, Quantità_Disponibile, Sconto, Immagine, Categoria) VALUES(?,?,?,?,?,?,?)",
+                    "INSERT INTO Prodotto (Nome, Descrizione, Prezzo, Quantita_Disponibile, Sconto, Immagine, Categoria) VALUES(?,?,?,?,?,?,?)",
                     Statement.RETURN_GENERATED_KEYS);
 
             ps.setString(1, productBean.getName());
@@ -40,7 +40,7 @@ public class ProductDAO {
         try (Connection con = ConPool.getConnection()) {
 
             Statement st = con.createStatement();
-            String query = "UPDATE Prodotto SET Nome = '" + productBean.getName() + "', Descrizione = '" + productBean.getDescription() + "', Prezzo = '" + productBean.getPrice() + "', Quantità_Disponibile = '" + productBean.getQuantity() + "', Sconto = '" + productBean.getSales() + "', Immagine = '" + productBean.getImage() +  "', Categoria = '" + productBean.getCategory() +
+            String query = "UPDATE Prodotto SET Nome = '" + productBean.getName() + "', Descrizione = '" + productBean.getDescription() + "', Prezzo = '" + productBean.getPrice() + "', Quantita_Disponibile = '" + productBean.getQuantity() + "', Sconto = '" + productBean.getSales() + "', Immagine = '" + productBean.getImage() +  "', Categoria = '" + productBean.getCategory() +
                     "'WHERE ID_Prodotto = " + productBean.getId();
             st.executeUpdate(query);
 
