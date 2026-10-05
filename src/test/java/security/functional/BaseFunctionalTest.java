@@ -26,6 +26,8 @@ public abstract class BaseFunctionalTest {
         p.setPassword("");
         p.setMaxActive(5);
         p.setInitialSize(1);
+        p.setMinIdle(1);
+        p.setMaxIdle(5);
 
         h2DataSource = new DataSource();
         h2DataSource.setPoolProperties(p);
@@ -40,6 +42,21 @@ public abstract class BaseFunctionalTest {
         ConPool.clearTestDataSource();
     }
 
+    /**
+     * UDF (User Defined Function) registrata come SHA1 in H2.
+     * Chiamata dall'alias SQL quando UserDAO usa SHA1(?).
+     */
+    public static String sha1(String input) throws Exception {
+        if (input == null) return null;
+        java.security.MessageDigest md = java.security.MessageDigest.getInstance("SHA-1");
+        byte[] digest = md.digest(input.getBytes("UTF-8"));
+        StringBuilder sb = new StringBuilder();
+        for (byte b : digest) {
+            sb.append(String.format("%02x", b));
+        }
+        return sb.toString();
+    }
+
     private static void createSchema() throws Exception {
         try (Connection con = h2DataSource.getConnection();
              Statement st = con.createStatement()) {
@@ -50,6 +67,8 @@ public abstract class BaseFunctionalTest {
             st.execute("DROP TABLE IF EXISTS Ordine");
             st.execute("DROP TABLE IF EXISTS Prodotto");
             st.execute("DROP TABLE IF EXISTS Categoria");
+            // Registra SHA1 come alias che chiama il metodo Java
+            st.execute("CREATE ALIAS IF NOT EXISTS SHA1 FOR \"security.functional.BaseFunctionalTest.sha1\"");
             st.execute("DROP TABLE IF EXISTS Utente");
 
             st.execute("CREATE TABLE Utente (" +
@@ -123,12 +142,20 @@ public abstract class BaseFunctionalTest {
     }
 
     protected void cleanDatabase() throws Exception {
-        executeSql("DELETE FROM Ordine_Prodotto");
-        executeSql("DELETE FROM Pagamento");
-        executeSql("DELETE FROM Carrello");
-        executeSql("DELETE FROM Ordine");
-        executeSql("DELETE FROM Prodotto");
-        executeSql("DELETE FROM Categoria");
-        executeSql("DELETE FROM Utente");
+        executeSql("SET REFERENTIAL_INTEGRITY FALSE");
+        executeSql("TRUNCATE TABLE Ordine_Prodotto RESTART IDENTITY");
+        executeSql("TRUNCATE TABLE Pagamento RESTART IDENTITY");
+        executeSql("TRUNCATE TABLE Carrello RESTART IDENTITY");
+        executeSql("TRUNCATE TABLE Ordine RESTART IDENTITY");
+        executeSql("TRUNCATE TABLE Prodotto RESTART IDENTITY");
+        executeSql("TRUNCATE TABLE Categoria RESTART IDENTITY");
+        executeSql("TRUNCATE TABLE Utente RESTART IDENTITY");
+        executeSql("SET REFERENTIAL_INTEGRITY TRUE");
     }
+
+    /**
+     * UDF (User Defined Function) registrata come SHA1 in H2.
+     * Chiamata dall'alias SQL quando UserDAO usa SHA1(?).
+     */
+
 }

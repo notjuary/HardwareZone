@@ -1,4 +1,4 @@
-package security.functional.controller;
+package security.functional.authorization;
 
 import Controller.ProductInfo;
 import org.junit.jupiter.api.BeforeEach;
@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import security.functional.BaseFunctionalTest;
 import security.functional.ServletTestSupport;
 
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 

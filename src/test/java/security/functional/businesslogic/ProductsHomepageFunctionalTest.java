@@ -1,4 +1,4 @@
-package security.functional.controller;
+package security.functional.businesslogic;
 
 import Controller.ProductsHomepage;
 import org.junit.jupiter.api.BeforeEach;

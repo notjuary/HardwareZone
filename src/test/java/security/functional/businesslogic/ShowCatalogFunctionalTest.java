@@ -1,6 +1,6 @@
-package security.functional.controller;
+package security.functional.businesslogic;
 
-import Controller.ShowSales;
+import Controller.ShowCatalog;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,14 +12,10 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 /**
- * Test funzionali di sicurezza per ShowSales con H2.
- * Verifica:
- *  - la pagina sconti è pubblica
- *  - vengono caricate categorie e prodotti in sconto
- *  - non vengono esposti dati amministrativi
+ * Test funzionali di sicurezza per ShowCatalog con H2.
  */
-@DisplayName("ShowSales - Test funzionale di sicurezza")
-class ShowSalesFunctionalTest extends BaseFunctionalTest {
+@DisplayName("ShowCatalog - Test funzionale di sicurezza")
+class ShowCatalogFunctionalTest extends BaseFunctionalTest {
 
     private ServletTestSupport support;
 
@@ -34,28 +30,26 @@ class ShowSalesFunctionalTest extends BaseFunctionalTest {
         executeSql("INSERT INTO Categoria VALUES ('CPU')");
         executeSql("INSERT INTO Categoria VALUES ('RAM')");
         executeSql("INSERT INTO Prodotto (Nome, Descrizione, Prezzo, Quantita_Disponibile, Sconto, Immagine, Categoria) " +
-                "VALUES ('Ryzen 5', 'CPU AMD', 299.99, 10, 30, '/img/ryzen.png', 'CPU')");
-        executeSql("INSERT INTO Prodotto (Nome, Descrizione, Prezzo, Quantita_Disponibile, Sconto, Immagine, Categoria) " +
-                "VALUES ('Corsair 16GB', 'RAM DDR4', 79.99, 20, 0, '/img/ram.png', 'RAM')");
+                "VALUES ('Ryzen 5', 'CPU AMD', 299.99, 10, 0, '/img/ryzen.png', 'CPU')");
 
-        when(support.request.getRequestDispatcher("/WEB-INF/sales.jsp"))
+        when(support.request.getRequestDispatcher("/WEB-INF/catalog.jsp"))
                 .thenReturn(support.dispatcher);
     }
 
     @Test
-    @DisplayName("SECURITY: la pagina sconti è accessibile senza autenticazione")
-    void testPaginaScontiPubblica() throws Exception {
-        ShowSales servlet = new ShowSales();
+    @DisplayName("SECURITY: il catalogo è accessibile senza autenticazione")
+    void testCatalogoPubblico() throws Exception {
+        ShowCatalog servlet = new ShowCatalog();
         support.invokeDoGet(servlet, support.request, support.response);
 
-        verify(support.request).getRequestDispatcher("/WEB-INF/sales.jsp");
+        verify(support.request).getRequestDispatcher("/WEB-INF/catalog.jsp");
         verify(support.dispatcher).forward(support.request, support.response);
     }
 
     @Test
-    @DisplayName("SECURITY: la pagina sconti carica categorie e prodotti")
-    void testCaricaCategorieEProdotti() throws Exception {
-        ShowSales servlet = new ShowSales();
+    @DisplayName("SECURITY: il catalogo carica i dati correttamente")
+    void testCatalogoCaricaDati() throws Exception {
+        ShowCatalog servlet = new ShowCatalog();
         support.invokeDoGet(servlet, support.request, support.response);
 
         verify(support.request).setAttribute(eq("categories"), any());
@@ -63,9 +57,9 @@ class ShowSalesFunctionalTest extends BaseFunctionalTest {
     }
 
     @Test
-    @DisplayName("SECURITY: la pagina sconti non espone dati amministrativi")
-    void testNonEsponeDatiAdmin() throws Exception {
-        ShowSales servlet = new ShowSales();
+    @DisplayName("SECURITY: il catalogo non espone dati amministrativi")
+    void testCatalogoNonEsponeAdmin() throws Exception {
+        ShowCatalog servlet = new ShowCatalog();
         support.invokeDoGet(servlet, support.request, support.response);
 
         verify(support.request, never()).setAttribute(eq("users"), any());
@@ -73,9 +67,9 @@ class ShowSalesFunctionalTest extends BaseFunctionalTest {
     }
 
     @Test
-    @DisplayName("SECURITY: la pagina sconti non richiede privilegi admin")
-    void testNonRichiedeAdmin() throws Exception {
-        ShowSales servlet = new ShowSales();
+    @DisplayName("SECURITY: il catalogo non richiede privilegi admin")
+    void testCatalogoNonRichiedeAdmin() throws Exception {
+        ShowCatalog servlet = new ShowCatalog();
         support.invokeDoGet(servlet, support.request, support.response);
 
         verify(support.session, never()).getAttribute("user");
