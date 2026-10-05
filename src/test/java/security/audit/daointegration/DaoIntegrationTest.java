@@ -1,4 +1,4 @@
-package security.daointegration;
+package security.audit.daointegration;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

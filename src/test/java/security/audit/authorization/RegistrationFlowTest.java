@@ -1,4 +1,4 @@
-package security.inputvalidation;
+package security.audit.authorization;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

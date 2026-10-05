@@ -1,4 +1,4 @@
-package security.dataprotection;
+package security.audit.dataprotection;
 
 import Model.ConPool;
 import Model.UserBean;

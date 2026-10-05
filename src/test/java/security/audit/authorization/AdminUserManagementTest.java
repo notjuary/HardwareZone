@@ -1,4 +1,4 @@
-package security.authorization;
+package security.audit.authorization;
 
 import Model.UserBean;
 import org.junit.jupiter.api.BeforeEach;

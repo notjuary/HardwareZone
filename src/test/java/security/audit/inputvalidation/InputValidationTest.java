@@ -1,4 +1,4 @@
-package security.inputvalidation;
+package security.audit.inputvalidation;
 
 import Model.UserBean;
 import org.junit.jupiter.api.BeforeEach;
