@@ -5,7 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import security.functional.BaseFunctionalTest;
 import security.functional.ServletTestSupport;
-
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
@@ -31,15 +31,13 @@ class ShowCartFunctionalTest extends BaseFunctionalTest {
 
     @Test
     @DisplayName("SECURITY: ShowCart con carrello null causa NPE (finding documentato)")
-    void testCarrelloNull() throws Exception {
+    void testCarrelloNull() {
         when(support.session.getAttribute("cart")).thenReturn(null);
 
         ShowCart servlet = new ShowCart();
-        try {
-            support.invokeDoGet(servlet, support.request, support.response);
-        } catch (Exception e) {
-            // NPE atteso
-        }
+        assertThrows(Exception.class, () ->
+                        support.invokeDoGet(servlet, support.request, support.response),
+                "Atteso NPE");
     }
 
     @Test

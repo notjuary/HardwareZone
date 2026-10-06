@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import security.functional.BaseFunctionalTest;
 import security.functional.ServletTestSupport;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 /**
@@ -27,16 +28,14 @@ class RemoveFromCartFunctionalTest extends BaseFunctionalTest {
 
     @Test
     @DisplayName("SECURITY: RemoveFromCart con cart null causa NPE (finding)")
-    void testCartNull() throws Exception {
+    void testCartNull()  {
         when(support.session.getAttribute("cart")).thenReturn(null);
         when(support.request.getParameter("productId")).thenReturn("1");
 
         RemoveFromCart servlet = new RemoveFromCart();
-        try {
-            support.invokeDoGet(servlet, support.request, support.response);
-        } catch (Exception e) {
-            // NPE atteso
-        }
+        assertThrows(Exception.class, () ->
+                        support.invokeDoGet(servlet, support.request, support.response),
+                "NPE atteso");
     }
 
     @Test

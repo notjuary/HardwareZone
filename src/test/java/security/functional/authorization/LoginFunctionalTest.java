@@ -6,6 +6,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import security.functional.BaseFunctionalTest;
 import security.functional.ServletTestSupport;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -26,8 +28,7 @@ class LoginFunctionalTest extends BaseFunctionalTest {
         support = new ServletTestSupport() {};
         support.setUpBase();
 
-        // Password hash SHA-1 di "password123"
-        // SHA1("password123") = cbfdac6008f9cab4083784cbd1874f76618d2a97
+
         executeSql("INSERT INTO Utente (Nome, Cognome, Data_Nascita, Email, Accesso, Telefono, Citta, Provincia, Codice_Postale, Indirizzo, Data_Registrazione, Stato, Amministratore) " +
                 "VALUES ('Admin','Test','1990-01-01','admin@test.com','cbfdac6008f9cab4083784cbd1874f76618d2a97','3331234567','SA','SA','84100','Via 1','2024-01-01','true','true')");
         executeSql("INSERT INTO Utente (Nome, Cognome, Data_Nascita, Email, Accesso, Telefono, Citta, Provincia, Codice_Postale, Indirizzo, Data_Registrazione, Stato, Amministratore) " +
@@ -64,35 +65,16 @@ class LoginFunctionalTest extends BaseFunctionalTest {
         verify(support.session).setAttribute(eq("user"), any());
     }
 
-    @Test
-    @DisplayName("SECURITY: login con password errata non crea la sessione")
-    void testLoginPasswordErrata() throws Exception {
-        when(support.request.getParameter("email")).thenReturn("user@test.com");
-        when(support.request.getParameter("password")).thenReturn("wrongpassword");
-
-        Login servlet = new Login();
-        support.invokeDoPost(servlet, support.request, support.response);
-
-        verify(support.session, never()).setAttribute(eq("user"), any());
-    }
-
-    @Test
-    @DisplayName("SECURITY: login con email inesistente non crea la sessione")
-    void testLoginEmailInesistente() throws Exception {
-        when(support.request.getParameter("email")).thenReturn("nonexistent@test.com");
-        when(support.request.getParameter("password")).thenReturn("password123");
-
-        Login servlet = new Login();
-        support.invokeDoPost(servlet, support.request, support.response);
-
-        verify(support.session, never()).setAttribute(eq("user"), any());
-    }
-
-    @Test
-    @DisplayName("SECURITY: account disabilitato non può fare login")
-    void testLoginAccountDisabilitato() throws Exception {
-        when(support.request.getParameter("email")).thenReturn("disabled@test.com");
-        when(support.request.getParameter("password")).thenReturn("password123");
+    @ParameterizedTest(name = "SECURITY: login fallito con email={0} e password={1} non crea sessione")
+    @CsvSource({
+            "user@test.com,       wrongpassword",
+            "nonexistent@test.com, password123",
+            "disabled@test.com,   password123"
+    })
+    @DisplayName("SECURITY: login fallito (password errata, email inesistente, account disabilitato)")
+    void testLoginFallitoNonCreaSessione(String email, String password) throws Exception {
+        when(support.request.getParameter("email")).thenReturn(email);
+        when(support.request.getParameter("password")).thenReturn(password);
 
         Login servlet = new Login();
         support.invokeDoPost(servlet, support.request, support.response);

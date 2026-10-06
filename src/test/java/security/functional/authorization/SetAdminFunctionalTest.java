@@ -8,8 +8,7 @@ import org.junit.jupiter.api.Test;
 import security.functional.BaseFunctionalTest;
 import security.functional.ServletTestSupport;
 
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 /**
@@ -49,15 +48,13 @@ class SetAdminFunctionalTest extends BaseFunctionalTest {
 
     @Test
     @DisplayName("SECURITY: SetAdmin con utente non loggato causa NPE (finding)")
-    void testUtenteAnonimo() throws Exception {
+    void testUtenteAnonimo()  {
         when(support.session.getAttribute("user")).thenReturn(null);
 
         SetAdmin servlet = new SetAdmin();
-        try {
-            support.invokeDoGet(servlet, support.request, support.response);
-        } catch (Exception e) {
-            // NPE atteso
-        }
+        assertThrows(Exception.class, () ->
+                        support.invokeDoGet(servlet, support.request, support.response),
+                "NPE atteso");
     }
 
     @Test

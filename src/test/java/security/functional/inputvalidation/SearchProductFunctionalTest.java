@@ -10,6 +10,7 @@ import security.functional.ServletTestSupport;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 /**
@@ -47,15 +48,13 @@ class SearchProductFunctionalTest extends BaseFunctionalTest {
 
     @Test
     @DisplayName("SECURITY: SearchProduct con query null causa NPE (finding)")
-    void testQueryNull() throws Exception {
+    void testQueryNull() {
         when(support.request.getParameter("searchQuery")).thenReturn(null);
 
         SearchProduct servlet = new SearchProduct();
-        try {
-            support.invokeDoPost(servlet, support.request, support.response);
-        } catch (Exception e) {
-            // NPE atteso (finding documentato)
-        }
+        assertThrows(Exception.class, () ->
+                        support.invokeDoGet(servlet, support.request, support.response),
+                "NPE atteso (finding documentato)");
     }
 
     @Test

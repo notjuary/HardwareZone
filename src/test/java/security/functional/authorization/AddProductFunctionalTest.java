@@ -6,8 +6,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import security.functional.BaseFunctionalTest;
 import security.functional.ServletTestSupport;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import static org.mockito.ArgumentMatchers.anyString;
+
 import static org.mockito.Mockito.*;
 
 /**
@@ -55,14 +56,12 @@ class AddProductFunctionalTest extends BaseFunctionalTest {
 
     @Test
     @DisplayName("SECURITY: AddProduct.doGet con utente null causa NPE (finding)")
-    void testDoGetUtenteAnonimo() throws Exception {
+    void testDoGetUtenteAnonimo() {
         when(support.session.getAttribute("user")).thenReturn(null);
-
         AddProduct servlet = new AddProduct();
-        try {
-            support.invokeDoGet(servlet, support.request, support.response);
-        } catch (Exception e) {
-            // NPE atteso
-        }
+
+        assertThrows(Exception.class, () ->
+                        support.invokeDoGet(servlet, support.request, support.response),
+                "Atteso NPE per utente non autenticato");
     }
 }

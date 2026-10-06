@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import security.functional.BaseFunctionalTest;
 import security.functional.ServletTestSupport;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
@@ -32,18 +33,15 @@ class ProductInfoFunctionalTest extends BaseFunctionalTest {
 
     @Test
     @DisplayName("SECURITY: ProductInfo causa NPE se utente non loggato (finding documentato)")
-    void testUtenteAnonimoCausaNPE() throws Exception {
+    void testUtenteAnonimoCausaNPE()  {
         when(support.session.getAttribute("user")).thenReturn(null);
         when(support.request.getParameter("id")).thenReturn("1");
 
         ProductInfo servlet = new ProductInfo();
 
-        try {
-            support.invokeDoGet(servlet, support.request, support.response);
-            // Se arriva qui, il NPE non si è verificato (fix già applicato)
-        } catch (Exception e) {
-            // NPE atteso: finding documentato
-        }
+        assertThrows(Exception.class, () ->
+                        support.invokeDoGet(servlet, support.request, support.response),
+                "NPE atteso: finding documentato");
     }
 
     @Test

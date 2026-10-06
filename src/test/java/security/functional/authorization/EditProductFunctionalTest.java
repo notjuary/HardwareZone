@@ -6,7 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import security.functional.BaseFunctionalTest;
 import security.functional.ServletTestSupport;
-
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 /**
@@ -43,7 +43,7 @@ class EditProductFunctionalTest extends BaseFunctionalTest {
 
     @Test
     @DisplayName("SECURITY: EditProduct con admin non crasha su input invalido")
-    void testAdminInputInvalido() throws Exception {
+    void testAdminInputInvalido()  {
         when(support.session.getAttribute("user")).thenReturn(support.createAdminUser());
         when(support.request.getParameter("id")).thenReturn("1");
         when(support.request.getParameter("name")).thenReturn("");
@@ -54,10 +54,8 @@ class EditProductFunctionalTest extends BaseFunctionalTest {
         when(support.request.getParameter("category")).thenReturn("");
 
         EditProduct servlet = new EditProduct();
-        try {
-            support.invokeDoPost(servlet, support.request, support.response);
-        } catch (Exception e) {
-            // Possibili eccezioni su parsing
-        }
+        assertThrows(Exception.class, () ->
+                        support.invokeDoGet(servlet, support.request, support.response),
+                "Atteso NPE");
     }
 }

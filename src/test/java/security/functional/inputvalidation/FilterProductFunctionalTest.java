@@ -10,6 +10,7 @@ import security.functional.ServletTestSupport;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 /**
@@ -70,17 +71,15 @@ class FilterProductFunctionalTest extends BaseFunctionalTest {
 
     @Test
     @DisplayName("SECURITY: FilterProduct con min non numerico causa eccezione (finding)")
-    void testMinNonNumerico() throws Exception {
+    void testMinNonNumerico() {
         when(support.request.getParameter("min")).thenReturn("abc");
         when(support.request.getParameter("max")).thenReturn("500");
         when(support.request.getParameter("category")).thenReturn("all");
 
         FilterProduct servlet = new FilterProduct();
-        try {
-            support.invokeDoPost(servlet, support.request, support.response);
-        } catch (Exception e) {
-            // NumberFormatException atteso (finding documentato)
-        }
+        assertThrows(Exception.class, () ->
+                        support.invokeDoGet(servlet, support.request, support.response),
+                "NumberFormatException atteso");
     }
 
     @Test

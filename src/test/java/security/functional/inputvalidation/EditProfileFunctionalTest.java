@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import security.functional.BaseFunctionalTest;
 import security.functional.ServletTestSupport;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
@@ -75,15 +76,13 @@ class EditProfileFunctionalTest extends BaseFunctionalTest {
 
     @Test
     @DisplayName("SECURITY: edit profile con utente null causa NPE (finding)")
-    void testEditProfileUtenteNull() throws Exception {
+    void testEditProfileUtenteNull() {
         when(support.session.getAttribute("user")).thenReturn(null);
         setupValidProfile();
 
         EditProfile servlet = new EditProfile();
-        try {
-            support.invokeDoPost(servlet, support.request, support.response);
-        } catch (Exception e) {
-            // NPE atteso
-        }
+        assertThrows(Exception.class, () ->
+                        support.invokeDoGet(servlet, support.request, support.response),
+                "NPE atteso");
     }
 }

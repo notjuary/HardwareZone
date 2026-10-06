@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import security.functional.BaseFunctionalTest;
 import security.functional.ServletTestSupport;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 /**
@@ -55,14 +56,12 @@ class UserInfoFunctionalTest extends BaseFunctionalTest {
 
     @Test
     @DisplayName("SECURITY: UserInfo con utente null causa NPE (finding)")
-    void testUtenteNull() throws Exception {
+    void testUtenteNull() {
         when(support.session.getAttribute("user")).thenReturn(null);
 
         UserInfo servlet = new UserInfo();
-        try {
-            support.invokeDoGet(servlet, support.request, support.response);
-        } catch (Exception e) {
-            // NPE atteso
-        }
+        assertThrows(Exception.class, () ->
+                        support.invokeDoGet(servlet, support.request, support.response),
+                "NPE atteso");
     }
 }

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import security.functional.BaseFunctionalTest;
 import security.functional.ServletTestSupport;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 /**
@@ -43,15 +44,13 @@ class LogoutFunctionalTest extends BaseFunctionalTest {
 
     @Test
     @DisplayName("SECURITY: logout causa NPE se utente non loggato (finding)")
-    void testLogoutUtenteAnonimo() throws Exception {
+    void testLogoutUtenteAnonimo()  {
         when(support.session.getAttribute("user")).thenReturn(null);
 
         Logout servlet = new Logout();
-        try {
-            support.invokeDoGet(servlet, support.request, support.response);
-        } catch (Exception e) {
-            // NPE atteso: user.isAdmin() senza null check
-        }
+        assertThrows(Exception.class, () ->
+                        support.invokeDoGet(servlet, support.request, support.response),
+                "Atteso NPE: user.isAdmin() senza null check");
     }
 
     @Test

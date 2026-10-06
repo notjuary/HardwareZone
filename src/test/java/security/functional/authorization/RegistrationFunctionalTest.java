@@ -8,7 +8,8 @@ import security.functional.BaseFunctionalTest;
 import security.functional.ServletTestSupport;
 
 import static org.mockito.Mockito.*;
-
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 /**
  * Test funzionali di sicurezza per Registration.
  */
@@ -64,35 +65,16 @@ class RegistrationFunctionalTest extends BaseFunctionalTest {
         verify(support.session, never()).setAttribute(eq("user"), any());
     }
 
-    @Test
-    @DisplayName("SECURITY: registrazione con email invalida fallisce")
-    void testEmailInvalida() throws Exception {
+    @ParameterizedTest(name = "SECURITY: registrazione con {0}=\"{1}\" fallisce ({2})")
+    @CsvSource({
+            "email, invalid-email,              email malformata",
+            "name,  '',                         nome vuoto",
+            "name,  '; DROP TABLE Utente; --',  SQL injection nel nome"
+    })
+    @DisplayName("SECURITY: registrazione rifiutata con input invalido")
+    void testRegistrazioneInputInvalido(String fieldName, String invalidValue, String description) throws Exception {
         setupValidRegistration();
-        when(support.request.getParameter("email")).thenReturn("invalid-email");
-
-        Registration servlet = new Registration();
-        support.invokeDoPost(servlet, support.request, support.response);
-
-        verify(support.session, never()).setAttribute(eq("user"), any());
-    }
-
-    @Test
-    @DisplayName("SECURITY: registrazione con nome vuoto fallisce")
-    void testNomeVuoto() throws Exception {
-        setupValidRegistration();
-        when(support.request.getParameter("name")).thenReturn("");
-
-        Registration servlet = new Registration();
-        support.invokeDoPost(servlet, support.request, support.response);
-
-        verify(support.session, never()).setAttribute(eq("user"), any());
-    }
-
-    @Test
-    @DisplayName("SECURITY: registrazione con SQL injection fallisce")
-    void testSqlInjection() throws Exception {
-        setupValidRegistration();
-        when(support.request.getParameter("name")).thenReturn("'; DROP TABLE Utente; --");
+        when(support.request.getParameter(fieldName)).thenReturn(invalidValue);
 
         Registration servlet = new Registration();
         support.invokeDoPost(servlet, support.request, support.response);

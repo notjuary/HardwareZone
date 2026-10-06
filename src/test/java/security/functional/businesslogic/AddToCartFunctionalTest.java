@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import security.functional.BaseFunctionalTest;
 import security.functional.ServletTestSupport;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -56,15 +57,13 @@ class AddToCartFunctionalTest extends BaseFunctionalTest {
 
     @Test
     @DisplayName("SECURITY: AddToCart con productId inesistente causa NPE (finding)")
-    void testProdottoInesistente() throws Exception {
+    void testProdottoInesistente()  {
         when(support.request.getParameter("productId")).thenReturn("999");
         when(support.request.getParameter("quantity")).thenReturn("1");
 
         AddToCart servlet = new AddToCart();
-        try {
-            support.invokeDoGet(servlet, support.request, support.response);
-        } catch (Exception e) {
-            // NPE atteso su productBean.getQuantity()
-        }
+        assertThrows(Exception.class, () ->
+                        support.invokeDoGet(servlet, support.request, support.response),
+                "NPE atteso su productBean.getQuantity()\n");
     }
 }
