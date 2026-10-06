@@ -84,16 +84,14 @@ class FilterProductFunctionalTest extends BaseFunctionalTest {
 
     @Test
     @DisplayName("SECURITY: FilterProduct con category null causa NPE (finding)")
-    void testCategoryNull() throws Exception {
+    void testCategoryNull() {
         when(support.request.getParameter("min")).thenReturn("0");
         when(support.request.getParameter("max")).thenReturn("500");
         when(support.request.getParameter("category")).thenReturn(null);
 
         FilterProduct servlet = new FilterProduct();
-        try {
-            support.invokeDoPost(servlet, support.request, support.response);
-        } catch (Exception e) {
-            // NPE atteso (finding documentato)
-        }
+        assertThrows(Exception.class, () ->
+                        support.invokeDoPost(servlet, support.request, support.response),
+                "NPE atteso per category null");
     }
 }
