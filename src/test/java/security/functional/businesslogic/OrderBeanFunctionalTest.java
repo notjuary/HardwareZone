@@ -29,8 +29,8 @@ class OrderBeanFunctionalTest {
     @DisplayName("Default: id 0, user 0, total 0.0")
     void testDefaults() {
         OrderBean o = new OrderBean();
-        assertThat(o.getId()).isEqualTo(0);
-        assertThat(o.getUser()).isEqualTo(0);
+        assertThat(o.getId()).isZero();
+        assertThat(o.getUser()).isZero();
         assertThat(o.getTotal()).isEqualTo(0.0);
     }
 

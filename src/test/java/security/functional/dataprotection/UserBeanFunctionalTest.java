@@ -126,7 +126,7 @@ class UserBeanFunctionalTest {
     @DisplayName("Default: admin null, id 0, name null")
     void testDefaults() {
         UserBean u = new UserBean();
-        assertThat(u.getId()).isEqualTo(0);
+        assertThat(u.getId()).isZero();
         assertThat(u.isAdmin()).isNull();
         assertThat(u.getName()).isNull();
     }

@@ -46,10 +46,10 @@ class ProductBeanFunctionalTest {
     @DisplayName("Default: id 0, price 0.0, quantity 0")
     void testDefaults() {
         ProductBean p = new ProductBean();
-        assertThat(p.getId()).isEqualTo(0);
+        assertThat(p.getId()).isZero();
         assertThat(p.getPrice()).isEqualTo(0.0);
-        assertThat(p.getQuantity()).isEqualTo(0);
-        assertThat(p.getSales()).isEqualTo(0);
+        assertThat(p.getQuantity()).isZero();
+        assertThat(p.getSales()).isZero();
     }
 
     @Test

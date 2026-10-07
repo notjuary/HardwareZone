@@ -31,9 +31,9 @@ class OrderProductBeanFunctionalTest {
     @DisplayName("Default: tutti i campi a 0")
     void testDefaults() {
         OrderProductBean op = new OrderProductBean();
-        assertThat(op.getProduct()).isEqualTo(0);
-        assertThat(op.getQuantity()).isEqualTo(0);
+        assertThat(op.getProduct()).isZero();
+        assertThat(op.getQuantity()).isZero();
         assertThat(op.getPrice()).isEqualTo(0.0);
-        assertThat(op.getOrder()).isEqualTo(0);
+        assertThat(op.getOrder()).isZero();
     }
 }

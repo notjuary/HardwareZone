@@ -13,7 +13,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
-
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 /**
  * Test funzionali di sicurezza per Payment.
  * Verifica:
@@ -153,78 +154,41 @@ class PaymentFunctionalTest extends BaseFunctionalTest {
             rs.next();
             org.assertj.core.api.Assertions.assertThat(rs.getInt(1))
                     .as("Nessun ordine deve essere creato con carta invalida")
-                    .isEqualTo(0);
+                    .isZero();
             con.close();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    @Test
-    @DisplayName("SECURITY: Payment.doPost con numero carta non numerico viene rifiutato")
-    void testPaymentNumeroCartaNonNumerico() throws Exception {
+    @ParameterizedTest(name = "SECURITY: Payment rifiutato con {0}=\"{1}\" ({2})")
+    @CsvSource({
+            "numero-carta, abcd567890123456, numero carta non numerico",
+            "CVV,          abcd,              CVV non valido",
+            "scadenza,     2020-01-01,        scadenza passata"
+    })
+    @DisplayName("SECURITY: Payment rifiutato con input carta invalido")
+    void testPaymentInputInvalido(String fieldName, String invalidValue, String description) throws Exception {
         when(support.session.getAttribute("user")).thenReturn(support.createNormalUser());
         when(support.session.getAttribute("total")).thenReturn(299.99);
 
-        when(support.request.getParameter("numero-carta")).thenReturn("abcd567890123456");
+        // Valori di default validi
+        when(support.request.getParameter("numero-carta")).thenReturn("1234567890123456");
         when(support.request.getParameter("CVV")).thenReturn("123");
         when(support.request.getParameter("scadenza")).thenReturn("2030-12-31");
         when(support.request.getParameter("titolare")).thenReturn("Mario Rossi");
 
-        Payment servlet = new Payment();
+        // Override del campo da testare
+        when(support.request.getParameter(fieldName)).thenReturn(invalidValue);
 
+        Payment servlet = new Payment();
         try {
             support.invokeDoPost(servlet, support.request, support.response);
         } catch (Exception e) {
-            // Eccezione possibile
+            // Eccezione possibile su parsing
         }
 
         // Il servlet deve reindirizzare a error.jsp (validazione fallita)
-        verify(support.request, atLeastOnce()).getRequestDispatcher(anyString());
-    }
-
-    @Test
-    @DisplayName("SECURITY: Payment.doPost con CVV non valido viene rifiutato")
-    void testPaymentCvvNonValido() throws Exception {
-        when(support.session.getAttribute("user")).thenReturn(support.createNormalUser());
-        when(support.session.getAttribute("total")).thenReturn(299.99);
-
-        when(support.request.getParameter("numero-carta")).thenReturn("1234567890123456");
-        when(support.request.getParameter("CVV")).thenReturn("abcd");
-        when(support.request.getParameter("scadenza")).thenReturn("2030-12-31");
-        when(support.request.getParameter("titolare")).thenReturn("Mario Rossi");
-
-        Payment servlet = new Payment();
-
-        try {
-            support.invokeDoPost(servlet, support.request, support.response);
-        } catch (Exception e) {
-            // Eccezione possibile
-        }
-
-        verify(support.request, atLeastOnce()).getRequestDispatcher(anyString());
-    }
-
-    @Test
-    @DisplayName("SECURITY: Payment.doPost con scadenza passata viene rifiutato")
-    void testPaymentScadenzaPassata() throws Exception {
-        when(support.session.getAttribute("user")).thenReturn(support.createNormalUser());
-        when(support.session.getAttribute("total")).thenReturn(299.99);
-
-        when(support.request.getParameter("numero-carta")).thenReturn("1234567890123456");
-        when(support.request.getParameter("CVV")).thenReturn("123");
-        when(support.request.getParameter("scadenza")).thenReturn("2020-01-01");
-        when(support.request.getParameter("titolare")).thenReturn("Mario Rossi");
-
-        Payment servlet = new Payment();
-
-        try {
-            support.invokeDoPost(servlet, support.request, support.response);
-        } catch (Exception e) {
-            // Eccezione possibile
-        }
-
-        // Con scadenza passata, il servlet deve reindirizzare a error.jsp
         verify(support.request, atLeastOnce()).getRequestDispatcher(anyString());
     }
 

@@ -27,7 +27,7 @@ class ProductCartBeanFunctionalTest {
     @DisplayName("Default: id 0, quantity 0")
     void testDefaults() {
         ProductCartBean pcb = new ProductCartBean();
-        assertThat(pcb.getId()).isEqualTo(0);
-        assertThat(pcb.getQuantity()).isEqualTo(0);
+        assertThat(pcb.getId()).isZero();
+        assertThat(pcb.getQuantity()).isZero();
     }
 }

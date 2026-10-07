@@ -44,7 +44,7 @@ class CartBeanFunctionalTest {
     @DisplayName("addProduct con quantità 0 non incrementa")
     void testAddZeroQuantity() {
         cart.addProduct(1, 0);
-        assertThat(cart.getNumberObject()).isEqualTo(0);
+        assertThat(cart.getNumberObject()).isZero();
     }
 
     @Test
@@ -92,6 +92,6 @@ class CartBeanFunctionalTest {
     @DisplayName("CartBean vuoto: cartList vuota, numberObject 0")
     void testEmptyCart() {
         assertThat(cart.getCartList()).isEmpty();
-        assertThat(cart.getNumberObject()).isEqualTo(0);
+        assertThat(cart.getNumberObject()).isZero();
     }
 }
