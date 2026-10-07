@@ -1,5 +1,6 @@
 package security.functional.authorization;
 
+
 import Controller.UserInfo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -64,4 +65,5 @@ class UserInfoFunctionalTest extends BaseFunctionalTest {
                         support.invokeDoGet(servlet, support.request, support.response),
                 "NPE atteso");
     }
+
 }

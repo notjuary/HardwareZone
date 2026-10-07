@@ -1,4 +1,4 @@
-package security.audit.authorization;
+package security.audit.inputvalidation;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,6 @@ import static org.assertj.core.api.Assertions.assertThat;
  *  - validazione completa dei 10 campi obbligatori
  *  - prevenzione email duplicate
  *  - robustezza input avversariali
- *
  * Riferimento: OWASP Testing Guide - OTG-AUTHN-02
  */
 @DisplayName("Registration Flow - Validazione completa form registrazione")

@@ -1,4 +1,4 @@
-package security.functional.authorization;
+package security.functional.businesslogic;
 
 import Controller.ProductInfo;
 import org.junit.jupiter.api.BeforeEach;

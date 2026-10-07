@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Test funzionali per UserBean.
- * Verifica: hashing password, getter/setter, calendari.
+ * Test funzionali di sicurezza per UserBean.
+ * Verifica hashing password, getter/setter, parsing date, valori di default.
  */
 @DisplayName("UserBean - Test funzionale")
 class UserBeanFunctionalTest {
@@ -21,23 +21,28 @@ class UserBeanFunctionalTest {
         user = new UserBean();
     }
 
+    // ==========================================================
+    // 1. HASHING PASSWORD (A02)
+    // ==========================================================
+
     @Test
-    @DisplayName("Password hashata con SHA-1 (40 caratteri hex)")
+    @DisplayName("SECURITY: password hashata con SHA-1 (40 caratteri hex)")
     void testPasswordHash() {
         user.setPassword("password123");
-        assertThat(user.getPassword()).hasSize(40);
-        assertThat(user.getPassword()).matches("[0-9a-f]{40}");
+        assertThat(user.getPassword())
+                .hasSize(40)
+                .matches("[0-9a-f]{40}");
     }
 
     @Test
-    @DisplayName("Password non è memorizzata in chiaro")
+    @DisplayName("SECURITY: password non in chiaro")
     void testPasswordNotPlaintext() {
         user.setPassword("secret");
         assertThat(user.getPassword()).isNotEqualTo("secret");
     }
 
     @Test
-    @DisplayName("Stessa password produce stesso hash (SHA-1 senza salt)")
+    @DisplayName("SECURITY: stessa password produce lo stesso hash (SHA-1 deterministico)")
     void testDeterministicHash() {
         UserBean u1 = new UserBean();
         UserBean u2 = new UserBean();
@@ -45,6 +50,20 @@ class UserBeanFunctionalTest {
         u2.setPassword("samepass");
         assertThat(u1.getPassword()).isEqualTo(u2.getPassword());
     }
+
+    @Test
+    @DisplayName("Password diverse producono hash diversi")
+    void testDifferentPasswordsProduceDifferentHashes() {
+        UserBean u1 = new UserBean();
+        UserBean u2 = new UserBean();
+        u1.setPassword("passwordOne");
+        u2.setPassword("passwordTwo");
+        assertThat(u1.getPassword()).isNotEqualTo(u2.getPassword());
+    }
+
+    // ==========================================================
+    // 2. GETTER/SETTER
+    // ==========================================================
 
     @Test
     @DisplayName("Getter/setter di tutti i campi")
@@ -74,6 +93,10 @@ class UserBeanFunctionalTest {
         assertThat(user.isAdmin()).isEqualTo("false");
     }
 
+    // ==========================================================
+    // 3. PARSING DATE
+    // ==========================================================
+
     @Test
     @DisplayName("setBirthday e getBirthday funzionano")
     void testBirthday() {
@@ -95,11 +118,38 @@ class UserBeanFunctionalTest {
         assertThat(user.getRegister()).isNotNull();
     }
 
+    // ==========================================================
+    // 4. VALORI DI DEFAULT
+    // ==========================================================
+
     @Test
-    @DisplayName("Default: admin null, id 0")
+    @DisplayName("Default: admin null, id 0, name null")
     void testDefaults() {
         UserBean u = new UserBean();
         assertThat(u.getId()).isEqualTo(0);
         assertThat(u.isAdmin()).isNull();
+        assertThat(u.getName()).isNull();
+    }
+
+    @Test
+    @DisplayName("Un utente appena creato ha admin=null")
+    void testNewUserHasNullAdmin() {
+        UserBean u = new UserBean();
+        assertThat(u.isAdmin()).isNull();
+    }
+
+    // ==========================================================
+    // 5. FINDING
+    // ==========================================================
+
+    @Test
+    @DisplayName("FINDING: SHA-1 usato per password (raccomandato bcrypt)")
+    void testDocumentSha1Usage() {
+        user.setPassword("test");
+        // Documenta l'uso di SHA-1 (40 char) invece di bcrypt (60 char)
+        assertThat(user.getPassword())
+                .as("FINDING: SHA-1 è veloce e vulnerabile a brute-force. "
+                        + "Raccomandato bcrypt/Argon2 (CWE-916).")
+                .hasSize(40);
     }
 }
