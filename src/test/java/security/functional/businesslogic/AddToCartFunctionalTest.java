@@ -7,13 +7,14 @@ import org.junit.jupiter.api.Test;
 import security.functional.BaseFunctionalTest;
 import security.functional.ServletTestSupport;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 /**
  * Test funzionali di sicurezza per AddToCart.
+ * I finding sono stati risolti e i test ora verificano il fix.
  */
 @DisplayName("AddToCart - Test funzionale di sicurezza")
 class AddToCartFunctionalTest extends BaseFunctionalTest {
@@ -43,7 +44,7 @@ class AddToCartFunctionalTest extends BaseFunctionalTest {
     }
 
     @Test
-    @DisplayName("SECURITY: AddToCart con quantity negativa (finding documentato)")
+    @DisplayName("FIXED: AddToCart con quantity negativa rifiutata (sendError 400)")
     void testQuantityNegativa() throws Exception {
         when(support.request.getParameter("productId")).thenReturn("1");
         when(support.request.getParameter("quantity")).thenReturn("-5");
@@ -51,19 +52,29 @@ class AddToCartFunctionalTest extends BaseFunctionalTest {
         AddToCart servlet = new AddToCart();
         support.invokeDoGet(servlet, support.request, support.response);
 
-        // Il codice accetta quantity negative → finding
-        verify(support.session).setAttribute(eq("cart"), any());
+        // FIX: la quantity negativa ora viene rifiutata con sendError(400)
+        verify(support.response).sendError(400);
+
+        // FIX: il carrello NON deve essere settato in sessione
+        verify(support.session, never()).setAttribute(eq("cart"), any());
     }
 
     @Test
-    @DisplayName("SECURITY: AddToCart con productId inesistente causa NPE (finding)")
-    void testProdottoInesistente()  {
+    @DisplayName("FIXED: AddToCart con productId inesistente gestito con sendError(404)")
+    void testProdottoInesistente() throws Exception {
         when(support.request.getParameter("productId")).thenReturn("999");
         when(support.request.getParameter("quantity")).thenReturn("1");
 
         AddToCart servlet = new AddToCart();
-        assertThrows(Exception.class, () ->
-                        support.invokeDoGet(servlet, support.request, support.response),
-                "NPE atteso su productBean.getQuantity()\n");
+
+        // FIX: non deve più lanciare NPE
+        assertDoesNotThrow(() ->
+                support.invokeDoGet(servlet, support.request, support.response));
+
+        // FIX: il servlet risponde con 404
+        verify(support.response).sendError(404);
+
+        // FIX: il carrello NON deve essere settato in sessione
+        verify(support.session, never()).setAttribute(eq("cart"), any());
     }
 }

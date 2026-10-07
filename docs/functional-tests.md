@@ -439,12 +439,11 @@ src/test/java/security/functional/
 
 **`AddToCartFunctionalTest.java` — 3 test**
 
-| # | Metodo | Cosa verifica                              |
-|:--|:---|:-------------------------------------------|
-| 1 | `testAggiungiProdottoValido` | Aggiunta OK                                |
-| 2 | `testQuantityNegativa` | **Finding**: quantità negative accettate |
-| 3 | `testProdottoInesistente` | NPE documentato                            |
-
+| # | Metodo | Cosa verifica                                                 |
+|:--|:---|:--------------------------------------------------------------|
+| 1 | `testAggiungiProdottoValido` | Aggiunta OK                                                   |
+| 2 | `testQuantityNegativa` | **FIXED**: quantity negativa rifiutata con `sendError(400)`   |
+| 3 | `testProdottoInesistente` | **FIXED**: productId inesistente gestito con `sendError(404)` |
 **`RemoveFromCartFunctionalTest.java` — 2 test**
 
 | # | Metodo | Cosa verifica |
@@ -617,18 +616,19 @@ I test GDPR sono **integrati** in `ProfileAndCartFunctionalTest`:
 
 ### 12.3 Finding documentati
 
-I test funzionali hanno **scoperto a runtime**:
+I test funzionali hanno **scoperto a runtime** i seguenti finding. Alcuni sono stati **risolti** durante l'ultima iterazione di remediation.
 
-| Finding                               | Test |
-|:--------------------------------------|:---|
-| Privilege escalation (`SetStateUser`) | `SetStateUserFunctionalTest` |
-| NPE su login anonimo                  | `LoginFunctionalTest` |
-| Quantità negative accettate           | `AddToCartFunctionalTest` |
-| Numero carta in chiaro                | `PaymentDAOFunctionalTest` |
-| SHA-1 per password (non bcrypt)       | `UserBeanFunctionalTest` |
-| NPE su carrello null                  | `ShowCartFunctionalTest`, `RemoveFromCartFunctionalTest`, `ProfileAndCartFunctionalTest` |
-| Loop infinito homepage                | `ProductsHomepageFunctionalTest` |
-| CVV getter esposto                  | `PaymentBeanFunctionalTest` |
+| Finding                               | Test | Stato       |
+|:--------------------------------------|:---|:------------|
+| Privilege escalation (`SetStateUser`) | `SetStateUserFunctionalTest` | Documentato |
+| NPE su login anonimo                  | `LoginFunctionalTest` | Documentato |
+| Quantità negative accettate           | `AddToCartFunctionalTest` | **FIXED**   |
+| Numero carta in chiaro                | `PaymentDAOFunctionalTest` | Documentato |
+| SHA-1 per password (non bcrypt)       | `UserBeanFunctionalTest` | Documentato |
+| NPE su carrello null                  | `ShowCartFunctionalTest`, `RemoveFromCartFunctionalTest`, `ProfileAndCartFunctionalTest` | Documentato |
+| Loop infinito homepage                | `ProductsHomepageFunctionalTest` | Documentato |
+| CVV getter esposto                    | `PaymentBeanFunctionalTest` | Documentato |
+| Bug `removeProduct` su ID inesistente | `CartBeanFunctionalTest` | **FIXED**   |
 
 ## 13. Dettaglio dei finding documentati
 
@@ -752,22 +752,44 @@ if (user != null && user.isActive().equalsIgnoreCase("true")) {
 
 ---
 
-### 13.3 Quantità negative accettate in `AddToCart`
+### 13.3 FIXED — Quantità negative in `AddToCart`
 
 - **File:** `src/main/java/Controller/AddToCart.java`
 - **Test:** `AddToCartFunctionalTest`
 - **CWE:** CWE-20 (Improper Input Validation)
 - **Severità:** Critica
+- **Stato:** ✅ RISOLTO
 
-#### Vulnerabilità
+#### Vulnerabilità (storica)
 
-Il servlet `AddToCart` accetta quantità **negative** nel parametro `quantity`. Questo permette a un attaccante di **sottrarre prodotti** dal carrello o di manipolare il totale dell'ordine.
+Il servlet `AddToCart` accettava quantità **negative** nel parametro `quantity`. Un attaccante poteva inviare `quantity=-100` e manipolare il carrello o il totale dell'ordine.
 
-#### Test
+#### Fix applicato
 
-```java
+```text
+int quantity = Integer.parseInt(request.getParameter("quantity"));
+
+// FIX: validazione quantity > 0
+boolean validQuantity = quantity > 0;
+    if(!validQuantity){
+        response.sendError(400);
+    return;
+}
+```
+
+#### Scenario
+
+| Scenario            |    Comportamento attuale    |
+| :------------------ |:---------------------------:|
+| `quantity = 2`      |             OK              |
+| `quantity = 0`      |  Rifiutato (sendError 400)  |
+| **`quantity = -5`** | Rifiutato (sendError 400)   |
+
+#### Patch raccomandata
+
+```text
 @Test
-@DisplayName("SECURITY: AddToCart accetta quantity negativa (finding)")
+@DisplayName("FIXED: AddToCart con quantity negativa rifiutata (sendError 400)")
 void testQuantityNegativa() throws Exception {
     when(support.request.getParameter("productId")).thenReturn("1");
     when(support.request.getParameter("quantity")).thenReturn("-5");
@@ -775,35 +797,8 @@ void testQuantityNegativa() throws Exception {
     AddToCart servlet = new AddToCart();
     support.invokeDoGet(servlet, support.request, support.response);
 
-    // Il servlet accetta quantity negativa
-    verify(support.session).setAttribute(eq("cart"), any());
-}
-```
-
-#### Scenario
-
-| Scenario            |      Comportamento attuale      |
-| :------------------ |:-------------------------------:|
-| `quantity = 2`      |               OK                |
-| `quantity = 0`      | Accettato (0 = nessun articolo) |
-| **`quantity = -5`** |   **Accettato → sottrazione**   |
-
-#### Patch raccomandata
-
-```text
-int quantity = Integer.parseInt(request.getParameter("quantity"));
-
-if (quantity <= 0) {
-    response.sendError(400, "Quantità non valida");
-    return;
-}
-
-ProductBean productBean = service.doRetrieveById(productId);
-if (productBean.getQuantity() >= quantity){
-    cartBean.addProduct(productId, quantity);
-} else {
-    response.sendError(400, "Quantità non disponibile");
-    return;  // ← return per non salvare
+    verify(support.response).sendError(400);
+    verify(support.session, never()).setAttribute(eq("cart"), any());
 }
 ```
 
@@ -1117,14 +1112,58 @@ public String toString() {
 
 ### 13.9 Riepilogo finding dei test funzionali
 
-| #  | Finding                             |   CWE   | Severità | Test                                                                                     |     Stato     |
-| :- | :---------------------------------- | :-----: |:--------:| :--------------------------------------------------------------------------------------- |:-------------:|
-| 1  | Privilege Escalation `SetStateUser` | CWE-269 | Critica  | `SetStateUserFunctionalTest`                                                             |  Documentato  |
-| 2  | NPE su Login anonimo                | CWE-476 | Critica  | `LoginFunctionalTest`                                                                    |  Documentato  |
-| 3  | Quantità negative `AddToCart`       |  CWE-20 | Critica  | `AddToCartFunctionalTest`                                                                |  Documentato  |
-| 4  | Numero carta in chiaro (PCI-DSS)    | CWE-312 | Critica  | `PaymentDAOFunctionalTest`                                                               |  Documentato  |
-| 5  | SHA-1 per password                  | CWE-916 |   Alta   | `UserBeanFunctionalTest`                                                                 |  Documentato  |
-| 6  | NPE su carrello null                | CWE-476 |   Alta   | `ShowCartFunctionalTest`, `RemoveFromCartFunctionalTest`, `ProfileAndCartFunctionalTest` |  Documentato  |
-| 7  | Loop infinito `ProductsHomepage`    | CWE-835 | Critica  | `ProductsHomepageFunctionalTest`                                                         |  Documentato  |
-| 8  | CVV getter esposto                  | CWE-200 |  Alta  | `PaymentBeanFunctionalTest`                                                              | Documentato |
+| #  | Finding                             |   CWE   | Severità | Test                                                                                     |    Stato    |
+| :- | :---------------------------------- | :-----: |:--------:|:-----------------------------------------------------------------------------------------|:-----------:|
+| 1  | Privilege Escalation `SetStateUser` | CWE-269 | Critica  | `SetStateUserFunctionalTest`                                                             | Documentato |
+| 2  | NPE su Login anonimo                | CWE-476 | Critica  | `LoginFunctionalTest`                                                                    | Documentato |
+| 3  | Quantità negative `AddToCart`       |  CWE-20 | Critica  | `AddToCartFunctionalTest`                                                                |  **FIXED**  |
+| 4  | Numero carta in chiaro (PCI-DSS)    | CWE-312 | Critica  | `PaymentDAOFunctionalTest`                                                               | Documentato |
+| 5  | SHA-1 per password                  | CWE-916 |   Alta   | `UserBeanFunctionalTest`                                                                 | Documentato |
+| 6  | NPE su carrello null                | CWE-476 |   Alta   | `ShowCartFunctionalTest`, `RemoveFromCartFunctionalTest`, `ProfileAndCartFunctionalTest` | Documentato |
+| 7  | Loop infinito `ProductsHomepage`    | CWE-835 | Critica  | `ProductsHomepageFunctionalTest`                                                         | Documentato |
+| 8  | CVV getter esposto                  | CWE-200 |   Alta   | `PaymentBeanFunctionalTest`                                                              | Documentato |
+| 9  | Bug `removeProduct`                 | CWE-20  |   Media  | `CartBeanFunctionalTest`, `BusinessLogicTest`                                            |  **FIXED**  |
+| 10 | Boundary bug filtro prezzi          | CWE-20  |   Media  | `BusinessLogicTest`, `ProductCatalogTest`                                                |  **FIXED**  |
+---
 
+## 14. Changelog
+
+### 07/10/2026 — Remediation iterazione 1
+
+**Fix applicati:**
+
+| # | Area | File | Descrizione |
+| :--- | :--- | :--- | :--- |
+| 1 | A04 | `AddToCart.java` | Aggiunto try/catch su `Integer.parseInt(productId)` |
+| 2 | A04 | `AddToCart.java` | Aggiunta validazione `quantity > 0` |
+| 3 | A04 | `AddToCart.java` | Aggiunto `return;` dopo ogni `sendError` |
+| 4 | A04 | `AddToCart.java` | Aggiunto null check su `productBean` con `sendError(404)` |
+| 5 | A04 | `CartBean.java` | `removeProduct` non rimuove più elementi se ID inesistente |
+| 6 | A04 | `ProductDAO.java` | Filtro prezzi usa `>=` e `<=` invece di `>` e `<` |
+| 7 | A05 | `UserDAO.java` | `PreparedStatement` al posto di `Statement` (già fixato) |
+| 8 | A05 | `ProductDAO.java` | Try-with-resources per `PreparedStatement` e `ResultSet` |
+| 9 | A05 | `CartDAO.java` | Try-with-resources per `PreparedStatement` e `ResultSet` |
+
+**Test aggiornati:**
+
+| File | Test | Modifica |
+| :--- | :--- | :--- |
+| `AddToCartFunctionalTest.java` | `testQuantityNegativa` | Verifica `sendError(400)` invece del bug |
+| `AddToCartFunctionalTest.java` | `testProdottoInesistente` | Verifica `sendError(404)` invece di NPE |
+| `BusinessLogicTest.java` | `testDocumentFilterBoundaryBug` | Verifica `>=` e `<=` |
+| `BusinessLogicTest.java` | `testRemoveNonExistentProductIsBuggy` | Aspetta `size == 2` |
+| `CartBeanFunctionalTest.java` | `testRemoveNonexistentBug` | Aspetta `size == 2` |
+| `CartManagementTest.java` | Vari test | Aggiornati al formato FIXED |
+
+**Finding ancora aperti (non fixati in questa iterazione):**
+
+- SHA-1 come algoritmo di hashing password (`UserBean.java`)
+- CSRF su azioni GET (`SetAdmin`, `SetStateUser`, `EditProfile`)
+- Privilege escalation e self-lockout in `SetStateUser`
+- File upload senza restrizioni in `AddProduct`
+- NPE in vari controller (Login, ShowCart, RemoveFromCart)
+- Loop infinito in `ProductsHomepage`
+- Numero carta in chiaro (PCI-DSS)
+- CVV getter esposto
+
+**Nota metodologica:** i test funzionali sono stati aggiornati per verificare il **fix** e fungono da **regression protection**: se qualcuno reintroduce la vulnerabilità, il test fallisce.

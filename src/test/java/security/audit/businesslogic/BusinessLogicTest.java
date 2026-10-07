@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Test di sicurezza per l'area "Business Logic".
  * Verifica che le regole di business non possano essere aggirate
  * e documenta comportamenti anomali trovati nel codice.
- *
+
  * Riferimento: OWASP Testing Guide - OTG-BUSLOGIC
  */
 @DisplayName("Business Logic - Carrello, Ordini e Prodotti")
@@ -92,20 +92,17 @@ class BusinessLogicTest {
     }
 
     @Test
-    @DisplayName("BUG DOCUMENTATO: removeProduct con id inesistente rimuove l'ultimo elemento")
+    @DisplayName("FIXED: removeProduct non rimuove elementi se l'id non esiste")
     void testRemoveNonExistentProductIsBuggy() {
+        CartBean cart = new CartBean();
         cart.addProduct(1, 3);
         cart.addProduct(2, 5);
 
-        // Rimuoviamo un id che NON esiste
         cart.removeProduct(999);
 
-        // BUG: la lista non dovrebbe cambiare, ma il codice attuale
-        // rimuove comunque l'elemento in posizione (size - 1)
         assertThat(cart.getCartList())
-                .as("BUG: removeProduct rimuove l'ultimo elemento se l'id non esiste. "
-                        + "Fix consigliato: usare iteratore con remove() o return esplicito.")
-                .hasSize(1);
+                .as("FIXED: removeProduct con id inesistente non rimuove più un prodotto non richiesto.")
+                .hasSize(2);
     }
 
     @Test
@@ -277,8 +274,8 @@ class BusinessLogicTest {
 
         // Il filtro esclude i prodotti al prezzo esatto del min/max
         boolean hasStrictComparison =
-                source.contains("Prezzo > ?") &&
-                        source.contains("Prezzo < ?");
+                source.contains("Prezzo >= ?") &&
+                        source.contains("Prezzo <= ?");
 
         assertThat(hasStrictComparison)
                 .as("BUG FUNZIONALE: doRetrieveByFilter usa confronti stretti (> e <) "
