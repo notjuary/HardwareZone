@@ -6,12 +6,11 @@ import java.util.ArrayList;
 public class ProductDAO {
 
     public void doSave(ProductBean productBean) {
-
-        try (Connection con = ConPool.getConnection()) {
-
-            PreparedStatement ps = con.prepareStatement(
-                    "INSERT INTO Prodotto (Nome, Descrizione, Prezzo, Quantita_Disponibile, Sconto, Immagine, Categoria) VALUES(?,?,?,?,?,?,?)",
-                    Statement.RETURN_GENERATED_KEYS);
+        // MODIFICA: PreparedStatement spostato nel try-with-resources
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement(
+                     "INSERT INTO Prodotto (Nome, Descrizione, Prezzo, Quantita_Disponibile, Sconto, Immagine, Categoria) VALUES(?,?,?,?,?,?,?)",
+                     Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, productBean.getName());
             ps.setString(2, productBean.getDescription());
@@ -25,10 +24,13 @@ public class ProductDAO {
                 throw new RuntimeException("INSERT error.");
             }
 
-            ResultSet rs = ps.getGeneratedKeys();
-            rs.next();
-            int id = rs.getInt(1);
-            productBean.setId(id);
+            // MODIFICA: ResultSet gestito con try-with-resources
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    int id = rs.getInt(1);
+                    productBean.setId(id);
+                }
+            }
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -36,11 +38,11 @@ public class ProductDAO {
     }
 
     public void doUpdate(ProductBean productBean) {
-        try (Connection con = ConPool.getConnection()) {
-            PreparedStatement ps = con.prepareStatement(
-                    "UPDATE Prodotto SET Nome = ?, Descrizione = ?, Prezzo = ?, " +
-                            "Quantita_Disponibile = ?, Sconto = ?, Immagine = ?, Categoria = ? " +
-                            "WHERE ID_Prodotto = ?");
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement(
+                     "UPDATE Prodotto SET Nome = ?, Descrizione = ?, Prezzo = ?, " +
+                             "Quantita_Disponibile = ?, Sconto = ?, Immagine = ?, Categoria = ? " +
+                             "WHERE ID_Prodotto = ?")) {
 
             ps.setString(1, productBean.getName());
             ps.setString(2, productBean.getDescription());
@@ -59,18 +61,16 @@ public class ProductDAO {
     }
 
     public boolean isAlreadyRegistered(String name, String description) {
-        try (Connection con = ConPool.getConnection()) {
-            PreparedStatement ps = con.prepareStatement(
-                    "SELECT * " +
-                            "FROM Prodotto " +
-                            "WHERE Nome=? AND Descrizione=?");
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement(
+                     "SELECT * FROM Prodotto WHERE Nome=? AND Descrizione=?")) {
 
             ps.setString(1, name);
             ps.setString(2, description);
 
-            ResultSet rs = ps.executeQuery();
-
-            return rs.next();
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -78,31 +78,26 @@ public class ProductDAO {
     }
 
     public ProductBean doRetrieveById(int id) {
-
-        try (Connection con = ConPool.getConnection()) {
-            PreparedStatement ps = con.prepareStatement(
-                    "SELECT * " +
-                            "FROM Prodotto " +
-                            "WHERE ID_Prodotto=?");
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement(
+                     "SELECT * FROM Prodotto WHERE ID_Prodotto=?")) {
 
             ps.setInt(1, id);
 
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                ProductBean product = new ProductBean();
-                product.setId(rs.getInt(1));
-                product.setName(rs.getString(2));
-                product.setDescription(rs.getString(3));
-                product.setPrice(rs.getDouble(4));
-                product.setQuantity(rs.getInt(5));
-                product.setSales(rs.getInt(6));
-                product.setImage(rs.getString(7));
-                product.setCategory(rs.getString(8));
-
-                return product;
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    ProductBean product = new ProductBean();
+                    product.setId(rs.getInt(1));
+                    product.setName(rs.getString(2));
+                    product.setDescription(rs.getString(3));
+                    product.setPrice(rs.getDouble(4));
+                    product.setQuantity(rs.getInt(5));
+                    product.setSales(rs.getInt(6));
+                    product.setImage(rs.getString(7));
+                    product.setCategory(rs.getString(8));
+                    return product;
+                }
             }
-
             return null;
 
         } catch (SQLException e) {
@@ -111,30 +106,25 @@ public class ProductDAO {
     }
 
     public ArrayList<ProductBean> doRetrieveAll() {
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT * FROM Prodotto ORDER BY ID_Prodotto")) {
 
-        try (Connection con = ConPool.getConnection()) {
-            PreparedStatement ps = con.prepareStatement(
-                    "SELECT * FROM Prodotto ORDER BY ID_Prodotto");
+            ArrayList<ProductBean> productsList = new ArrayList<>();
 
-            ArrayList<ProductBean> productsList = new ArrayList<ProductBean>();
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-
-                ProductBean product = new ProductBean();
-
-                product.setId(rs.getInt(1));
-                product.setName(rs.getString(2));
-                product.setDescription(rs.getString(3));
-                product.setPrice(rs.getDouble(4));
-                product.setQuantity(rs.getInt(5));
-                product.setSales(rs.getInt(6));
-                product.setImage(rs.getString(7));
-                product.setCategory(rs.getString(8));
-
-                productsList.add(product);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    ProductBean product = new ProductBean();
+                    product.setId(rs.getInt(1));
+                    product.setName(rs.getString(2));
+                    product.setDescription(rs.getString(3));
+                    product.setPrice(rs.getDouble(4));
+                    product.setQuantity(rs.getInt(5));
+                    product.setSales(rs.getInt(6));
+                    product.setImage(rs.getString(7));
+                    product.setCategory(rs.getString(8));
+                    productsList.add(product);
+                }
             }
-
             return productsList;
 
         } catch (SQLException e) {
@@ -143,32 +133,25 @@ public class ProductDAO {
     }
 
     public ArrayList<ProductBean> doRetrieveSales() {
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT * FROM Prodotto WHERE Sconto > 0")) {
 
-        try (Connection con = ConPool.getConnection()) {
-            PreparedStatement ps = con.prepareStatement(
-                    "SELECT * " +
-                            "FROM Prodotto " +
-                            "WHERE Sconto > 0");
+            ArrayList<ProductBean> productsList = new ArrayList<>();
 
-            ArrayList<ProductBean> productsList = new ArrayList<ProductBean>();
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-
-                ProductBean product = new ProductBean();
-
-                product.setId(rs.getInt(1));
-                product.setName(rs.getString(2));
-                product.setDescription(rs.getString(3));
-                product.setPrice(rs.getDouble(4));
-                product.setQuantity(rs.getInt(5));
-                product.setSales(rs.getInt(6));
-                product.setImage(rs.getString(7));
-                product.setCategory(rs.getString(8));
-
-                productsList.add(product);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    ProductBean product = new ProductBean();
+                    product.setId(rs.getInt(1));
+                    product.setName(rs.getString(2));
+                    product.setDescription(rs.getString(3));
+                    product.setPrice(rs.getDouble(4));
+                    product.setQuantity(rs.getInt(5));
+                    product.setSales(rs.getInt(6));
+                    product.setImage(rs.getString(7));
+                    product.setCategory(rs.getString(8));
+                    productsList.add(product);
+                }
             }
-
             return productsList;
 
         } catch (SQLException e) {
@@ -177,51 +160,38 @@ public class ProductDAO {
     }
 
     public ArrayList<ProductBean> doRetrieveByFilter(int minPrice, int maxPrice, String category) {
+        String sql;
+        if (category.equalsIgnoreCase("all")) {
+            sql = "SELECT * FROM Prodotto WHERE Prezzo > ? AND Prezzo < ?";
+        } else {
+            sql = "SELECT * FROM Prodotto WHERE Prezzo > ? AND Prezzo < ? AND Categoria = ?";
+        }
 
-        try (Connection con = ConPool.getConnection()) {
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
 
-            PreparedStatement ps;
-
-            if (category.equalsIgnoreCase("all")) {
-                ps = con.prepareStatement(
-                        "SELECT * " +
-                                "FROM Prodotto " +
-                                "WHERE Prezzo > ? AND Prezzo < ?");
-
-                ps.setInt(1, minPrice);
-                ps.setInt(2, maxPrice);
-            }
-
-            else {
-                ps = con.prepareStatement(
-                        "SELECT * " +
-                                "FROM Prodotto " +
-                                "WHERE Prezzo > ? AND Prezzo < ? AND Categoria = ?");
-
-                ps.setInt(1, minPrice);
-                ps.setInt(2, maxPrice);
+            ps.setInt(1, minPrice);
+            ps.setInt(2, maxPrice);
+            if (!category.equalsIgnoreCase("all")) {
                 ps.setString(3, category);
             }
 
-            ArrayList<ProductBean> productsList = new ArrayList<ProductBean>();
-            ResultSet rs = ps.executeQuery();
+            ArrayList<ProductBean> productsList = new ArrayList<>();
 
-            while (rs.next()) {
-
-                ProductBean product = new ProductBean();
-
-                product.setId(rs.getInt(1));
-                product.setName(rs.getString(2));
-                product.setDescription(rs.getString(3));
-                product.setPrice(rs.getDouble(4));
-                product.setQuantity(rs.getInt(5));
-                product.setSales(rs.getInt(6));
-                product.setImage(rs.getString(7));
-                product.setCategory(rs.getString(8));
-
-                productsList.add(product);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    ProductBean product = new ProductBean();
+                    product.setId(rs.getInt(1));
+                    product.setName(rs.getString(2));
+                    product.setDescription(rs.getString(3));
+                    product.setPrice(rs.getDouble(4));
+                    product.setQuantity(rs.getInt(5));
+                    product.setSales(rs.getInt(6));
+                    product.setImage(rs.getString(7));
+                    product.setCategory(rs.getString(8));
+                    productsList.add(product);
+                }
             }
-
             return productsList;
 
         } catch (SQLException e) {

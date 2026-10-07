@@ -7,12 +7,10 @@ import java.util.List;
 public class UserDAO {
 
     public void doSave(UserBean userBean) {
-
-        try (Connection con = ConPool.getConnection()) {
-
-            PreparedStatement ps = con.prepareStatement(
-                    "INSERT INTO Utente (Nome, Cognome, Data_Nascita, Email, Accesso, Telefono, Citta, Provincia, Codice_Postale, Indirizzo, Data_Registrazione, Stato, Amministratore) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)",
-                    Statement.RETURN_GENERATED_KEYS);
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement(
+                     "INSERT INTO Utente (Nome, Cognome, Data_Nascita, Email, Accesso, Telefono, Citta, Provincia, Codice_Postale, Indirizzo, Data_Registrazione, Stato, Amministratore) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                     Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, userBean.getName());
             ps.setString(2, userBean.getSurname());
@@ -32,10 +30,12 @@ public class UserDAO {
                 throw new RuntimeException("INSERT error.");
             }
 
-            ResultSet rs = ps.getGeneratedKeys();
-            rs.next();
-            int id = rs.getInt(1);
-            userBean.setId(id);
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    int id = rs.getInt(1);
+                    userBean.setId(id);
+                }
+            }
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -43,37 +43,31 @@ public class UserDAO {
     }
 
     public UserBean doRetrieveById(int id) {
-
-        try (Connection con = ConPool.getConnection()) {
-            PreparedStatement ps = con.prepareStatement(
-                    "SELECT * " +
-                            "FROM Utente " +
-                            "WHERE ID_Utente=?");
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT * FROM Utente WHERE ID_Utente=?")) {
 
             ps.setInt(1, id);
 
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                UserBean user = new UserBean();
-                user.setId(rs.getInt(1));
-                user.setName(rs.getString(2));
-                user.setSurname(rs.getString(3));
-                user.setBirthday(rs.getString(4));
-                user.setEmail(rs.getString(5));
-                user.setPassword(rs.getString(6));
-                user.setPhone(rs.getString(7));
-                user.setCity(rs.getString(8));
-                user.setProvince(rs.getString(9));
-                user.setPostalCode(rs.getString(10));
-                user.setAddress(rs.getString(11));
-                user.setRegister(rs.getString(12));
-                user.setState(rs.getString(13));
-                user.setAdmin(rs.getString(14));
-
-                return user;
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    UserBean user = new UserBean();
+                    user.setId(rs.getInt(1));
+                    user.setName(rs.getString(2));
+                    user.setSurname(rs.getString(3));
+                    user.setBirthday(rs.getString(4));
+                    user.setEmail(rs.getString(5));
+                    user.setPassword(rs.getString(6));
+                    user.setPhone(rs.getString(7));
+                    user.setCity(rs.getString(8));
+                    user.setProvince(rs.getString(9));
+                    user.setPostalCode(rs.getString(10));
+                    user.setAddress(rs.getString(11));
+                    user.setRegister(rs.getString(12));
+                    user.setState(rs.getString(13));
+                    user.setAdmin(rs.getString(14));
+                    return user;
+                }
             }
-
             return null;
 
         } catch (SQLException e) {
@@ -82,38 +76,32 @@ public class UserDAO {
     }
 
     public UserBean doRetrieveByEmailAndPassword(String email, String password) {
-
-        try (Connection con = ConPool.getConnection()) {
-            PreparedStatement ps = con.prepareStatement(
-                    "SELECT * " +
-                            "FROM Utente " +
-                            "WHERE Email=? AND Accesso=SHA1(?)");
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT * FROM Utente WHERE Email=? AND Accesso=SHA1(?)")) {
 
             ps.setString(1, email);
             ps.setString(2, password);
 
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                UserBean user = new UserBean();
-                user.setId(rs.getInt(1));
-                user.setName(rs.getString(2));
-                user.setSurname(rs.getString(3));
-                user.setBirthday(rs.getString(4));
-                user.setEmail(rs.getString(5));
-                user.setPassword(rs.getString(6));
-                user.setPhone(rs.getString(7));
-                user.setCity(rs.getString(8));
-                user.setProvince(rs.getString(9));
-                user.setPostalCode(rs.getString(10));
-                user.setAddress(rs.getString(11));
-                user.setRegister(rs.getString(12));
-                user.setState(rs.getString(13));
-                user.setAdmin(rs.getString(14));
-
-                return user;
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    UserBean user = new UserBean();
+                    user.setId(rs.getInt(1));
+                    user.setName(rs.getString(2));
+                    user.setSurname(rs.getString(3));
+                    user.setBirthday(rs.getString(4));
+                    user.setEmail(rs.getString(5));
+                    user.setPassword(rs.getString(6));
+                    user.setPhone(rs.getString(7));
+                    user.setCity(rs.getString(8));
+                    user.setProvince(rs.getString(9));
+                    user.setPostalCode(rs.getString(10));
+                    user.setAddress(rs.getString(11));
+                    user.setRegister(rs.getString(12));
+                    user.setState(rs.getString(13));
+                    user.setAdmin(rs.getString(14));
+                    return user;
+                }
             }
-
             return null;
 
         } catch (SQLException e) {
@@ -122,12 +110,12 @@ public class UserDAO {
     }
 
     public void doUpdate(UserBean utente) {
-        try (Connection con = ConPool.getConnection()) {
-            PreparedStatement ps = con.prepareStatement(
-                    "UPDATE Utente SET Nome = ?, Cognome = ?, Data_Nascita = ?, " +
-                            "Email = ?, Accesso = ?, Telefono = ?, Citta = ?, Provincia = ?, " +
-                            "Codice_Postale = ?, Indirizzo = ?, Stato = ?, Amministratore = ? " +
-                            "WHERE Id_Utente = ?");
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement(
+                     "UPDATE Utente SET Nome = ?, Cognome = ?, Data_Nascita = ?, " +
+                             "Email = ?, Accesso = ?, Telefono = ?, Citta = ?, Provincia = ?, " +
+                             "Codice_Postale = ?, Indirizzo = ?, Stato = ?, Amministratore = ? " +
+                             "WHERE Id_Utente = ?")) {
 
             ps.setString(1, utente.getName());
             ps.setString(2, utente.getSurname());
@@ -151,9 +139,8 @@ public class UserDAO {
     }
 
     public void doUpdateState(UserBean utente) {
-        try (Connection con = ConPool.getConnection()) {
-            PreparedStatement ps = con.prepareStatement(
-                    "UPDATE Utente SET Stato = ? WHERE Id_Utente = ?");
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement("UPDATE Utente SET Stato = ? WHERE Id_Utente = ?")) {
 
             ps.setString(1, utente.isActive());
             ps.setInt(2, utente.getId());
@@ -166,9 +153,8 @@ public class UserDAO {
     }
 
     public void doUpdateAdmin(UserBean utente) {
-        try (Connection con = ConPool.getConnection()) {
-            PreparedStatement ps = con.prepareStatement(
-                    "UPDATE Utente SET Amministratore = 'true' WHERE Id_Utente = ?");
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement("UPDATE Utente SET Amministratore = 'true' WHERE Id_Utente = ?")) {
 
             ps.setInt(1, utente.getId());
 
@@ -180,16 +166,14 @@ public class UserDAO {
     }
 
     public boolean isAlreadyRegistered(String email) {
-
-        try (Connection con = ConPool.getConnection()) {
-            PreparedStatement ps = con.prepareStatement(
-                    "SELECT Email FROM Utente WHERE Email=?");
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT Email FROM Utente WHERE Email=?")) {
 
             ps.setString(1, email);
 
-            ResultSet rs = ps.executeQuery();
-
-            return rs.next();
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -197,36 +181,31 @@ public class UserDAO {
     }
 
     public List<UserBean> doRetrieveAll() {
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT * FROM Utente ORDER BY ID_Utente")) {
 
-        try (Connection con = ConPool.getConnection()) {
-            PreparedStatement ps = con.prepareStatement(
-                    "SELECT * FROM Utente ORDER BY ID_Utente");
+            ArrayList<UserBean> usersList = new ArrayList<>();
 
-            ArrayList<UserBean> usersList = new ArrayList<UserBean>();
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-
-                UserBean user = new UserBean();
-
-                user.setId(rs.getInt(1));
-                user.setName(rs.getString(2));
-                user.setSurname(rs.getString(3));
-                user.setBirthday(rs.getString(4));
-                user.setEmail(rs.getString(5));
-                user.setPassword(rs.getString(6));
-                user.setPhone(rs.getString(7));
-                user.setCity(rs.getString(8));
-                user.setProvince(rs.getString(9));
-                user.setPostalCode(rs.getString(10));
-                user.setAddress(rs.getString(11));
-                user.setRegister(rs.getString(12));
-                user.setState(rs.getString(13));
-                user.setAdmin(rs.getString(14));
-
-                usersList.add(user);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    UserBean user = new UserBean();
+                    user.setId(rs.getInt(1));
+                    user.setName(rs.getString(2));
+                    user.setSurname(rs.getString(3));
+                    user.setBirthday(rs.getString(4));
+                    user.setEmail(rs.getString(5));
+                    user.setPassword(rs.getString(6));
+                    user.setPhone(rs.getString(7));
+                    user.setCity(rs.getString(8));
+                    user.setProvince(rs.getString(9));
+                    user.setPostalCode(rs.getString(10));
+                    user.setAddress(rs.getString(11));
+                    user.setRegister(rs.getString(12));
+                    user.setState(rs.getString(13));
+                    user.setAdmin(rs.getString(14));
+                    usersList.add(user);
+                }
             }
-
             return usersList;
 
         } catch (SQLException e) {
