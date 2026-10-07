@@ -248,20 +248,25 @@ class BusinessLogicTest {
     // ==========================================================
 
     @Test
-    @DisplayName("FINDING: ProductDAO.doUpdate contiene SQL Injection (concatenazione)")
-    void testDocumentSqlInjectionInProductDAO() throws Exception {
+    @DisplayName("REGRESSION: ProductDAO.doUpdate usa PreparedStatement (SQL Injection fixata)")
+    void testProductDAOUpdateUsesPreparedStatement() throws Exception {
         String source = new String(java.nio.file.Files.readAllBytes(
                 java.nio.file.Paths.get("src/main/java/Model/ProductDAO.java")));
 
-        boolean containsRawStatement =
-                source.contains("con.createStatement()") &&
-                        source.contains("UPDATE Prodotto SET Nome = '\" +");
+        // Verifica che NON usi più Statement (vulnerabile)
+        assertThat(source)
+                .as("ProductDAO.doUpdate NON deve usare con.createStatement() (SQL Injection)")
+                .doesNotContain("con.createStatement()");
 
-        assertThat(containsRawStatement)
-                .as("FINDING DI SICUREZZA: ProductDAO.doUpdate usa Statement con concatenazione. "
-                        + "Questo e SQL Injection (CWE-89, OWASP A03:2021). "
-                        + "Fix consigliato: usare PreparedStatement con parametri (?).")
-                .isTrue();
+        // Verifica che usi PreparedStatement (sicuro)
+        assertThat(source)
+                .as("ProductDAO.doUpdate deve usare PreparedStatement")
+                .contains("PreparedStatement");
+
+        // Verifica che usi placeholder parametrizzati (?)
+        assertThat(source)
+                .as("ProductDAO.doUpdate deve usare placeholder (?) invece di concatenazione")
+                .contains("UPDATE Prodotto SET Nome = ?");
     }
 
     @Test
