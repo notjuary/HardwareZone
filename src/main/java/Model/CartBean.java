@@ -1,8 +1,6 @@
 package Model;
 
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
-import java.util.ListIterator;
 
 public class CartBean {
 
@@ -15,43 +13,34 @@ public class CartBean {
     }
 
     public int getNumberObject() {
-
         return numberObject;
     }
 
     public void setNumberObject(int number) {
-
         this.numberObject = number;
     }
 
     public ArrayList<ProductCartBean> getCartList() {
-
         return cartList;
     }
 
     public void setCartList(ArrayList<ProductCartBean> cartList) {
         this.cartList = cartList;
-
-        for (ProductCartBean productCartBean: cartList)
+        for (ProductCartBean productCartBean : cartList)
             this.numberObject += productCartBean.getQuantity();
     }
 
     public void addProduct(int id, int quantity) {
-
         numberObject += quantity;
         boolean isOn = false;
         for (ProductCartBean product : cartList) {
-
             if (product.getId() == id) {
-
                 isOn = true;
                 int newQuantity = (product.getQuantity() + quantity);
                 product.setQuantity(newQuantity);
             }
         }
-
         if (!isOn) {
-
             ProductCartBean product = new ProductCartBean();
             product.setId(id);
             product.setQuantity(quantity);
@@ -59,28 +48,15 @@ public class CartBean {
         }
     }
 
+    // FIX: rimuove solo se l'id esiste, altrimenti non fa nulla
     public void removeProduct(int id) {
-
-        int position = 0;
-
-        for (ProductCartBean product : cartList) {
-            position++;
-
-            if(product.getId() == id) {
-                numberObject -= product.getQuantity();
-                break;
+        for (int i = 0; i < cartList.size(); i++) {
+            if (cartList.get(i).getId() == id) {
+                numberObject -= cartList.get(i).getQuantity();
+                cartList.remove(i);
+                return; // esci dopo aver rimosso l'elemento corretto
             }
         }
-
-        cartList.remove(position - 1);
-
-        /*
-        for (ProductCartBean product : cartList) {
-
-            if (product.getId() == id) {
-                this.numberObject -= product.getQuantity();
-                cartList.remove(product);
-            }
-        }*/
+        // se non trovato, non fare nulla (il carrello rimane intatto)
     }
 }

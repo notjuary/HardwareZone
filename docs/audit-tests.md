@@ -489,7 +489,7 @@ Validazione completa di tutti i campi del form di registrazione:
 | :---- | :------------------------------------------ |:--------------------|
 | 1     | `testMaxLessThanMinIsCorrected`             | Correzione max\<min |
 | 2     | `testFilterUsesCorrectDAO`                  | DAO corretto        |
-| 3     | `testDocumentFilterBoundaryBug`             | Bug `>` vs `>=`   |
+| 3     | `testDocumentFilterBoundaryBug`             | **FIXED** — filtro usa `>=` e `<=`   |
 | 4     | `testDocumentNumberFormatExceptionInFilter` | No try/catch        |
 | 5     | `testDocumentNullCategoryInFilter`          | NPE                 |
 | 6     | `testSearchIsCaseInsensitive`               | Case-insensitive    |
@@ -497,6 +497,8 @@ Validazione completa di tutti i campi del form di registrazione:
 | 8     | `testDocumentNullSearchQuery`               | NPE                 |
 | 9     | `testSearchReturnsJsonOutput`               | JSON                |
 | 10-18 | altri                                       | Vari                |
+
+**Finding risolti:** `testDocumentFilterBoundaryBug` — la query ora usa `Prezzo >= ?` e `Prezzo <= ?`.
 
 ### 7.3 `ProductViewTest.java` (22 test)
 
@@ -517,16 +519,17 @@ Validazione completa di tutti i campi del form di registrazione:
 ### 7.4 `CartManagementTest.java` (16 test)
 
 | **Categoria**  | **# Test** |
-| :------------- | :--------- |
-| AddToCart      | 7          |
-| RemoveFromCart | 4          |
-| CartBean       | 5          |
+| :------------- |:-----------|
+| AddToCart      | 7 FIXED    |
+| RemoveFromCart | 4 FIXED    |
+| CartBean       | 5 FIXED    |
 
-**Finding critici:**
+**Finding risolti:**
 
--  `testDocumentNegativeQuantityAcceptance` - Quantità negative
-- `testDocumentMissingReturnAfterSendError` - Bug logico
-
+- `testDocumentNegativeQuantityAcceptance` — **FIXED**: `AddToCart` ora valida `quantity > 0`
+-  `testDocumentMissingReturnAfterSendError` — **FIXED**: aggiunto `return;` dopo ogni `sendError`
+-  `testDocumentNumberFormatExceptionOnProductId` — **FIXED**: aggiunto try/catch su `Integer.parseInt`
+-  `testCartRemoveNonExistentBug` — **FIXED**: `CartBean.removeProduct` ora rimuove solo se l'ID esiste
 ---
 
 ## 8. A05:2021 — Security Misconfiguration
@@ -617,13 +620,23 @@ Coperti da `AuthenticationTest.java` — vedi sezione 4.5.
 
 ### 10.3 Finding documentati
 
-I test di audit hanno **scoperto 40+ finding**, tra cui:
+I test di audit hanno **scoperto 40+ finding**, di cui **5 risolti** durante l'ultimo ciclo di remediation.
 
-| **Categoria** | **# Finding** | **Esempi**                                          |
-|:--------------| :------------ | :-------------------------------------------------- |
-| **Critici**   | 12            | Privilege escalation, CSRF, PCI-DSS, race condition |
-| **Alti**      | 8             | SQL Injection, DoS, file upload                     |
-| **Medi**    | 20+           | NPE, bug logici, NumberFormatException              |
+| **Categoria** | **# Finding totali** | **# Risolti** | **# Aperti** | **Esempi** |
+|:--------------| :------------------- | :------------ | :----------- | :--------- |
+| **Critici**   | 12                   | 0             | 12           | Privilege escalation, CSRF, PCI-DSS, race condition |
+| **Alti**      | 8                    | 0             | 8            | SQL Injection, DoS, file upload |
+| **Medi**      | 20+                  | 5             | 15+          | NPE, bug logici, NumberFormatException |
+
+**Finding risolti in questa iterazione:**
+
+| # | Finding | File | Test |
+| :--- | :--- | :--- | :--- |
+| 1 | Validazione `quantity > 0` in AddToCart | `AddToCart.java` | `CartManagementTest.testDocumentNegativeQuantityAcceptance` |
+| 2 | `return;` dopo `sendError` | `AddToCart.java` | `CartManagementTest.testDocumentMissingReturnAfterSendError` |
+| 3 | Gestione `NumberFormatException` | `AddToCart.java` | `CartManagementTest.testDocumentNumberFormatExceptionOnProductId` |
+| 4 | `removeProduct` rimuoveva ID inesistente | `CartBean.java` | `CartManagementTest.testCartRemoveNonExistentBug` |
+| 5 | Filtro prezzi usava `>` e `<` | `ProductDAO.java` | `ProductCatalogTest.testDocumentFilterBoundaryBug` |
 
 ## 11. Dettaglio dei Finding
 
@@ -833,5 +846,68 @@ public void doUpdate(UserBean utente) {
     }
 }
 ```
+---
 
+### 11.5 Finding risolti — Riepilogo remediation
 
+I seguenti finding sono stati **corretti** e i test ora verificano la presenza del fix (non più la vulnerabilità).
+
+#### 11.5.1 A04 — Validazione `quantity` in `AddToCart`
+
+- **File:** `Controller/AddToCart.java`
+- **Test:** `CartManagementTest.testDocumentNegativeQuantityAcceptance`
+- **Fix applicato:**
+
+```text
+  boolean validQuantity = quantity > 0;
+  if (!validQuantity) {
+      response.sendError(400);
+      return;
+  }
+```
+- **Stato**: FIXED
+
+#### 11.5.2 A04 — `return;` dopo `sendError` in `AddToCart`
+- **File:** `Controller/AddToCart.java`
+- **Test:** `CartManagementTest.testDocumentMissingReturnAfterSendError`
+- **Fix applicato:** aggiunto return; dopo ogni response.sendError(400) per interrompere l'esecuzione.
+- **Stato**:  FIXED
+
+#### 11.5.3 A04 — Gestione `NumberFormatException` in `AddToCart`
+- **File:** `Controller/AddToCart.java`
+- **Test:** `CartManagementTest.testDocumentNumberFormatExceptionOnProductId`
+- **Fix applicato:**
+
+```text
+     try {
+        productId = Integer.parseInt(request.getParameter("productId"));
+     }catch (NumberFormatException e) {
+        response.sendError(400);
+    return;
+}
+```
+- **Stato**: FIXED
+
+#### 11.5.4 A04 — Bug `CartBean.removeProduct`
+- **File:** `Model/CartBean.java`
+- **Test:** `CartManagementTest.testCartRemoveNonExistentBug`
+- Fix applicato:
+
+```java
+public void removeProduct(int id) {
+ for (int i = 0; i < cartList.size(); i++) {
+  if (cartList.get(i).getId() == id) {
+   numberObject -= cartList.get(i).getQuantity();
+   cartList.remove(i);
+   return; // esci dopo aver rimosso l'elemento corretto
+  }
+ }
+}
+```
+- **Stato:**  FIXED
+
+#### 11.5.5 A04 — Boundary bug filtro prezzi
+- **File:** `Model/ProductDAO.java`
+- **Test:** `ProductCatalogTest.testDocumentFilterBoundaryBug`
+- **Fix applicato:** query SQL cambiata da Prezzo > ? a Prezzo >= ? e da Prezzo < ? a Prezzo <= ?.
+- **Stato:**  FIXED

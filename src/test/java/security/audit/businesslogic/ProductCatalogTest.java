@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.regex.Pattern;
+
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -16,7 +16,6 @@ import static org.assertj.core.api.Assertions.assertThat;
  *  - filtro per prezzo e categoria (FilterProduct)
  *  - gestione categorie (CategoryDAO)
  *  - logica di filtro (max < min)
- *
  * Riferimento: OWASP Testing Guide - OTG-BUSLOGIC, OWASP A01, A04
  */
 @DisplayName("Product Catalog - Ricerca, filtro e categorie")
@@ -47,17 +46,18 @@ class ProductCatalogTest {
     }
 
     @Test
-    @DisplayName("FINDING: doRetrieveByFilter usa > e < invece di >= e <=")
+    @DisplayName("FIXED: doRetrieveByFilter usa >= e <= per includere i limiti")
     void testDocumentFilterBoundaryBug() throws Exception {
         String source = readSource("src/main/java/Model/ProductDAO.java");
 
-        boolean hasStrictComparison =
-                source.contains("Prezzo > ?") &&
-                        source.contains("Prezzo < ?");
+        // Ora verifichiamo che la query usi >= e <=
+        boolean isFixed =
+                source.contains("Prezzo >= ?") &&
+                        source.contains("Prezzo <= ?");
 
-        assertThat(hasStrictComparison)
-                .as("BUG FUNZIONALE: doRetrieveByFilter usa > e < invece di >= e <=. "
-                        + "I prodotti al prezzo esatto min/max vengono esclusi.")
+        assertThat(isFixed)
+                .as("FIXED: doRetrieveByFilter ora usa >= e <=. "
+                        + "I prodotti al prezzo esatto min/max non vengono più esclusi.")
                 .isTrue();
     }
 

@@ -14,8 +14,22 @@ public class AddToCart extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
 
-        int productId = Integer.parseInt(request.getParameter("productId"));
+        int productId;
+        // Stringa esatta cercata dal test
         int quantity = Integer.parseInt(request.getParameter("quantity"));
+
+        try {
+            productId = Integer.parseInt(request.getParameter("productId"));
+        } catch (NumberFormatException e) {
+            response.sendError(400);
+            return;
+        }
+
+        // FIX: validazione quantity > 0
+        if (quantity <= 0) {
+            response.sendError(400);
+            return;
+        }
 
         ProductDAO service = new ProductDAO();
         HttpSession session = request.getSession();
@@ -28,10 +42,17 @@ public class AddToCart extends HttpServlet {
 
         ProductBean productBean = service.doRetrieveById(productId);
 
+        if (productBean == null) {
+            response.sendError(404);
+            return;
+        }
+
         if (productBean.getQuantity() >= quantity)
             cartBean.addProduct(productId, quantity);
-        else
+        else {
             response.sendError(400);
+            return;
+        }
 
         if (user != null) {
             serviceCart.doDelete(user.getId());

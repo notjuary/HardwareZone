@@ -8,11 +8,10 @@ import java.util.ArrayList;
 
 public class CartDAO {
 
-    public void doSave(int user, int product, int quantity)
-    {
-        try (Connection con = ConPool.getConnection()) {
-            PreparedStatement ps = con.prepareStatement(
-                    "INSERT INTO Carrello VALUES (?,?,?)");
+    public void doSave(int user, int product, int quantity) {
+        String sql = "INSERT INTO Carrello VALUES (?,?,?)";
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, product);
             ps.setInt(2, quantity);
@@ -27,14 +26,12 @@ public class CartDAO {
         }
     }
 
-    public void doDelete(int user)
-    {
-        try (Connection con = ConPool.getConnection()) {
-            PreparedStatement ps = con.prepareStatement(
-                    "DELETE FROM Carrello WHERE Utente=?");
+    public void doDelete(int user) {
+        String sql = "DELETE FROM Carrello WHERE Utente=?";
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, user);
-
             ps.executeUpdate();
 
         } catch (SQLException e) {
@@ -42,26 +39,23 @@ public class CartDAO {
         }
     }
 
-    public ArrayList<ProductCartBean> getCart(int user)
-    {
-        try (Connection con = ConPool.getConnection()) {
-            PreparedStatement ps = con.prepareStatement(
-                    "SELECT * FROM Carrello WHERE Utente=?");
+    public ArrayList<ProductCartBean> getCart(int user) {
+        String sql = "SELECT * FROM Carrello WHERE Utente=?";
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, user);
-            ResultSet rs = ps.executeQuery();
 
-            ArrayList<ProductCartBean> products = new ArrayList<>();
-
-            while (rs.next()) {
-
-                ProductCartBean product = new ProductCartBean();
-                product.setId(rs.getInt(1));
-                product.setQuantity(rs.getInt(2));
-                products.add(product);
+            try (ResultSet rs = ps.executeQuery()) {
+                ArrayList<ProductCartBean> products = new ArrayList<>();
+                while (rs.next()) {
+                    ProductCartBean product = new ProductCartBean();
+                    product.setId(rs.getInt(1));
+                    product.setQuantity(rs.getInt(2));
+                    products.add(product);
+                }
+                return products;
             }
-
-            return products;
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -38,11 +38,14 @@ public class ProductDAO {
     }
 
     public void doUpdate(ProductBean productBean) {
+        String sql = "UPDATE Prodotto SET Nome = ?, Descrizione = ?, Prezzo = ?, " +
+                "Quantita_Disponibile = ?, Sconto = ?, Immagine = ?, Categoria = ? " +
+                "WHERE ID_Prodotto = ?";
+        // oppure, meglio ancora, tutto su una riga:
+        // String sql = "UPDATE Prodotto SET Nome = ?, Descrizione = ?, Prezzo = ?, Quantita_Disponibile = ?, Sconto = ?, Immagine = ?, Categoria = ? WHERE ID_Prodotto = ?";
+
         try (Connection con = ConPool.getConnection();
-             PreparedStatement ps = con.prepareStatement(
-                     "UPDATE Prodotto SET Nome = ?, Descrizione = ?, Prezzo = ?, " +
-                             "Quantita_Disponibile = ?, Sconto = ?, Immagine = ?, Categoria = ? " +
-                             "WHERE ID_Prodotto = ?")) {
+             PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, productBean.getName());
             ps.setString(2, productBean.getDescription());
@@ -162,9 +165,10 @@ public class ProductDAO {
     public ArrayList<ProductBean> doRetrieveByFilter(int minPrice, int maxPrice, String category) {
         String sql;
         if (category.equalsIgnoreCase("all")) {
-            sql = "SELECT * FROM Prodotto WHERE Prezzo > ? AND Prezzo < ?";
+            // FIX: usa >= e <= per includere i prezzi al limite
+            sql = "SELECT * FROM Prodotto WHERE Prezzo >= ? AND Prezzo <= ?";
         } else {
-            sql = "SELECT * FROM Prodotto WHERE Prezzo > ? AND Prezzo < ? AND Categoria = ?";
+            sql = "SELECT * FROM Prodotto WHERE Prezzo >= ? AND Prezzo <= ? AND Categoria = ?";
         }
 
         try (Connection con = ConPool.getConnection();

@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Test di sicurezza per la gestione del carrello.
  * Verifica AddToCart e RemoveFromCart.
- *
+
  * Riferimento: OWASP Testing Guide - OTG-BUSLOGIC, OWASP A04:2021
  */
 @DisplayName("Cart Management - AddToCart e RemoveFromCart")
@@ -32,38 +32,34 @@ class CartManagementTest {
     // ==========================================================
 
     @Test
-    @DisplayName("FINDING: AddToCart non gestisce NumberFormatException su productId")
+    @DisplayName("FIXED: AddToCart gestisce NumberFormatException su productId")
     void testDocumentNumberFormatExceptionOnProductId() throws Exception {
         String source = readSource("src/main/java/Controller/AddToCart.java");
 
-        boolean unsafe =
+        // Ora verifichiamo che il parsing sia protetto da try/catch
+        boolean isFixed =
                 source.contains("Integer.parseInt(request.getParameter(\"productId\"))") &&
-                        !source.contains("try {");
+                        source.contains("catch (NumberFormatException");
 
-        assertThat(unsafe)
-                .as("FINDING: AddToCart chiama Integer.parseInt senza try/catch. "
-                        + "Se un utente invia 'productId=abc', si verifica "
-                        + "NumberFormatException (CWE-20, DoS).")
+        assertThat(isFixed)
+                .as("FIXED: AddToCart ora gestisce NumberFormatException con try/catch. "
+                        + "La vulnerabilità CWE-20 è stata risolta.")
                 .isTrue();
     }
 
     @Test
-    @DisplayName("FINDING CRITICO: AddToCart non gestisce quantity negativa")
+    @DisplayName("FIXED: AddToCart valida quantity positiva")
     void testDocumentNegativeQuantityAcceptance() throws Exception {
         String source = readSource("src/main/java/Controller/AddToCart.java");
 
-        boolean noValidation =
+        // Ora verifichiamo che ci sia un controllo su quantity > 0
+        boolean isFixed =
                 source.contains("int quantity = Integer.parseInt(request.getParameter(\"quantity\"))") &&
-                        !source.contains("quantity > 0") &&
-                        !source.contains("quantity >= 0");
+                        (source.contains("quantity > 0") || source.contains("quantity >= 0"));
 
-        assertThat(noValidation)
-                .as("FINDING CRITICO: AddToCart accetta quantita negative. "
-                        + "Un utente puo inviare 'quantity=-100' e il carrello "
-                        + "sottrarra 100 unita (o passera il controllo "
-                        + "'productBean.getQuantity() >= quantity' sempre vero). "
-                        + "CWE-20: Improper Input Validation, OWASP A04:2021. "
-                        + "Fix: verificare che quantity > 0 prima di aggiungere.")
+        assertThat(isFixed)
+                .as("FIXED: AddToCart ora valida che quantity sia positiva. "
+                        + "La vulnerabilità CWE-20 è stata risolta.")
                 .isTrue();
     }
 
@@ -85,20 +81,17 @@ class CartManagementTest {
     }
 
     @Test
-    @DisplayName("FINDING CRITICO: AddToCart usa sendError(400) senza return")
+    @DisplayName("FIXED: AddToCart esegue return dopo sendError")
     void testDocumentMissingReturnAfterSendError() throws Exception {
         String source = readSource("src/main/java/Controller/AddToCart.java");
 
-        // Dopo response.sendError(400) non c'è un return -> l'esecuzione continua
-        boolean noReturn =
+        boolean isFixed =
                 source.contains("response.sendError(400)") &&
-                        !source.contains("return;");
+                        source.contains("return;");
 
-        assertThat(noReturn)
-                .as("FINDING: AddToCart chiama response.sendError(400) ma non esegue "
-                        + "'return;'. L'esecuzione prosegue e il codice tenta di "
-                        + "salvare il carrello anche se la quantita era insufficiente. "
-                        + "Fix: aggiungere 'return;' dopo sendError.")
+        assertThat(isFixed)
+                .as("FIXED: AddToCart ora esegue 'return;' dopo sendError, "
+                        + "impedendo l'esecuzione del codice successivo.")
                 .isTrue();
     }
 
@@ -199,17 +192,17 @@ class CartManagementTest {
     // ==========================================================
 
     @Test
-    @DisplayName("CartBean: rimuovere un prodotto inesistente causa bug (documentato)")
+    @DisplayName("FIXED: CartBean.removeProduct non rimuove elementi se l'id non esiste")
     void testCartRemoveNonExistentBug() {
         cart.addProduct(1, 3);
         cart.addProduct(2, 5);
 
-        // BUG: removeProduct rimuove l'ultimo elemento se l'id non esiste
+        // Ora il carrello deve rimanere intatto
         cart.removeProduct(999);
 
         assertThat(cart.getCartList())
-                .as("BUG: RemoveFromCart con id inesistente rimuove un prodotto non richiesto")
-                .hasSize(1);
+                .as("FIXED: RemoveFromCart con id inesistente non rimuove più un prodotto non richiesto.")
+                .hasSize(2); // Prima era 1 (bug), ora 2 (corretto)
     }
 
     @Test
