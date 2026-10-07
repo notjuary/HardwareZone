@@ -75,62 +75,59 @@ class DaoIntegrationTest {
     // ==========================================================
 
     @Test
-    @DisplayName("FINDING: UserDAO.doUpdate usa Statement con concatenazione (SQL Injection)")
-    void testFindingSqlInjectionInUserDAO() throws Exception {
+    @DisplayName("REGRESSION: UserDAO.doUpdate usa PreparedStatement (SQL Injection fixata)")
+    void testUserDAOUpdateUsesPreparedStatement() throws Exception {
         String source = readSource("src/main/java/Model/UserDAO.java");
 
-        boolean hasRawStatement =
-                source.contains("con.createStatement()") &&
-                        source.contains("UPDATE Utente SET Nome = '\" +");
+        // Verifica che NON usi più Statement
+        assertThat(source)
+                .as("UserDAO.doUpdate deve usare PreparedStatement")
+                .doesNotContain("con.createStatement()");
 
-        assertThat(hasRawStatement)
-                .as("FINDING: UserDAO.doUpdate usa Statement con concatenazione di stringhe. "
-                        + "SQL Injection (CWE-89, OWASP A03:2021). "
-                        + "Fix: sostituire con PreparedStatement parametrizzato (?).")
-                .isTrue();
+        // Verifica che usi PreparedStatement
+        assertThat(source)
+                .as("UserDAO deve usare PreparedStatement")
+                .contains("PreparedStatement");
     }
 
     @Test
-    @DisplayName("FINDING: UserDAO.doUpdateState usa Statement con concatenazione (SQL Injection)")
-    void testFindingSqlInjectionInUserDAOUpdateState() throws Exception {
+    @DisplayName("REGRESSION: UserDAO.doUpdateState usa PreparedStatement")
+    void testUserDAOUpdateStateUsesPreparedStatement() throws Exception {
         String source = readSource("src/main/java/Model/UserDAO.java");
 
-        boolean hasRawStatement =
-                source.contains("UPDATE Utente SET Stato = '\" +");
+        assertThat(source)
+                .as("UserDAO.doUpdateState non deve usare concatenazione")
+                .doesNotContain("UPDATE Utente SET Stato = '\" +");
+    }
+    @Test
+    @DisplayName("REGRESSION: UserDAO.doUpdateAdmin usa PreparedStatement")
+    void testUserDAOUpdateAdminUsesPreparedStatement() throws Exception {
+        String source = readSource("src/main/java/Model/UserDAO.java");
 
-        assertThat(hasRawStatement)
-                .as("FINDING: UserDAO.doUpdateState usa concatenazione di stringhe. "
-                        + "SQL Injection (CWE-89). Fix: PreparedStatement.")
-                .isTrue();
+        assertThat(source)
+                .as("UserDAO.doUpdateAdmin non deve usare concatenazione")
+                .doesNotContain("UPDATE Utente SET Amministratore = 'true' WHERE Id_Utente = \" +");
     }
 
     @Test
-    @DisplayName("FINDING: UserDAO.doUpdateAdmin usa Statement con concatenazione (SQL Injection)")
-    void testFindingSqlInjectionInUserDAOUpdateAdmin() throws Exception {
-        String source = readSource("src/main/java/Model/UserDAO.java");
-
-        boolean hasRawStatement =
-                source.contains("UPDATE Utente SET Amministratore = 'true' WHERE Id_Utente = \" +");
-
-        assertThat(hasRawStatement)
-                .as("FINDING: UserDAO.doUpdateAdmin concatena direttamente l'id. "
-                        + "SQL Injection (CWE-89). Fix: PreparedStatement.")
-                .isTrue();
-    }
-
-    @Test
-    @DisplayName("FINDING: ProductDAO.doUpdate usa Statement con concatenazione (SQL Injection)")
-    void testFindingSqlInjectionInProductDAO() throws Exception {
+    @DisplayName("REGRESSION: ProductDAO.doUpdate usa PreparedStatement (SQL Injection fixata)")
+    void testProductDAOUpdateUsesPreparedStatement() throws Exception {
         String source = readSource("src/main/java/Model/ProductDAO.java");
 
-        boolean hasRawStatement =
-                source.contains("con.createStatement()") &&
-                        source.contains("UPDATE Prodotto SET Nome = '\" +");
+        // Verifica che NON usi più Statement (vulnerabile)
+        assertThat(source)
+                .as("ProductDAO.doUpdate NON deve usare con.createStatement() (SQL Injection)")
+                .doesNotContain("con.createStatement()");
 
-        assertThat(hasRawStatement)
-                .as("FINDING: ProductDAO.doUpdate usa concatenazione. "
-                        + "SQL Injection (CWE-89). Fix: PreparedStatement.")
-                .isTrue();
+        // Verifica che usi PreparedStatement (sicuro)
+        assertThat(source)
+                .as("ProductDAO.doUpdate deve usare PreparedStatement")
+                .contains("PreparedStatement");
+
+        // Verifica che usi placeholder parametrizzati (?)
+        assertThat(source)
+                .as("ProductDAO.doUpdate deve usare placeholder (?) invece di concatenazione")
+                .contains("UPDATE Prodotto SET Nome = ?");
     }
 
     // ==========================================================

@@ -543,14 +543,14 @@ Validazione completa di tutti i campi del form di registrazione:
 | 2     | `testOrderProductDAO_UsesPreparedStatement` | OrderProductDAO OK |
 | 3     | `testCartDAO_UsesPreparedStatement`         | CartDAO OK         |
 
-**Finding SQL Injection:**
+****Regression test SQL Injection:****
 
-| **#** | **Metodo**                                    | **Finding**             |
-| :---- | :-------------------------------------------- |:------------------------|
-| 4     | `testFindingSqlInjectionInUserDAO`            | `UserDAO.doUpdate`      |
-| 5     | `testFindingSqlInjectionInUserDAOUpdateState` | `doUpdateState`         |
-| 6     | `testFindingSqlInjectionInUserDAOUpdateAdmin` | `doUpdateAdmin`         |
-| 7     | `testFindingSqlInjectionInProductDAO`         | `ProductDAO.doUpdate` |
+| **#** | **Metodo**                                          | **Finding**                  |
+| :---- |:----------------------------------------------------|:-----------------------------|
+| 4     | `testUserDAOUpdateUsesPreparedStatement`            | `UserDAO.doUpdate` fixato    |
+| 5     | `testUserDAOUpdateStateUsesPreparedStatement`       | `doUpdateState`    fixato    |
+| 6     | `testUserDAOUpdateAdminUsesPreparedStatement`       | `doUpdateAdmin`    fixato    |
+| 7     | `testProductDAOUpdateUsesPreparedStatement`         | `ProductDAO.doUpdate` fixato |
 
 **Schema DB:**
 

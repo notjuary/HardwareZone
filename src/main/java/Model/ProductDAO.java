@@ -35,16 +35,23 @@ public class ProductDAO {
         }
     }
 
-    public void doUpdate(ProductBean productBean)
-    {
+    public void doUpdate(ProductBean productBean) {
         try (Connection con = ConPool.getConnection()) {
+            PreparedStatement ps = con.prepareStatement(
+                    "UPDATE Prodotto SET Nome = ?, Descrizione = ?, Prezzo = ?, " +
+                            "Quantita_Disponibile = ?, Sconto = ?, Immagine = ?, Categoria = ? " +
+                            "WHERE ID_Prodotto = ?");
 
-            Statement st = con.createStatement();
-            String query = "UPDATE Prodotto SET Nome = '" + productBean.getName() + "', Descrizione = '" + productBean.getDescription() + "', Prezzo = '" + productBean.getPrice() + "', Quantita_Disponibile = '" + productBean.getQuantity() + "', Sconto = '" + productBean.getSales() + "', Immagine = '" + productBean.getImage() +  "', Categoria = '" + productBean.getCategory() +
-                    "'WHERE ID_Prodotto = " + productBean.getId();
-            st.executeUpdate(query);
+            ps.setString(1, productBean.getName());
+            ps.setString(2, productBean.getDescription());
+            ps.setDouble(3, productBean.getPrice());
+            ps.setInt(4, productBean.getQuantity());
+            ps.setInt(5, productBean.getSales());
+            ps.setString(6, productBean.getImage());
+            ps.setString(7, productBean.getCategory());
+            ps.setInt(8, productBean.getId());
 
-            st.executeUpdate(query);
+            ps.executeUpdate();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -121,39 +121,58 @@ public class UserDAO {
         }
     }
 
-    public void doUpdate(UserBean utente)
-    {
+    public void doUpdate(UserBean utente) {
         try (Connection con = ConPool.getConnection()) {
+            PreparedStatement ps = con.prepareStatement(
+                    "UPDATE Utente SET Nome = ?, Cognome = ?, Data_Nascita = ?, " +
+                            "Email = ?, Accesso = ?, Telefono = ?, Citta = ?, Provincia = ?, " +
+                            "Codice_Postale = ?, Indirizzo = ?, Stato = ?, Amministratore = ? " +
+                            "WHERE Id_Utente = ?");
 
-            Statement st = con.createStatement();
-            String query = "UPDATE Utente SET Nome = '" + utente.getName() + "', Cognome = '" + utente.getSurname() + "', Data_Nascita = '" + utente.getBirthday() + "', Email = '" + utente.getEmail() + "', Accesso = '" + utente.getPassword() + "', Telefono = '" + utente.getPhone() +  "', Citta = '" + utente.getCity() + "', Provincia = '" + utente.getProvince() + "', Codice_Postale = '" + utente.getPostalCode() + "', Indirizzo = '" + utente.getAddress() + "', Stato = '" + utente.isActive() + "', Amministratore = '" + utente.isAdmin() + "' WHERE Id_Utente = " + utente.getId();
-            st.executeUpdate(query);
+            ps.setString(1, utente.getName());
+            ps.setString(2, utente.getSurname());
+            ps.setString(3, utente.getBirthday());
+            ps.setString(4, utente.getEmail());
+            ps.setString(5, utente.getPassword());
+            ps.setString(6, utente.getPhone());
+            ps.setString(7, utente.getCity());
+            ps.setString(8, utente.getProvince());
+            ps.setString(9, utente.getPostalCode());
+            ps.setString(10, utente.getAddress());
+            ps.setString(11, utente.isActive());
+            ps.setString(12, utente.isAdmin());
+            ps.setInt(13, utente.getId());
+
+            ps.executeUpdate();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void doUpdateState(UserBean utente)
-    {
+    public void doUpdateState(UserBean utente) {
         try (Connection con = ConPool.getConnection()) {
+            PreparedStatement ps = con.prepareStatement(
+                    "UPDATE Utente SET Stato = ? WHERE Id_Utente = ?");
 
-            Statement st = con.createStatement();
-            String query = "UPDATE Utente SET Stato = '" + utente.isActive() + "' WHERE Id_Utente = " + utente.getId();
-            st.executeUpdate(query);
+            ps.setString(1, utente.isActive());
+            ps.setInt(2, utente.getId());
+
+            ps.executeUpdate();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void doUpdateAdmin(UserBean utente)
-    {
+    public void doUpdateAdmin(UserBean utente) {
         try (Connection con = ConPool.getConnection()) {
+            PreparedStatement ps = con.prepareStatement(
+                    "UPDATE Utente SET Amministratore = 'true' WHERE Id_Utente = ?");
 
-            Statement st = con.createStatement();
-            String query = "UPDATE Utente SET Amministratore = 'true' WHERE Id_Utente = " + utente.getId();
-            st.executeUpdate(query);
+            ps.setInt(1, utente.getId());
+
+            ps.executeUpdate();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
