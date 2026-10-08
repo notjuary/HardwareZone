@@ -8,6 +8,7 @@ import jakarta.servlet.annotation.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,7 +27,7 @@ public class AddProduct extends HttpServlet {
 
         if (user.isAdmin().equalsIgnoreCase("true")) {
             CategoryDAO service = new CategoryDAO();
-            ArrayList<CategoryBean> categoryList = service.doRetrieveAll();
+            List<CategoryBean> categoryList = service.doRetrieveAll();
 
             request.setAttribute("categories", categoryList);
 
@@ -102,7 +103,7 @@ public class AddProduct extends HttpServlet {
                 ProductBean product = new ProductBean();
 
                 CategoryDAO serviceCategory = new CategoryDAO();
-                ArrayList<CategoryBean> categoryList = serviceCategory.doRetrieveAll();
+                List<CategoryBean> categoryList = serviceCategory.doRetrieveAll();
 
                 boolean categoryExist = false;
                 for (CategoryBean categorySaved : categoryList) {
@@ -125,7 +126,7 @@ public class AddProduct extends HttpServlet {
 
                 service.doSave(product);
 
-                ArrayList<CategoryBean> listCategories = serviceCategory.doRetrieveAll();
+                List<CategoryBean> listCategories = serviceCategory.doRetrieveAll();
 
                 request.setAttribute("categories", listCategories);
 

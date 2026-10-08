@@ -2,7 +2,7 @@ package security.functional.daointegration;
 
 import Model.OrderBean;
 import Model.OrderDAO;
-import Model.OrderProductBean;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -75,7 +75,7 @@ class OrderDAOFunctionalTest extends BaseFunctionalTest {
         dao.doSave(createOrder(1, 100.00));
         dao.doSave(createOrder(1, 200.00));
 
-        ArrayList<OrderBean> orders = dao.doRetrieveAll();
+        List<OrderBean> orders = dao.doRetrieveAll();
 
         assertThat(orders).hasSize(2);
     }

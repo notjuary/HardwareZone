@@ -2,6 +2,7 @@ package Model;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class CategoryDAO {
 
@@ -23,7 +24,7 @@ public class CategoryDAO {
         }
     }
 
-    public ArrayList<CategoryBean> doRetrieveAll() {
+    public List<CategoryBean> doRetrieveAll() {
         String sql = SELECT + "Nome_Categoria FROM Categoria ORDER BY Nome_Categoria";
         try (Connection con = ConPool.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {

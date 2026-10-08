@@ -7,6 +7,7 @@ import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet(name = "productInfoServlet", value = "/product-info-servlet")
 public class ProductInfo extends HttpServlet {
@@ -25,7 +26,7 @@ public class ProductInfo extends HttpServlet {
             ProductBean product = service.doRetrieveById(id);
 
             CategoryDAO serviceCategory = new CategoryDAO();
-            ArrayList<CategoryBean> listCategories = serviceCategory.doRetrieveAll();
+            List<CategoryBean> listCategories = serviceCategory.doRetrieveAll();
 
             request.setAttribute("productJSP", product);
             request.setAttribute("categories", listCategories);

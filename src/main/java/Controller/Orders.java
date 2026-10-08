@@ -7,6 +7,7 @@ import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet(name = "showOrderUserServlet", value = "/show-order-user-servlet")
 public class Orders extends HttpServlet {
@@ -20,7 +21,7 @@ public class Orders extends HttpServlet {
         if (user.isAdmin().equalsIgnoreCase("false")) {
 
             OrderDAO serviceOrder = new OrderDAO();
-            ArrayList<OrderBean> orders = serviceOrder.doRetrieveById(user.getId());
+            List<OrderBean> orders = serviceOrder.doRetrieveById(user.getId());
 
             request.setAttribute("orders", orders);
 
@@ -30,7 +31,7 @@ public class Orders extends HttpServlet {
 
         else if (user.isAdmin().equalsIgnoreCase("true")) {
             OrderDAO serviceOrder = new OrderDAO();
-            ArrayList<OrderBean> orders = serviceOrder.doRetrieveAll();
+            List<OrderBean> orders = serviceOrder.doRetrieveAll();
 
             request.setAttribute("orders", orders);
 

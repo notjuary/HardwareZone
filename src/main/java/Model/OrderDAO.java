@@ -2,6 +2,7 @@ package Model;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class OrderDAO {
 
@@ -34,7 +35,7 @@ public class OrderDAO {
         }
     }
 
-    public ArrayList<OrderBean> doRetrieveById(int id) {
+    public List<OrderBean> doRetrieveById(int id) {
         String sql = SELECT + COLUMNS + " FROM Ordine WHERE Utente=?";
         try (Connection con = ConPool.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -74,12 +75,12 @@ public class OrderDAO {
         }
     }
 
-    public ArrayList<OrderBean> doRetrieveAll() {
+    public List<OrderBean> doRetrieveAll() {
         String sql = SELECT + COLUMNS + " FROM Ordine";
         try (Connection con = ConPool.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ArrayList<OrderBean> orders = new ArrayList<>();
+            List<OrderBean> orders = new ArrayList<>();
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {

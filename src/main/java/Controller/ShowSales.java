@@ -10,6 +10,7 @@ import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet(name = "showSalesServlet", value = "/show-sales-servlet")
 public class ShowSales extends HttpServlet {
@@ -19,7 +20,7 @@ public class ShowSales extends HttpServlet {
         response.setContentType("text/html");
 
         CategoryDAO serviceCategory = new CategoryDAO();
-        ArrayList<CategoryBean> listCategories = serviceCategory.doRetrieveAll();
+        List<CategoryBean> listCategories = serviceCategory.doRetrieveAll();
 
         ProductDAO service = new ProductDAO();
         ArrayList<ProductBean> listProducts = service.doRetrieveSales();

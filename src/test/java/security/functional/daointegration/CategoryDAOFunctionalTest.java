@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import security.functional.BaseFunctionalTest;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -30,7 +31,7 @@ class CategoryDAOFunctionalTest extends BaseFunctionalTest {
     void testDoSave() {
         dao.doSave("CPU");
 
-        ArrayList<CategoryBean> categories = dao.doRetrieveAll();
+        List<CategoryBean> categories = dao.doRetrieveAll();
         assertThat(categories).hasSize(1);
         assertThat(categories.get(0).getNome()).isEqualTo("CPU");
     }
@@ -42,7 +43,7 @@ class CategoryDAOFunctionalTest extends BaseFunctionalTest {
         dao.doSave("CPU");
         dao.doSave("RAM");
 
-        ArrayList<CategoryBean> categories = dao.doRetrieveAll();
+        List<CategoryBean> categories = dao.doRetrieveAll();
 
         assertThat(categories).hasSize(3);
         assertThat(categories.get(0).getNome()).isEqualTo("CPU");

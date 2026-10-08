@@ -7,6 +7,7 @@ import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet(name = "orderUserInfoServlet", value = "/order-user-info-servlet")
 public class OrderInfo extends HttpServlet {
@@ -46,7 +47,7 @@ public class OrderInfo extends HttpServlet {
         else {
 
             OrderDAO serviceOrder = new OrderDAO();
-            ArrayList<OrderBean> orderBean = serviceOrder.doRetrieveById(user.getId());
+            List<OrderBean> orderBean = serviceOrder.doRetrieveById(user.getId());
 
             for (OrderBean order : orderBean) {
 
