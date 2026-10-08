@@ -2,54 +2,47 @@ package Controller;
 
 import Model.ProductBean;
 import Model.ProductDAO;
-import Model.UserBean;
-import Model.UserDAO;
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 @WebServlet(name = "productsHomepageServlet", value = "/products-homepage-servlet")
 public class ProductsHomepage extends HttpServlet {
 
+    // FIX: Random come campo static final, riutilizzato tra le chiamate
+    private static final Random RANDOM = new Random();
+    private static final int HOMEPAGE_SIZE = 12;
+
+    @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         response.setContentType("text/html");
 
-        ArrayList<ProductBean> listProduct = new ArrayList<ProductBean>();
         ProductDAO service = new ProductDAO();
+        ArrayList<ProductBean> allProducts = service.doRetrieveAll();
 
-        int max = service.doRetrieveAll().size();
-        Random rand = new Random();
-        boolean in;
-
-        while (listProduct.size() != 12) {
-            in = false;
-            int random = rand.nextInt(max) + 1;
-
-            for (ProductBean product: listProduct) {
-
-                if (product.getId() == random) {
-                    in = true;
-                    break;
-                }
-            }
-
-            if (!in)
-                listProduct.add(service.doRetrieveById(random));
+        // FIX: shuffle + subList evita loop infinito e IllegalArgumentException su DB vuoto
+        List<ProductBean> listProduct;
+        if (allProducts.isEmpty()) {
+            listProduct = Collections.emptyList();
+        } else {
+            Collections.shuffle(allProducts, RANDOM);
+            int target = Math.min(HOMEPAGE_SIZE, allProducts.size());
+            listProduct = allProducts.subList(0, target);
         }
 
         JSONArray ja = new JSONArray();
-        for (ProductBean product: listProduct) {
+        for (ProductBean product : listProduct) {
             JSONObject jo = new JSONObject();
             jo.put("id", product.getId());
             jo.put("name", product.getName());

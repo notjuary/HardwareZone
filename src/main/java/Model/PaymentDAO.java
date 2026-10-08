@@ -6,11 +6,10 @@ import java.sql.SQLException;
 
 public class PaymentDAO {
 
-    public void doSave(PaymentBean payment)
-    {
-        try (Connection con = ConPool.getConnection()) {
-            PreparedStatement ps = con.prepareStatement(
-                    "INSERT INTO Pagamento (Ordine, Data_Pagamento, Numero_Carta, CVV, Scadenza, Titolare_Carta) VALUES (?,?,?,?,?,?)");
+    public void doSave(PaymentBean payment) {
+        String sql = "INSERT INTO Pagamento (Ordine, Data_Pagamento, Numero_Carta, CVV, Scadenza, Titolare_Carta) VALUES (?,?,?,?,?,?)";
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, payment.getOrder());
             ps.setString(2, payment.getDatePayment());

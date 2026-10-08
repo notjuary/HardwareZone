@@ -2,12 +2,14 @@ package security.functional.daointegration;
 
 import Model.OrderBean;
 import Model.OrderDAO;
+import Model.OrderProductBean;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import security.functional.BaseFunctionalTest;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -51,9 +53,9 @@ class OrderDAOFunctionalTest extends BaseFunctionalTest {
         dao.doSave(createOrder(1, 100.00));
         dao.doSave(createOrder(1, 200.00));
 
-        ArrayList<OrderBean> orders = dao.doRetrieveById(1);
+        List<OrderBean> retrieved = dao.doRetrieveById(1);
 
-        assertThat(orders).hasSize(2);
+        assertThat(retrieved).hasSize(2);
     }
 
     @Test

@@ -201,72 +201,61 @@ class ProductViewTest {
     // ==========================================================
 
     @Test
-    @DisplayName("FINDING CRITICO: ProductsHomepage ha loop potenzialmente INFINITO")
+    @DisplayName("FIXED: ProductsHomepage non ha più loop infinito")
     void testDocumentInfiniteLoopInProductsHomepage() throws Exception {
         String source = readSource("src/main/java/Controller/ProductsHomepage.java");
 
-        // Il codice: while (listProduct.size() != 12) con max = doRetrieveAll().size()
-        // Se max < 12, il loop non termina mai
-        boolean hasInfiniteLoopRisk =
-                source.contains("while (listProduct.size() != 12)") &&
-                        source.contains("int max = service.doRetrieveAll().size()");
+        boolean isFixed =
+                !source.contains("while (listProduct.size() != 12)") &&
+                        source.contains("Math.min");
 
-        assertThat(hasInfiniteLoopRisk)
-                .as("FINDING CRITICO DoS: ProductsHomepage ha un ciclo 'while (listProduct.size() != 12)' "
-                        + "che si basa su 'max = doRetrieveAll().size()'. Se il database "
-                        + "contiene MENO DI 12 prodotti, il loop non termina mai "
-                        + "(infinite loop) bloccando il thread della servlet "
-                        + "(CWE-835: Loop with Unreachable Exit Condition). "
-                        + "Questo causa un Denial of Service. "
-                        + "Fix: usare 'while (listProduct.size() != 12 && listProduct.size() < max)' "
-                        + "o Collections.shuffle() su una lista limitata a 12 elementi.")
+        assertThat(isFixed)
+                .as("FIXED: ProductsHomepage non usa più il while(size() != 12) "
+                        + "che causava loop infinito con DB < 12 prodotti. "
+                        + "Ora usa Math.min per limitare la dimensione.")
                 .isTrue();
     }
 
     @Test
-    @DisplayName("FINDING: ProductsHomepage causa IllegalArgumentException se DB vuoto")
+    @DisplayName("FIXED: ProductsHomepage gestisce DB vuoto senza IllegalArgumentException")
     void testDocumentEmptyDatabaseRisk() throws Exception {
         String source = readSource("src/main/java/Controller/ProductsHomepage.java");
 
-        boolean hasEmptyDbRisk =
-                source.contains("rand.nextInt(max)") &&
-                        !source.contains("if (max == 0)");
+        boolean isFixed =
+                !source.contains("rand.nextInt(max)") &&
+                        source.contains("allProducts.isEmpty()");
 
-        assertThat(hasEmptyDbRisk)
-                .as("FINDING: ProductsHomepage chiama rand.nextInt(max) dove max = "
-                        + "doRetrieveAll().size(). Se il database e vuoto, max == 0 e "
-                        + "rand.nextInt(0) lancia IllegalArgumentException "
-                        + "(CWE-20). Fix: if (max == 0) gestire il caso vuoto.")
+        assertThat(isFixed)
+                .as("FIXED: ProductsHomepage gestisce il caso DB vuoto con "
+                        + "if (allProducts.isEmpty()) invece di rand.nextInt(0).")
                 .isTrue();
     }
 
     @Test
-    @DisplayName("FINDING: ProductsHomepage non gestisce product null nel ciclo")
+    @DisplayName("FIXED: ProductsHomepage non aggiunge null alla lista")
     void testDocumentNullProductRisk() throws Exception {
         String source = readSource("src/main/java/Controller/ProductsHomepage.java");
 
-        // doRetrieveById può restituire null se l'id random non esiste
-        boolean noNullCheck =
-                source.contains("listProduct.add(service.doRetrieveById(random))") &&
-                        !source.contains("doRetrieveById(random) != null");
+        boolean isFixed =
+                !source.contains("listProduct.add(service.doRetrieveById(random))") &&
+                        source.contains("Collections.shuffle");
 
-        assertThat(noNullCheck)
-                .as("FINDING: ProductsHomepage aggiunge il risultato di doRetrieveById(random) "
-                        + "alla lista senza verificare null. Se il random id non esiste, "
-                        + "viene aggiunto un null alla lista, causando NPE successivamente "
-                        + "quando si itera su di essa (CWE-476).")
+        assertThat(isFixed)
+                .as("FIXED: ProductsHomepage non chiama più doRetrieveById(random). "
+                        + "Usa Collections.shuffle su tutti i prodotti, "
+                        + "evitando di aggiungere null alla lista.")
                 .isTrue();
     }
 
     @Test
-    @DisplayName("ProductsHomepage: usa Random per selezione casuale")
+    @DisplayName("FIXED: ProductsHomepage usa Random static final")
     void testProductsHomepageUsesRandom() throws Exception {
         String source = readSource("src/main/java/Controller/ProductsHomepage.java");
 
         assertThat(source)
-                .contains("Random rand = new Random()");
+                .as("FIXED: ProductsHomepage ora usa RANDOM static final")
+                .contains("private static final Random RANDOM");
     }
-
     @Test
     @DisplayName("ProductsHomepage: restituisce JSON")
     void testProductsHomepageReturnsJson() throws Exception {

@@ -511,10 +511,12 @@ Validazione completa di tutti i campi del form di registrazione:
 | ProductsHomepage | 6          |
 | ProductBean      | 2          |
 
-**Finding critici:**
+**Finding risolti:**
 
-- `testDocumentInfiniteLoopInProductsHomepage` - **DoS loop infinito**
--  `testDocumentEmptyDatabaseRisk` - `IllegalArgumentException`
+-  `testDocumentInfiniteLoopInProductsHomepage` — **FIXED**: sostituito `while` con `Collections.shuffle()` + `Math.min`
+-  `testDocumentEmptyDatabaseRisk` — **FIXED**: aggiunto check `allProducts.isEmpty()`
+-  `testDocumentNullProductRisk` — **FIXED**: rimosso `doRetrieveById(random)`, usa shuffle su lista completa
+-  `testProductsHomepageUsesRandom` — **FIXED**: `RANDOM` ora è `static final`
 
 ### 7.4 `CartManagementTest.java` (16 test)
 
@@ -526,10 +528,11 @@ Validazione completa di tutti i campi del form di registrazione:
 
 **Finding risolti:**
 
-- `testDocumentNegativeQuantityAcceptance` — **FIXED**: `AddToCart` ora valida `quantity > 0`
--  `testDocumentMissingReturnAfterSendError` — **FIXED**: aggiunto `return;` dopo ogni `sendError`
--  `testDocumentNumberFormatExceptionOnProductId` — **FIXED**: aggiunto try/catch su `Integer.parseInt`
--  `testCartRemoveNonExistentBug` — **FIXED**: `CartBean.removeProduct` ora rimuove solo se l'ID esiste
+- `testDocumentNegativeQuantityAcceptance` — **FIXED**: `AddToCart` valida `quantity > 0`
+- `testDocumentMissingReturnAfterSendError` — **FIXED**: aggiunto `return;` dopo `sendError`
+- `testDocumentNumberFormatExceptionOnProductId` — **FIXED**: aggiunto try/catch
+- `testCartRemoveNonExistentBug` — **FIXED**: `CartBean.removeProduct` non rimuove se ID non esiste
+- `testDocumentNullProductInAddToCart` — **FIXED**: null check con `sendError(404)`
 ---
 
 ## 8. A05:2021 — Security Misconfiguration
@@ -620,23 +623,50 @@ Coperti da `AuthenticationTest.java` — vedi sezione 4.5.
 
 ### 10.3 Finding documentati
 
-I test di audit hanno **scoperto 40+ finding**, di cui **5 risolti** durante l'ultimo ciclo di remediation.
+I test di audit hanno **scoperto 40+ finding**, di cui **8 risolti** durante l'ultimo ciclo di remediation.
 
-| **Categoria** | **# Finding totali** | **# Risolti** | **# Aperti** | **Esempi** |
-|:--------------| :------------------- | :------------ | :----------- | :--------- |
-| **Critici**   | 12                   | 0             | 12           | Privilege escalation, CSRF, PCI-DSS, race condition |
-| **Alti**      | 8                    | 0             | 8            | SQL Injection, DoS, file upload |
-| **Medi**      | 20+                  | 5             | 15+          | NPE, bug logici, NumberFormatException |
+| **Categoria** | **# Totali** | **# Risolti** | **# Aperti** | **Esempi** |
+|:--------------| :--- | :--- | :--- | :--------- |
+| **Critici**   | 12 | 3 | 9 | Privilege escalation, CSRF, PCI-DSS, race condition |
+| **Alti**      | 8 | 1 | 7 | SQL Injection, DoS, file upload |
+| **Medi**      | 20+ | 4 | 16+ | NPE, bug logici, NumberFormatException |
 
-**Finding risolti in questa iterazione:**
+**Finding risolti:**
 
 | # | Finding | File | Test |
 | :--- | :--- | :--- | :--- |
 | 1 | Validazione `quantity > 0` in AddToCart | `AddToCart.java` | `CartManagementTest.testDocumentNegativeQuantityAcceptance` |
 | 2 | `return;` dopo `sendError` | `AddToCart.java` | `CartManagementTest.testDocumentMissingReturnAfterSendError` |
 | 3 | Gestione `NumberFormatException` | `AddToCart.java` | `CartManagementTest.testDocumentNumberFormatExceptionOnProductId` |
-| 4 | `removeProduct` rimuoveva ID inesistente | `CartBean.java` | `CartManagementTest.testCartRemoveNonExistentBug` |
-| 5 | Filtro prezzi usava `>` e `<` | `ProductDAO.java` | `ProductCatalogTest.testDocumentFilterBoundaryBug` |
+| 4 | Null check `productBean` | `AddToCart.java` | `CartManagementTest.testDocumentNullProductInAddToCart` |
+| 5 | `removeProduct` non rimuove ID inesistente | `CartBean.java` | `CartManagementTest.testCartRemoveNonExistentBug` |
+| 6 | Filtro prezzi usa `>=` e `<=` | `ProductDAO.java` | `ProductCatalogTest.testDocumentFilterBoundaryBug` |
+| 7 | Loop infinito homepage | `ProductsHomepage.java` | `ProductViewTest.testDocumentInfiniteLoopInProductsHomepage` |
+| 8 | DB vuoto e product null | `ProductsHomepage.java` | `ProductViewTest.testDocumentEmptyDatabaseRisk`, `testDocumentNullProductRisk` |
+
+### 10.4 Blockers SonarQube risolti (Overall Code)
+
+| File | Finding | Fix |
+| :--- | :--- | :--- |
+| `CartDAO.java` | Try-with-resources | `PreparedStatement` e `ResultSet` dentro `try (...)` |
+| `ProductDAO.java` | Try-with-resources + SELECT * | Idem + colonne esplicite |
+| `UserDAO.java` | Try-with-resources + SELECT * | Idem |
+| `OrderDAO.java` | Try-with-resources + SELECT * | Idem |
+| `OrderProductDAO.java` | Try-with-resources + SELECT * | Idem |
+| `CategoryDAO.java` | Try-with-resources + SELECT * | Idem |
+| `PaymentDAO.java` | Try-with-resources | `PreparedStatement` dentro `try (...)` |
+| `ProductsHomepage.java` | Random non riutilizzato | `RANDOM` static final |
+| `UserBean.java` | SHA-1 (High) | **Non fixato** — compatibilità DB |
+
+### 10.5 Finding ancora aperti
+
+- SHA-1 come algoritmo di hashing password (`UserBean.java`) — decisione consapevole
+- CSRF su azioni GET (`SetAdmin`, `SetStateUser`, `EditProfile`)
+- Privilege escalation e self-lockout in `SetStateUser`
+- File upload senza restrizioni in `AddProduct`
+- NPE in vari controller (Login, ShowCart, RemoveFromCart)
+- Numero carta in chiaro (PCI-DSS)
+- CVV getter esposto
 
 ## 11. Dettaglio dei Finding
 
@@ -911,3 +941,30 @@ public void removeProduct(int id) {
 - **Test:** `ProductCatalogTest.testDocumentFilterBoundaryBug`
 - **Fix applicato:** query SQL cambiata da Prezzo > ? a Prezzo >= ? e da Prezzo < ? a Prezzo <= ?.
 - **Stato:**  FIXED
+
+---
+
+## 12. Changelog
+
+### 08/10/2026 — Remediation iterazione 1
+
+**Fix applicati (8 finding risolti):**
+
+| # | Area | File | Descrizione |
+| :--- | :--- | :--- | :--- |
+| 1 | A04 | `AddToCart.java` | Try/catch su `Integer.parseInt(productId)` |
+| 2 | A04 | `AddToCart.java` | Validazione `quantity > 0` |
+| 3 | A04 | `AddToCart.java` | `return;` dopo ogni `sendError` |
+| 4 | A04 | `AddToCart.java` | Null check su `productBean` con `sendError(404)` |
+| 5 | A04 | `CartBean.java` | `removeProduct` non rimuove se ID inesistente |
+| 6 | A04 | `ProductDAO.java` | Filtro usa `>=` e `<=` |
+| 7 | A04 | `ProductsHomepage.java` | Sostituito `while` con `Collections.shuffle()` |
+| 8 | A04 | `ProductsHomepage.java` | Gestione DB vuoto e product null |
+
+**Test aggiornati al formato FIXED:**
+
+| File | Test |
+| :--- | :--- |
+| `CartManagementTest.java` | 5 test |
+| `ProductCatalogTest.java` | 1 test |
+| `ProductViewTest.java` | 4 test |

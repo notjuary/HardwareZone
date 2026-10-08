@@ -1,17 +1,18 @@
 package Model;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class OrderProductDAO {
-    public void doSave(OrderProductBean orderProductBean)
-    {
-        try (Connection con = ConPool.getConnection()) {
-            PreparedStatement ps = con.prepareStatement(
-                    "INSERT INTO Ordine_Prodotto VALUES (?,?,?,?)");
+
+    private static final String SELECT = "SELECT ";
+    private static final String COLUMNS =
+            "Prodotto, Quantità, Prezzo, Ordine";
+
+    public void doSave(OrderProductBean orderProductBean) {
+        String sql = "INSERT INTO Ordine_Prodotto (Prodotto, Quantità, Prezzo, Ordine) VALUES (?,?,?,?)";
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, orderProductBean.getProduct());
             ps.setInt(2, orderProductBean.getQuantity());
@@ -28,24 +29,23 @@ public class OrderProductDAO {
     }
 
     public ArrayList<OrderProductBean> doRetrieveById(int id) {
-        try (Connection con = ConPool.getConnection()) {
-            PreparedStatement ps = con.prepareStatement(
-                    "SELECT * " +
-                            "FROM Ordine_Prodotto " +
-                            "WHERE Ordine=?");
+        String sql = SELECT + COLUMNS + " FROM Ordine_Prodotto WHERE Ordine=?";
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, id);
 
-            ResultSet rs = ps.executeQuery();
             ArrayList<OrderProductBean> products = new ArrayList<>();
 
-            while (rs.next()) {
-                OrderProductBean product = new OrderProductBean();
-                product.setProduct(rs.getInt(1));
-                product.setQuantity(rs.getInt(2));
-                product.setPrice(rs.getDouble(3));
-                product.setOrder(rs.getInt(4));
-                products.add(product);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    OrderProductBean product = new OrderProductBean();
+                    product.setProduct(rs.getInt("Prodotto"));
+                    product.setQuantity(rs.getInt("Quantità"));
+                    product.setPrice(rs.getDouble("Prezzo"));
+                    product.setOrder(rs.getInt("Ordine"));
+                    products.add(product);
+                }
             }
 
             return products;
