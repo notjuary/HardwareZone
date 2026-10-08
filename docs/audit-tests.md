@@ -513,10 +513,10 @@ Validazione completa di tutti i campi del form di registrazione:
 
 **Finding risolti:**
 
--  `testDocumentInfiniteLoopInProductsHomepage` — **FIXED**: sostituito `while` con `Collections.shuffle()` + `Math.min`
--  `testDocumentEmptyDatabaseRisk` — **FIXED**: aggiunto check `allProducts.isEmpty()`
--  `testDocumentNullProductRisk` — **FIXED**: rimosso `doRetrieveById(random)`, usa shuffle su lista completa
--  `testProductsHomepageUsesRandom` — **FIXED**: `RANDOM` ora è `static final`
+1. `testDocumentInfiniteLoopInProductsHomepage` — **FIXED**: sostituito `while` con `Collections.shuffle()` + `Math.min`
+2. `testDocumentEmptyDatabaseRisk` — **FIXED**: aggiunto check `allProducts.isEmpty()`
+3. `testDocumentNullProductRisk` — **FIXED**: rimosso `doRetrieveById(random)`, usa shuffle su lista completa
+4. `testProductsHomepageUsesRandom` — **FIXED**: `RANDOM` ora è `static final`
 
 ### 7.4 `CartManagementTest.java` (16 test)
 
@@ -657,6 +657,7 @@ I test di audit hanno **scoperto 40+ finding**, di cui **8 risolti** durante l'u
 | `PaymentDAO.java` | Try-with-resources | `PreparedStatement` dentro `try (...)` |
 | `ProductsHomepage.java` | Random non riutilizzato | `RANDOM` static final |
 | `UserBean.java` | SHA-1 (High) | **Non fixato** — compatibilità DB |
+| `OrderDAO.java`, `CategoryDAO.java`, `CartDAO.java` | Ritorno `ArrayList` invece di `List` | Cambiato il tipo di ritorno in `List<...>` |
 
 ### 10.5 Finding ancora aperti
 
@@ -942,7 +943,49 @@ public void removeProduct(int id) {
 - **Fix applicato:** query SQL cambiata da Prezzo > ? a Prezzo >= ? e da Prezzo < ? a Prezzo <= ?.
 - **Stato:**  FIXED
 
----
+#### 11.5.6 A04 — Null check su `productBean` in `AddToCart`
+
+- **File:** `Controller/AddToCart.java`
+- **Test:** `CartManagementTest.testDocumentNullProductInAddToCart`
+- **Fix applicato:**
+- 
+```java
+ProductBean productBean = service.doRetrieveById(productId);
+
+if (productBean == null) {
+    response.sendError(404); // NOSONAR
+    return;
+}
+```
+- **Stato:** FIXED
+
+### 11.5.7 A04 — Loop infinito ProductsHomepage
+- **File:** `Controller/ProductsHomepage.java`
+- **Test:** `ProductViewTest.testDocumentInfiniteLoopInProductsHomepage`
+- **Fix applicato:** `sostituito while (listProduct.size() != 12)` con:
+
+```java
+private static final Random RANDOM = new Random();
+private static final int HOMEPAGE_SIZE = 12;
+
+ArrayList<ProductBean> allProducts = service.doRetrieveAll();
+
+List<ProductBean> listProduct;
+if (allProducts.isEmpty()) {
+    listProduct = Collections.emptyList();
+} else {
+    Collections.shuffle(allProducts, RANDOM);
+    int target = Math.min(HOMEPAGE_SIZE, allProducts.size());
+    listProduct = allProducts.subList(0, target);
+}
+```
+- **Stato:**  FIXED
+- 
+### 11.5.8 A04 — DB vuoto e product null in ProductsHomepage
+- **File:** `Controller/ProductsHomepage.java`
+- **Test:** `ProductViewTest.testDocumentEmptyDatabaseRisk, testDocumentNullProductRisk`
+- **Fix applicato:** gestione `allProducts.isEmpty()` e rimozione di `doRetrieveById(random)` (usa shuffle sulla lista completa).
+- **Stato:** FIXED
 
 ## 12. Changelog
 
@@ -968,3 +1011,24 @@ public void removeProduct(int id) {
 | `CartManagementTest.java` | 5 test |
 | `ProductCatalogTest.java` | 1 test |
 | `ProductViewTest.java` | 4 test |
+
+### 08/10/2026 — Remediation iterazione 2
+
+**Fix applicati:**
+
+| # | Area | File | Descrizione |
+| :--- | :--- | :--- | :--- |
+| 1 | A04 | `ProductsHomepage.java` | Sostituito `while` con `Collections.shuffle()` + `Math.min` |
+| 2 | A04 | `ProductsHomepage.java` | Gestione DB vuoto con `if (allProducts.isEmpty())` |
+| 3 | A04 | `ProductsHomepage.java` | Rimosso `doRetrieveById(random)` |
+| 4 | A04 | `ProductsHomepage.java` | `RANDOM` static final |
+| 5 | A04 | `ProductsHomepage.java` | `Math.min(HOMEPAGE_SIZE, size)` |
+
+**Test aggiornati:**
+
+| File | Modifica |
+| :--- | :--- |
+| `ProductViewTest.java` | 4 test aggiornati al formato FIXED |
+| `ProductsHomepageFunctionalTest.java` | Rimosso riferimento a "loop infinito documentato" |
+| `CartManagementTest.java` | Test allineati al formato FIXED |
+| `ProductCatalogTest.java` | Test boundary filter allineato |
