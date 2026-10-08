@@ -6,6 +6,9 @@ import java.util.List;
 
 public class UserDAO {
 
+    // Costante per evitare duplicazione della stringa "SELECT "
+    private static final String SELECT = "SELECT ";
+
     // Colonne esplicite
     private static final String COLUMNS =
             "ID_Utente, Nome, Cognome, Data_Nascita, Email, Accesso, Telefono, " +
@@ -49,7 +52,7 @@ public class UserDAO {
     }
 
     public UserBean doRetrieveById(int id) {
-        String sql = "SELECT " + COLUMNS + " FROM Utente WHERE ID_Utente=?";
+        String sql = SELECT + COLUMNS + " FROM Utente WHERE ID_Utente=?";
         try (Connection con = ConPool.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -68,7 +71,7 @@ public class UserDAO {
     }
 
     public UserBean doRetrieveByEmailAndPassword(String email, String password) {
-        String sql = "SELECT " + COLUMNS + " FROM Utente WHERE Email=? AND Accesso=SHA1(?)";
+        String sql = SELECT + COLUMNS + " FROM Utente WHERE Email=? AND Accesso=SHA1(?)";
         try (Connection con = ConPool.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -159,7 +162,7 @@ public class UserDAO {
     }
 
     public List<UserBean> doRetrieveAll() {
-        String sql = "SELECT " + COLUMNS + " FROM Utente ORDER BY ID_Utente";
+        String sql = SELECT + COLUMNS + " FROM Utente ORDER BY ID_Utente";
         try (Connection con = ConPool.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 

@@ -5,6 +5,9 @@ import java.util.ArrayList;
 
 public class ProductDAO {
 
+    // Costante per evitare duplicazione della stringa "SELECT "
+    private static final String SELECT = "SELECT ";
+
     // Colonne esplicite per evitare SELECT *
     private static final String COLUMNS =
             "ID_Prodotto, Nome, Descrizione, Prezzo, Quantita_Disponibile, Sconto, Immagine, Categoria";
@@ -82,7 +85,7 @@ public class ProductDAO {
     }
 
     public ProductBean doRetrieveById(int id) {
-        String sql = "SELECT " + COLUMNS + " FROM Prodotto WHERE ID_Prodotto=?";
+        String sql = SELECT + COLUMNS + " FROM Prodotto WHERE ID_Prodotto=?";
         try (Connection con = ConPool.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -101,7 +104,7 @@ public class ProductDAO {
     }
 
     public ArrayList<ProductBean> doRetrieveAll() {
-        String sql = "SELECT " + COLUMNS + " FROM Prodotto ORDER BY ID_Prodotto";
+        String sql = SELECT + COLUMNS + " FROM Prodotto ORDER BY ID_Prodotto";
         try (Connection con = ConPool.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -120,7 +123,7 @@ public class ProductDAO {
     }
 
     public ArrayList<ProductBean> doRetrieveSales() {
-        String sql = "SELECT " + COLUMNS + " FROM Prodotto WHERE Sconto > 0";
+        String sql = SELECT + COLUMNS + " FROM Prodotto WHERE Sconto > 0";
         try (Connection con = ConPool.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -141,9 +144,9 @@ public class ProductDAO {
     public ArrayList<ProductBean> doRetrieveByFilter(int minPrice, int maxPrice, String category) {
         String sql;
         if (category.equalsIgnoreCase("all")) {
-            sql = "SELECT " + COLUMNS + " FROM Prodotto WHERE Prezzo >= ? AND Prezzo <= ?";
+            sql = SELECT + COLUMNS + " FROM Prodotto WHERE Prezzo >= ? AND Prezzo <= ?";
         } else {
-            sql = "SELECT " + COLUMNS + " FROM Prodotto WHERE Prezzo >= ? AND Prezzo <= ? AND Categoria = ?";
+            sql = SELECT + COLUMNS + " FROM Prodotto WHERE Prezzo >= ? AND Prezzo <= ? AND Categoria = ?";
         }
 
         try (Connection con = ConPool.getConnection();

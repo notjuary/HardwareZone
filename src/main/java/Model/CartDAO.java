@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class CartDAO {
 
@@ -39,7 +40,8 @@ public class CartDAO {
         }
     }
 
-    public ArrayList<ProductCartBean> getCart(int user) {
+    // FIX: ritorna List invece di ArrayList
+    public List<ProductCartBean> getCart(int user) {
         String sql = "SELECT Prodotto, Quantità FROM Carrello WHERE Utente=?";
         try (Connection con = ConPool.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -47,7 +49,7 @@ public class CartDAO {
             ps.setInt(1, user);
 
             try (ResultSet rs = ps.executeQuery()) {
-                ArrayList<ProductCartBean> products = new ArrayList<>();
+                List<ProductCartBean> products = new ArrayList<>();
                 while (rs.next()) {
                     ProductCartBean product = new ProductCartBean();
                     product.setId(rs.getInt("Prodotto"));

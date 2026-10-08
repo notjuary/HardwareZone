@@ -7,7 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import security.functional.BaseFunctionalTest;
 
-import java.util.ArrayList;
+import java.util.List;   // ← aggiunto
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -35,7 +35,7 @@ class CartDAOFunctionalTest extends BaseFunctionalTest {
     void testDoSave() {
         dao.doSave(1, 1, 3);
 
-        ArrayList<ProductCartBean> cart = dao.getCart(1);
+        List<ProductCartBean> cart = dao.getCart(1);   // ← List invece di ArrayList
         assertThat(cart).hasSize(1);
         assertThat(cart.get(0).getQuantity()).isEqualTo(3);
     }
@@ -45,7 +45,7 @@ class CartDAOFunctionalTest extends BaseFunctionalTest {
     void testGetCart() {
         dao.doSave(1, 1, 5);
 
-        ArrayList<ProductCartBean> cart = dao.getCart(1);
+        List<ProductCartBean> cart = dao.getCart(1);   // ← List
         assertThat(cart).hasSize(1);
     }
 
@@ -57,14 +57,14 @@ class CartDAOFunctionalTest extends BaseFunctionalTest {
 
         dao.doDelete(1);
 
-        ArrayList<ProductCartBean> cart = dao.getCart(1);
+        List<ProductCartBean> cart = dao.getCart(1);   // ← List
         assertThat(cart).isEmpty();
     }
 
     @Test
     @DisplayName("getCart per utente senza carrello restituisce lista vuota")
     void testGetCartVuoto() {
-        ArrayList<ProductCartBean> cart = dao.getCart(999);
+        List<ProductCartBean> cart = dao.getCart(999);   // ← List
         assertThat(cart).isEmpty();
     }
 }

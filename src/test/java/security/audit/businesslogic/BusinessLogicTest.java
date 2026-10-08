@@ -37,10 +37,14 @@ class BusinessLogicTest {
     @DisplayName("Aggiungere un nuovo prodotto lo inserisce con la quantita corretta")
     void testAddNewProductToCart() {
         cart.addProduct(1, 3);
+        assertThat(cart.getCartList())
+                .hasSize(1)
+                .first()
+                .satisfies(p -> {
+                    assertThat(p.getId()).isEqualTo(1);
+                    assertThat(p.getQuantity()).isEqualTo(3);
+                });
 
-        assertThat(cart.getCartList()).hasSize(1);
-        assertThat(cart.getCartList().get(0).getId()).isEqualTo(1);
-        assertThat(cart.getCartList().get(0).getQuantity()).isEqualTo(3);
         assertThat(cart.getNumberObject()).isEqualTo(3);
     }
 
@@ -49,9 +53,12 @@ class BusinessLogicTest {
     void testAddSameProductIncrementsQuantity() {
         cart.addProduct(1, 3);
         cart.addProduct(1, 2);
+        assertThat(cart.getCartList())
+                .hasSize(1)
+                .first()
+                .extracting(ProductCartBean::getQuantity)
+                .isEqualTo(5);
 
-        assertThat(cart.getCartList()).hasSize(1);
-        assertThat(cart.getCartList().get(0).getQuantity()).isEqualTo(5);
         assertThat(cart.getNumberObject()).isEqualTo(5);
     }
 
@@ -139,8 +146,11 @@ class BusinessLogicTest {
 
         cart.setCartList(list);
 
-        assertThat(cart.getNumberObject()).isEqualTo(10);
-        assertThat(cart.getCartList()).hasSize(2);
+        assertThat(cart)
+                .satisfies(c -> {
+                    assertThat(c.getNumberObject()).isEqualTo(10);
+                    assertThat(c.getCartList()).hasSize(2);
+                });
     }
 
     // ==========================================================
@@ -225,8 +235,9 @@ class BusinessLogicTest {
                 .mapToInt(ProductCartBean::getQuantity)
                 .sum();
 
-        assertThat(cart.getNumberObject()).isEqualTo(sum);
-        assertThat(cart.getNumberObject()).isEqualTo(12);
+        assertThat(cart.getNumberObject())
+                .isEqualTo(sum)
+                .isEqualTo(12);
     }
 
     @Test
@@ -236,8 +247,11 @@ class BusinessLogicTest {
         cart.addProduct(1, 3);
         cart.addProduct(1, 4);
 
-        assertThat(cart.getCartList()).hasSize(1);
-        assertThat(cart.getCartList().get(0).getQuantity()).isEqualTo(9);
+        assertThat(cart.getCartList())
+                .hasSize(1)
+                .first()
+                .extracting(ProductCartBean::getQuantity)
+                .isEqualTo(9);
     }
 
     // ==========================================================
@@ -250,19 +264,10 @@ class BusinessLogicTest {
         String source = new String(java.nio.file.Files.readAllBytes(
                 java.nio.file.Paths.get("src/main/java/Model/ProductDAO.java")));
 
-        // Verifica che NON usi più Statement (vulnerabile)
         assertThat(source)
-                .as("ProductDAO.doUpdate NON deve usare con.createStatement() (SQL Injection)")
-                .doesNotContain("con.createStatement()");
-
-        // Verifica che usi PreparedStatement (sicuro)
-        assertThat(source)
-                .as("ProductDAO.doUpdate deve usare PreparedStatement")
-                .contains("PreparedStatement");
-
-        // Verifica che usi placeholder parametrizzati (?)
-        assertThat(source)
-                .as("ProductDAO.doUpdate deve usare placeholder (?) invece di concatenazione")
+                .as("ProductDAO.doUpdate deve usare PreparedStatement (no Statement)")
+                .doesNotContain("con.createStatement()")
+                .contains("PreparedStatement")
                 .contains("UPDATE Prodotto SET Nome = ?");
     }
 

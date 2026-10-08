@@ -1,6 +1,7 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CartBean {
 
@@ -24,12 +25,12 @@ public class CartBean {
         return cartList;
     }
 
-    public void setCartList(ArrayList<ProductCartBean> cartList) {
-        this.cartList = cartList;
-        for (ProductCartBean productCartBean : cartList)
+    public void setCartList(List<ProductCartBean> cartList) {
+        this.cartList = new ArrayList<>(cartList);
+        for (ProductCartBean productCartBean : cartList) {
             this.numberObject += productCartBean.getQuantity();
+        }
     }
-
     public void addProduct(int id, int quantity) {
         numberObject += quantity;
         boolean isOn = false;

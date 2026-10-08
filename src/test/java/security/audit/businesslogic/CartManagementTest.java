@@ -52,10 +52,11 @@ class CartManagementTest {
     void testDocumentNegativeQuantityAcceptance() throws Exception {
         String source = readSource("src/main/java/Controller/AddToCart.java");
 
-        // Ora verifichiamo che ci sia un controllo su quantity > 0
+        // Cerca il pattern di validazione effettivamente presente nel codice
         boolean isFixed =
                 source.contains("int quantity = Integer.parseInt(request.getParameter(\"quantity\"))") &&
-                        (source.contains("quantity > 0") || source.contains("quantity >= 0"));
+                        (source.contains("quantity <= 0") || source.contains("quantity < 1") ||
+                                source.contains("quantity > 0") || source.contains("quantity >= 0"));
 
         assertThat(isFixed)
                 .as("FIXED: AddToCart ora valida che quantity sia positiva. "
