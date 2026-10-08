@@ -829,9 +829,9 @@ void testNumeroCartaInChiaro() throws Exception {
 
 | Scenario                     | Comportamento attuale | PCI-DSS |
 | :--------------------------- | :-------------------: | :-----: |
-| Admin accede al DB           | Vede numeri in chiaro |    ❌    |
-| Attaccante compromette il DB | Ottiene numeri validi |    ❌    |
-| Query del DB                 | `SELECT Numero_Carta` |    ❌    |
+| Admin accede al DB           | Vede numeri in chiaro |    X    |
+| Attaccante compromette il DB | Ottiene numeri validi |    X    |
+| Query del DB                 | `SELECT Numero_Carta` |    X    |
 
 #### Patch raccomandata
 
@@ -1068,7 +1068,7 @@ public String toString() {
 ---
 
 
-### Fix 2 — Sezione 13.9 (tabella riepilogo corretta)
+### Fix 2 — Sezione 13.9 
 
 
 | #  | Finding                             |   CWE   | Severità | Test                                                                                     |    Stato    |
