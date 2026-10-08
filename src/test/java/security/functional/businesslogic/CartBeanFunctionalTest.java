@@ -60,13 +60,13 @@ class CartBeanFunctionalTest {
     @Test
     @DisplayName("FIXED: removeProduct non rimuove elementi se id non esiste")
     void testRemoveNonexistentBug() {
-        CartBean cart = new CartBean();
-        cart.addProduct(1, 3);
-        cart.addProduct(2, 5);
+        CartBean testCart = new CartBean();   // ← rinominato
+        testCart.addProduct(1, 3);
+        testCart.addProduct(2, 5);
 
-        cart.removeProduct(999);
+        testCart.removeProduct(999);
 
-        assertThat(cart.getCartList())
+        assertThat(testCart.getCartList())
                 .as("FIXED: removeProduct con id inesistente non rimuove più un prodotto.")
                 .hasSize(2);
     }

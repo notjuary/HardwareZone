@@ -94,13 +94,13 @@ class BusinessLogicTest {
     @Test
     @DisplayName("FIXED: removeProduct non rimuove elementi se l'id non esiste")
     void testRemoveNonExistentProductIsBuggy() {
-        CartBean cart = new CartBean();
-        cart.addProduct(1, 3);
-        cart.addProduct(2, 5);
+        CartBean testCart = new CartBean();
+        testCart.addProduct(1, 3);
+        testCart.addProduct(2, 5);
 
-        cart.removeProduct(999);
+        testCart.removeProduct(999);
 
-        assertThat(cart.getCartList())
+        assertThat(testCart.getCartList())
                 .as("FIXED: removeProduct con id inesistente non rimuove più un prodotto non richiesto.")
                 .hasSize(2);
     }
@@ -267,20 +267,18 @@ class BusinessLogicTest {
     }
 
     @Test
-    @DisplayName("FINDING: ProductDAO.doRetrieveByFilter usa > e < invece di >= e <=")
+    @DisplayName("FIXED: ProductDAO.doRetrieveByFilter usa >= e <= per includere i limiti")
     void testDocumentFilterBoundaryBug() throws Exception {
         String source = new String(java.nio.file.Files.readAllBytes(
                 java.nio.file.Paths.get("src/main/java/Model/ProductDAO.java")));
 
-        // Il filtro esclude i prodotti al prezzo esatto del min/max
-        boolean hasStrictComparison =
+        boolean isFixed =
                 source.contains("Prezzo >= ?") &&
                         source.contains("Prezzo <= ?");
 
-        assertThat(hasStrictComparison)
-                .as("BUG FUNZIONALE: doRetrieveByFilter usa confronti stretti (> e <) "
-                        + "invece di (>= e <=). I prodotti al prezzo esatto min/max "
-                        + "vengono esclusi dai risultati.")
+        assertThat(isFixed)
+                .as("FIXED: doRetrieveByFilter ora usa >= e <=. "
+                        + "I prodotti al prezzo esatto min/max non vengono più esclusi.")
                 .isTrue();
     }
 }

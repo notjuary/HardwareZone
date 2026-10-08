@@ -5,8 +5,11 @@ import java.util.ArrayList;
 
 public class ProductDAO {
 
+    // Colonne esplicite per evitare SELECT *
+    private static final String COLUMNS =
+            "ID_Prodotto, Nome, Descrizione, Prezzo, Quantita_Disponibile, Sconto, Immagine, Categoria";
+
     public void doSave(ProductBean productBean) {
-        // MODIFICA: PreparedStatement spostato nel try-with-resources
         try (Connection con = ConPool.getConnection();
              PreparedStatement ps = con.prepareStatement(
                      "INSERT INTO Prodotto (Nome, Descrizione, Prezzo, Quantita_Disponibile, Sconto, Immagine, Categoria) VALUES(?,?,?,?,?,?,?)",
@@ -24,7 +27,6 @@ public class ProductDAO {
                 throw new RuntimeException("INSERT error.");
             }
 
-            // MODIFICA: ResultSet gestito con try-with-resources
             try (ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) {
                     int id = rs.getInt(1);
@@ -41,8 +43,6 @@ public class ProductDAO {
         String sql = "UPDATE Prodotto SET Nome = ?, Descrizione = ?, Prezzo = ?, " +
                 "Quantita_Disponibile = ?, Sconto = ?, Immagine = ?, Categoria = ? " +
                 "WHERE ID_Prodotto = ?";
-        // oppure, meglio ancora, tutto su una riga:
-        // String sql = "UPDATE Prodotto SET Nome = ?, Descrizione = ?, Prezzo = ?, Quantita_Disponibile = ?, Sconto = ?, Immagine = ?, Categoria = ? WHERE ID_Prodotto = ?";
 
         try (Connection con = ConPool.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -64,9 +64,10 @@ public class ProductDAO {
     }
 
     public boolean isAlreadyRegistered(String name, String description) {
+        // Solo 1 colonna è sufficiente per verificare l'esistenza
         try (Connection con = ConPool.getConnection();
              PreparedStatement ps = con.prepareStatement(
-                     "SELECT * FROM Prodotto WHERE Nome=? AND Descrizione=?")) {
+                     "SELECT ID_Prodotto FROM Prodotto WHERE Nome=? AND Descrizione=?")) {
 
             ps.setString(1, name);
             ps.setString(2, description);
@@ -81,24 +82,15 @@ public class ProductDAO {
     }
 
     public ProductBean doRetrieveById(int id) {
+        String sql = "SELECT " + COLUMNS + " FROM Prodotto WHERE ID_Prodotto=?";
         try (Connection con = ConPool.getConnection();
-             PreparedStatement ps = con.prepareStatement(
-                     "SELECT * FROM Prodotto WHERE ID_Prodotto=?")) {
+             PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, id);
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    ProductBean product = new ProductBean();
-                    product.setId(rs.getInt(1));
-                    product.setName(rs.getString(2));
-                    product.setDescription(rs.getString(3));
-                    product.setPrice(rs.getDouble(4));
-                    product.setQuantity(rs.getInt(5));
-                    product.setSales(rs.getInt(6));
-                    product.setImage(rs.getString(7));
-                    product.setCategory(rs.getString(8));
-                    return product;
+                    return mapRow(rs);
                 }
             }
             return null;
@@ -109,23 +101,15 @@ public class ProductDAO {
     }
 
     public ArrayList<ProductBean> doRetrieveAll() {
+        String sql = "SELECT " + COLUMNS + " FROM Prodotto ORDER BY ID_Prodotto";
         try (Connection con = ConPool.getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT * FROM Prodotto ORDER BY ID_Prodotto")) {
+             PreparedStatement ps = con.prepareStatement(sql)) {
 
             ArrayList<ProductBean> productsList = new ArrayList<>();
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    ProductBean product = new ProductBean();
-                    product.setId(rs.getInt(1));
-                    product.setName(rs.getString(2));
-                    product.setDescription(rs.getString(3));
-                    product.setPrice(rs.getDouble(4));
-                    product.setQuantity(rs.getInt(5));
-                    product.setSales(rs.getInt(6));
-                    product.setImage(rs.getString(7));
-                    product.setCategory(rs.getString(8));
-                    productsList.add(product);
+                    productsList.add(mapRow(rs));
                 }
             }
             return productsList;
@@ -136,23 +120,15 @@ public class ProductDAO {
     }
 
     public ArrayList<ProductBean> doRetrieveSales() {
+        String sql = "SELECT " + COLUMNS + " FROM Prodotto WHERE Sconto > 0";
         try (Connection con = ConPool.getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT * FROM Prodotto WHERE Sconto > 0")) {
+             PreparedStatement ps = con.prepareStatement(sql)) {
 
             ArrayList<ProductBean> productsList = new ArrayList<>();
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    ProductBean product = new ProductBean();
-                    product.setId(rs.getInt(1));
-                    product.setName(rs.getString(2));
-                    product.setDescription(rs.getString(3));
-                    product.setPrice(rs.getDouble(4));
-                    product.setQuantity(rs.getInt(5));
-                    product.setSales(rs.getInt(6));
-                    product.setImage(rs.getString(7));
-                    product.setCategory(rs.getString(8));
-                    productsList.add(product);
+                    productsList.add(mapRow(rs));
                 }
             }
             return productsList;
@@ -165,10 +141,9 @@ public class ProductDAO {
     public ArrayList<ProductBean> doRetrieveByFilter(int minPrice, int maxPrice, String category) {
         String sql;
         if (category.equalsIgnoreCase("all")) {
-            // FIX: usa >= e <= per includere i prezzi al limite
-            sql = "SELECT * FROM Prodotto WHERE Prezzo >= ? AND Prezzo <= ?";
+            sql = "SELECT " + COLUMNS + " FROM Prodotto WHERE Prezzo >= ? AND Prezzo <= ?";
         } else {
-            sql = "SELECT * FROM Prodotto WHERE Prezzo >= ? AND Prezzo <= ? AND Categoria = ?";
+            sql = "SELECT " + COLUMNS + " FROM Prodotto WHERE Prezzo >= ? AND Prezzo <= ? AND Categoria = ?";
         }
 
         try (Connection con = ConPool.getConnection();
@@ -184,16 +159,7 @@ public class ProductDAO {
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    ProductBean product = new ProductBean();
-                    product.setId(rs.getInt(1));
-                    product.setName(rs.getString(2));
-                    product.setDescription(rs.getString(3));
-                    product.setPrice(rs.getDouble(4));
-                    product.setQuantity(rs.getInt(5));
-                    product.setSales(rs.getInt(6));
-                    product.setImage(rs.getString(7));
-                    product.setCategory(rs.getString(8));
-                    productsList.add(product);
+                    productsList.add(mapRow(rs));
                 }
             }
             return productsList;
@@ -201,5 +167,19 @@ public class ProductDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    // Helper per evitare duplicazione del mapping
+    private ProductBean mapRow(ResultSet rs) throws SQLException {
+        ProductBean product = new ProductBean();
+        product.setId(rs.getInt("ID_Prodotto"));
+        product.setName(rs.getString("Nome"));
+        product.setDescription(rs.getString("Descrizione"));
+        product.setPrice(rs.getDouble("Prezzo"));
+        product.setQuantity(rs.getInt("Quantita_Disponibile"));
+        product.setSales(rs.getInt("Sconto"));
+        product.setImage(rs.getString("Immagine"));
+        product.setCategory(rs.getString("Categoria"));
+        return product;
     }
 }

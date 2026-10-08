@@ -6,6 +6,12 @@ import java.util.List;
 
 public class UserDAO {
 
+    // Colonne esplicite
+    private static final String COLUMNS =
+            "ID_Utente, Nome, Cognome, Data_Nascita, Email, Accesso, Telefono, " +
+                    "Citta, Provincia, Codice_Postale, Indirizzo, Data_Registrazione, " +
+                    "Stato, Amministratore";
+
     public void doSave(UserBean userBean) {
         try (Connection con = ConPool.getConnection();
              PreparedStatement ps = con.prepareStatement(
@@ -43,29 +49,15 @@ public class UserDAO {
     }
 
     public UserBean doRetrieveById(int id) {
+        String sql = "SELECT " + COLUMNS + " FROM Utente WHERE ID_Utente=?";
         try (Connection con = ConPool.getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT * FROM Utente WHERE ID_Utente=?")) {
+             PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, id);
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    UserBean user = new UserBean();
-                    user.setId(rs.getInt(1));
-                    user.setName(rs.getString(2));
-                    user.setSurname(rs.getString(3));
-                    user.setBirthday(rs.getString(4));
-                    user.setEmail(rs.getString(5));
-                    user.setPassword(rs.getString(6));
-                    user.setPhone(rs.getString(7));
-                    user.setCity(rs.getString(8));
-                    user.setProvince(rs.getString(9));
-                    user.setPostalCode(rs.getString(10));
-                    user.setAddress(rs.getString(11));
-                    user.setRegister(rs.getString(12));
-                    user.setState(rs.getString(13));
-                    user.setAdmin(rs.getString(14));
-                    return user;
+                    return mapRow(rs);
                 }
             }
             return null;
@@ -76,30 +68,16 @@ public class UserDAO {
     }
 
     public UserBean doRetrieveByEmailAndPassword(String email, String password) {
+        String sql = "SELECT " + COLUMNS + " FROM Utente WHERE Email=? AND Accesso=SHA1(?)";
         try (Connection con = ConPool.getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT * FROM Utente WHERE Email=? AND Accesso=SHA1(?)")) {
+             PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, email);
             ps.setString(2, password);
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    UserBean user = new UserBean();
-                    user.setId(rs.getInt(1));
-                    user.setName(rs.getString(2));
-                    user.setSurname(rs.getString(3));
-                    user.setBirthday(rs.getString(4));
-                    user.setEmail(rs.getString(5));
-                    user.setPassword(rs.getString(6));
-                    user.setPhone(rs.getString(7));
-                    user.setCity(rs.getString(8));
-                    user.setProvince(rs.getString(9));
-                    user.setPostalCode(rs.getString(10));
-                    user.setAddress(rs.getString(11));
-                    user.setRegister(rs.getString(12));
-                    user.setState(rs.getString(13));
-                    user.setAdmin(rs.getString(14));
-                    return user;
+                    return mapRow(rs);
                 }
             }
             return null;
@@ -181,29 +159,15 @@ public class UserDAO {
     }
 
     public List<UserBean> doRetrieveAll() {
+        String sql = "SELECT " + COLUMNS + " FROM Utente ORDER BY ID_Utente";
         try (Connection con = ConPool.getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT * FROM Utente ORDER BY ID_Utente")) {
+             PreparedStatement ps = con.prepareStatement(sql)) {
 
             ArrayList<UserBean> usersList = new ArrayList<>();
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    UserBean user = new UserBean();
-                    user.setId(rs.getInt(1));
-                    user.setName(rs.getString(2));
-                    user.setSurname(rs.getString(3));
-                    user.setBirthday(rs.getString(4));
-                    user.setEmail(rs.getString(5));
-                    user.setPassword(rs.getString(6));
-                    user.setPhone(rs.getString(7));
-                    user.setCity(rs.getString(8));
-                    user.setProvince(rs.getString(9));
-                    user.setPostalCode(rs.getString(10));
-                    user.setAddress(rs.getString(11));
-                    user.setRegister(rs.getString(12));
-                    user.setState(rs.getString(13));
-                    user.setAdmin(rs.getString(14));
-                    usersList.add(user);
+                    usersList.add(mapRow(rs));
                 }
             }
             return usersList;
@@ -211,5 +175,25 @@ public class UserDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    // Helper per evitare duplicazione
+    private UserBean mapRow(ResultSet rs) throws SQLException {
+        UserBean user = new UserBean();
+        user.setId(rs.getInt("ID_Utente"));
+        user.setName(rs.getString("Nome"));
+        user.setSurname(rs.getString("Cognome"));
+        user.setBirthday(rs.getString("Data_Nascita"));
+        user.setEmail(rs.getString("Email"));
+        user.setPassword(rs.getString("Accesso"));
+        user.setPhone(rs.getString("Telefono"));
+        user.setCity(rs.getString("Citta"));
+        user.setProvince(rs.getString("Provincia"));
+        user.setPostalCode(rs.getString("Codice_Postale"));
+        user.setAddress(rs.getString("Indirizzo"));
+        user.setRegister(rs.getString("Data_Registrazione"));
+        user.setState(rs.getString("Stato"));
+        user.setAdmin(rs.getString("Amministratore"));
+        return user;
     }
 }

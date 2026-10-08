@@ -40,7 +40,7 @@ public class CartDAO {
     }
 
     public ArrayList<ProductCartBean> getCart(int user) {
-        String sql = "SELECT * FROM Carrello WHERE Utente=?";
+        String sql = "SELECT Prodotto, Quantità FROM Carrello WHERE Utente=?";
         try (Connection con = ConPool.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -50,8 +50,8 @@ public class CartDAO {
                 ArrayList<ProductCartBean> products = new ArrayList<>();
                 while (rs.next()) {
                     ProductCartBean product = new ProductCartBean();
-                    product.setId(rs.getInt(1));
-                    product.setQuantity(rs.getInt(2));
+                    product.setId(rs.getInt("Prodotto"));
+                    product.setQuantity(rs.getInt("Quantità"));
                     products.add(product);
                 }
                 return products;
