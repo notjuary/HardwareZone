@@ -757,9 +757,33 @@ if (user != null && user.isActive().equalsIgnoreCase("true")) {
 }
 ```
 
+### 13.4  FIXED — NPE su prodotto inesistente in `AddToCart`
+
+- **File:** `src/main/java/Controller/AddToCart.java`
+- **Test:** `AddToCartFunctionalTest.testProdottoInesistente`
+- **CWE:** CWE-476 (NULL Pointer Dereference)
+- **Stato:**  RISOLTO
+
+#### Fix applicato
+
+```java
+ProductBean productBean = service.doRetrieveById(productId);
+
+if (productBean == null) {
+    response.sendError(404); // NOSONAR
+    return;
+}
+
+#### Scenario
+
+| Scenario                       | Comportamento attuale      | 
+| :---------------------------   | :------------------------: | 
+| `productId esistente`          | OK                         |
+| `productId = 999 inesistente`  | Rifiutato (sendError 400)  | 
+
 ---
 
-### 13.3  FIXED — Quantità negative in `AddToCart`
+### 13.5  FIXED — Quantità negative in `AddToCart`
 
 - **File:** `src/main/java/Controller/AddToCart.java`
 - **Test:** `AddToCartFunctionalTest.testQuantityNegativa`
@@ -780,13 +804,33 @@ if (!validQuantity) {
     return;
             }
 ```
+#### Test aggiornato
 
+```java
+@Test
+@DisplayName("FIXED: AddToCart con quantity negativa rifiutata (sendError 400)")
+void testQuantityNegativa() throws Exception {
+    when(support.request.getParameter("productId")).thenReturn("1");
+    when(support.request.getParameter("quantity")).thenReturn("-5");
 
+    AddToCart servlet = new AddToCart();
+    support.invokeDoGet(servlet, support.request, support.response);
 
+    verify(support.response).sendError(400);
+    verify(support.session, never()).setAttribute(eq("cart"), any());
+}
+
+#### Scenario
+
+| Scenario                       | Comportamento attuale      | 
+| :---------------------------   | :------------------------: | 
+| `quantity = 2`                 | OK                         |
+| `quantity = 0`                 | Rifiutato (sendError 400)  | 
+| `quantity = -5`                | Rifiutato (sendError 400)  |   
 
 ---
 
-### 13.4 Numero carta in chiaro nel database
+### 13.6 Numero carta in chiaro nel database
 
 - **File:** `src/main/java/Model/PaymentDAO.java`
 - **Test:** `PaymentDAOFunctionalTest`
@@ -854,7 +898,7 @@ ps.setString(3, encrypted);
 
 ---
 
-### 13.5 SHA-1 per password (non Bcrypt)
+### 13.7 SHA-1 per password (non Bcrypt)
 
 - **File:** `src/main/java/Model/UserBean.java`
 - **Test:** `UserBeanFunctionalTest`
@@ -915,7 +959,7 @@ public boolean checkPassword(String plainPassword) {
 
 ---
 
-### 13.6 NPE su Carrello Null
+### 13.8 NPE su Carrello Null
 
 - **File:** `src/main/java/Controller/ShowCart.java`, `RemoveFromCart.java`, `ProfileAndCart.java`
 - **Test:** `ShowCartFunctionalTest`, `RemoveFromCartFunctionalTest`, `ProfileAndCartFunctionalTest`
@@ -965,7 +1009,7 @@ ArrayList<ProductCartBean> cartList = cartBean.getCartList();
 
 ---
 
-### 13.7  FIXED — Loop Infinito in `ProductsHomepage`
+### 13.9  FIXED — Loop Infinito in `ProductsHomepage`
 
 - **File:** `src/main/java/Controller/ProductsHomepage.java`
 - **Test:** `ProductViewTest.testDocumentInfiniteLoopInProductsHomepage`, `ProductsHomepageFunctionalTest`
@@ -996,10 +1040,33 @@ int target = Math.min(HOMEPAGE_SIZE, allProducts.size());
 listProduct = allProducts.subList(0, target);
 }
 ```
+#### Test aggiornato
+
+```java
+@Test
+@DisplayName("FIXED: ProductsHomepage non ha più loop infinito")
+void testDocumentInfiniteLoopInProductsHomepage() throws Exception {
+    String source = readSource("src/main/java/Controller/ProductsHomepage.java");
+
+    boolean isFixed =
+            !source.contains("while (listProduct.size() != 12)") &&
+            source.contains("Math.min");
+
+    assertThat(isFixed).isTrue();
+}
+
+#### Scenario
+
+| Scenario                           |   Comportamento attuale    |
+| :--------------------------------- |:--------------------------:|
+| DB con 50 prodotti                 |        OK (12 casuali)     |
+| DB con 12 prodotti                 |        OK (12)             |
+| DB con 8 prodotti                  |        OK (8 casuali)      |
+| DB vuoto                           |        OK (lista vuota)    |
 
 ---
 
-### 13.8 CVV getter esposto
+### 13.10 CVV getter esposto
 
 - **File:** `src/main/java/Model/PaymentBean.java`
 - **Test:** `PaymentBeanFunctionalTest`
@@ -1068,7 +1135,7 @@ public String toString() {
 ---
 
 
-### Fix 2 — Sezione 13.9 
+### 13.9 Riepilogo finding dei test funzionali 
 
 
 | #  | Finding                             |   CWE   | Severità | Test                                                                                     |    Stato    |
