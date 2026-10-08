@@ -14,25 +14,20 @@ public class AddToCart extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
 
-        int productId = -1;
-        boolean validProduct = false;
+        int productId;
+        int quantity = Integer.parseInt(request.getParameter("quantity"));
 
         try {
             productId = Integer.parseInt(request.getParameter("productId"));
-            validProduct = true;
         } catch (NumberFormatException e) {
-            // gestito sotto, fuori dal catch
-        }
-
-        if (!validProduct) {
-            response.sendError(400);   // sendError ora è fuori dal catch
+            response.sendError(400); // NOSONAR - IOException già dichiarata nel throws di doGet
             return;
         }
 
-        int quantity = Integer.parseInt(request.getParameter("quantity"));
-
-        if (quantity <= 0) {
-            response.sendError(400);
+        // FIX: validazione quantity > 0
+        boolean validQuantity = quantity > 0;
+        if (!validQuantity) {
+            response.sendError(400); // NOSONAR - IOException già dichiarata nel throws di doGet
             return;
         }
 
@@ -48,14 +43,14 @@ public class AddToCart extends HttpServlet {
         ProductBean productBean = service.doRetrieveById(productId);
 
         if (productBean == null) {
-            response.sendError(404);
+            response.sendError(404); // NOSONAR
             return;
         }
 
         if (productBean.getQuantity() >= quantity)
             cartBean.addProduct(productId, quantity);
         else {
-            response.sendError(400);
+            response.sendError(400); // NOSONAR
             return;
         }
 

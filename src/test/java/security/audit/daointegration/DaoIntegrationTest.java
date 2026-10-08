@@ -1,11 +1,11 @@
 package security.audit.daointegration;
 
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.regex.Pattern;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -33,12 +33,8 @@ class DaoIntegrationTest {
         String source = readSource("src/main/java/Model/OrderDAO.java");
 
         assertThat(source)
-                .as("OrderDAO deve usare PreparedStatement")
-                .contains("PreparedStatement");
-
-        // Nessun Statement con concatenazione
-        assertThat(source)
-                .as("OrderDAO non deve usare Statement con createStatement()")
+                .as("OrderDAO deve usare PreparedStatement e non Statement con createStatement()")
+                .contains("PreparedStatement")
                 .doesNotContain("con.createStatement()");
     }
 
@@ -48,11 +44,8 @@ class DaoIntegrationTest {
         String source = readSource("src/main/java/Model/OrderProductDAO.java");
 
         assertThat(source)
-                .as("OrderProductDAO deve usare PreparedStatement")
-                .contains("PreparedStatement");
-
-        assertThat(source)
-                .as("OrderProductDAO non deve usare Statement")
+                .as("OrderProductDAO deve usare PreparedStatement e non Statement")
+                .contains("PreparedStatement")
                 .doesNotContain("con.createStatement()");
     }
 
@@ -62,11 +55,8 @@ class DaoIntegrationTest {
         String source = readSource("src/main/java/Model/CartDAO.java");
 
         assertThat(source)
-                .as("CartDAO deve usare PreparedStatement")
-                .contains("PreparedStatement");
-
-        assertThat(source)
-                .as("CartDAO non deve usare Statement")
+                .as("CartDAO deve usare PreparedStatement e non Statement")
+                .contains("PreparedStatement")
                 .doesNotContain("con.createStatement()");
     }
 
@@ -79,14 +69,9 @@ class DaoIntegrationTest {
     void testUserDAOUpdateUsesPreparedStatement() throws Exception {
         String source = readSource("src/main/java/Model/UserDAO.java");
 
-        // Verifica che NON usi più Statement
         assertThat(source)
-                .as("UserDAO.doUpdate deve usare PreparedStatement")
-                .doesNotContain("con.createStatement()");
-
-        // Verifica che usi PreparedStatement
-        assertThat(source)
-                .as("UserDAO deve usare PreparedStatement")
+                .as("UserDAO deve usare PreparedStatement e non Statement")
+                .doesNotContain("con.createStatement()")
                 .contains("PreparedStatement");
     }
 
@@ -99,6 +84,7 @@ class DaoIntegrationTest {
                 .as("UserDAO.doUpdateState non deve usare concatenazione")
                 .doesNotContain("UPDATE Utente SET Stato = '\" +");
     }
+
     @Test
     @DisplayName("REGRESSION: UserDAO.doUpdateAdmin usa PreparedStatement")
     void testUserDAOUpdateAdminUsesPreparedStatement() throws Exception {
@@ -114,19 +100,10 @@ class DaoIntegrationTest {
     void testProductDAOUpdateUsesPreparedStatement() throws Exception {
         String source = readSource("src/main/java/Model/ProductDAO.java");
 
-        // Verifica che NON usi più Statement (vulnerabile)
         assertThat(source)
                 .as("ProductDAO.doUpdate NON deve usare con.createStatement() (SQL Injection)")
-                .doesNotContain("con.createStatement()");
-
-        // Verifica che usi PreparedStatement (sicuro)
-        assertThat(source)
-                .as("ProductDAO.doUpdate deve usare PreparedStatement")
-                .contains("PreparedStatement");
-
-        // Verifica che usi placeholder parametrizzati (?)
-        assertThat(source)
-                .as("ProductDAO.doUpdate deve usare placeholder (?) invece di concatenazione")
+                .doesNotContain("con.createStatement()")
+                .contains("PreparedStatement")
                 .contains("UPDATE Prodotto SET Nome = ?");
     }
 
@@ -139,7 +116,6 @@ class DaoIntegrationTest {
     void testSchemaPasswordColumnIsHashSized() throws Exception {
         String schema = readSource("database/createDB.sql");
 
-        // La colonna Accesso deve contenere l'hash SHA-1 (40 caratteri)
         assertThat(schema)
                 .as("La colonna Accesso in Utente deve essere VARCHAR(40) "
                         + "per contenere un hash SHA-1 hex")
@@ -151,7 +127,6 @@ class DaoIntegrationTest {
     void testSchemaHasNoPlaintextPasswordColumn() throws Exception {
         String schema = readSource("database/createDB.sql");
 
-        // Non deve esistere una colonna 'password' o 'passwd' (solo 'Accesso')
         assertThat(schema.toLowerCase())
                 .as("Lo schema non deve avere una colonna 'password' in chiaro")
                 .doesNotContain("password varchar")
@@ -173,16 +148,11 @@ class DaoIntegrationTest {
     void testSchemaTablesHavePrimaryKeys() throws Exception {
         String schema = readSource("database/createDB.sql");
 
-        // Le principali tabelle devono avere AUTO_INCREMENT PRIMARY KEY
         assertThat(schema)
                 .as("Utente deve avere ID_Utente AUTO_INCREMENT PRIMARY KEY")
-                .contains("ID_Utente INT AUTO_INCREMENT PRIMARY KEY");
-
-        assertThat(schema)
+                .contains("ID_Utente INT AUTO_INCREMENT PRIMARY KEY")
                 .as("Prodotto deve avere ID_Prodotto AUTO_INCREMENT PRIMARY KEY")
-                .contains("ID_Prodotto INT AUTO_INCREMENT PRIMARY KEY");
-
-        assertThat(schema)
+                .contains("ID_Prodotto INT AUTO_INCREMENT PRIMARY KEY")
                 .as("Ordine deve avere ID_Ordine AUTO_INCREMENT PRIMARY KEY")
                 .contains("ID_Ordine INT AUTO_INCREMENT PRIMARY KEY");
     }
@@ -197,16 +167,15 @@ class DaoIntegrationTest {
         String dao = readSource("src/main/java/Model/OrderDAO.java");
         String schema = readSource("database/createDB.sql");
 
-        // Tabella Ordine
-        assertThat(dao).contains("FROM Ordine");
-        assertThat(schema).contains("CREATE TABLE Ordine");
-
-        // Colonne utilizzate dal DAO devono esistere nello schema
-        assertThat(dao).contains("ID_Ordine");
-        assertThat(schema).contains("ID_Ordine");
-
-        assertThat(dao).contains("Utente");
-        assertThat(schema).contains("Utente INT REFERENCES");
+        // Assertion su soggetti diversi: uso SoftAssertions per raggruppare
+        SoftAssertions softly = new SoftAssertions();
+        softly.assertThat(dao).contains("FROM Ordine");
+        softly.assertThat(schema).contains("CREATE TABLE Ordine");
+        softly.assertThat(dao).contains("ID_Ordine");
+        softly.assertThat(schema).contains("ID_Ordine");
+        softly.assertThat(dao).contains("Utente");
+        softly.assertThat(schema).contains("Utente INT REFERENCES");
+        softly.assertAll();
     }
 
     @Test
@@ -215,12 +184,12 @@ class DaoIntegrationTest {
         String dao = readSource("src/main/java/Model/OrderProductDAO.java");
         String schema = readSource("database/createDB.sql");
 
-        assertThat(dao).contains("Ordine_Prodotto");
-        assertThat(schema).contains("CREATE TABLE Ordine_Prodotto");
-
-        // Colonne utilizzate
-        assertThat(dao).contains("Prodotto");
-        assertThat(dao).contains("Ordine");
+        SoftAssertions softly = new SoftAssertions();
+        softly.assertThat(dao).contains("Ordine_Prodotto");
+        softly.assertThat(schema).contains("CREATE TABLE Ordine_Prodotto");
+        softly.assertThat(dao).contains("Prodotto");
+        softly.assertThat(dao).contains("Ordine");
+        softly.assertAll();
     }
 
     // ==========================================================
@@ -233,15 +202,14 @@ class DaoIntegrationTest {
         String bean = readSource("src/main/java/Model/OrderBean.java");
         String dao = readSource("src/main/java/Model/OrderDAO.java");
 
-        // OrderBean deve avere i getter usati dal DAO
-        assertThat(dao).contains("order.getUser()");
-        assertThat(bean).contains("public int getUser()");
-
-        assertThat(dao).contains("order.getTotal()");
-        assertThat(bean).contains("public double getTotal()");
-
-        assertThat(dao).contains("orderBean.setId(");
-        assertThat(bean).contains("public void setId(");
+        SoftAssertions softly = new SoftAssertions();
+        softly.assertThat(dao).contains("order.getUser()");
+        softly.assertThat(bean).contains("public int getUser()");
+        softly.assertThat(dao).contains("order.getTotal()");
+        softly.assertThat(bean).contains("public double getTotal()");
+        softly.assertThat(dao).contains("orderBean.setId(");
+        softly.assertThat(bean).contains("public void setId(");
+        softly.assertAll();
     }
 
     @Test
@@ -250,14 +218,14 @@ class DaoIntegrationTest {
         String bean = readSource("src/main/java/Model/OrderProductBean.java");
         String dao = readSource("src/main/java/Model/OrderProductDAO.java");
 
-        assertThat(dao).contains("orderProductBean.getProduct()");
-        assertThat(bean).contains("public int getProduct()");
-
-        assertThat(dao).contains("orderProductBean.getQuantity()");
-        assertThat(bean).contains("public int getQuantity()");
-
-        assertThat(dao).contains("orderProductBean.getPrice()");
-        assertThat(bean).contains("public double getPrice()");
+        SoftAssertions softly = new SoftAssertions();
+        softly.assertThat(dao).contains("orderProductBean.getProduct()");
+        softly.assertThat(bean).contains("public int getProduct()");
+        softly.assertThat(dao).contains("orderProductBean.getQuantity()");
+        softly.assertThat(bean).contains("public int getQuantity()");
+        softly.assertThat(dao).contains("orderProductBean.getPrice()");
+        softly.assertThat(bean).contains("public double getPrice()");
+        softly.assertAll();
     }
 
     // ==========================================================
@@ -290,11 +258,8 @@ class DaoIntegrationTest {
         String source = readSource("src/main/java/Model/ConPool.java");
 
         assertThat(source)
-                .as("La URL JDBC deve specificare serverTimezone per evitare errori di connessione")
-                .contains("serverTimezone");
-
-        assertThat(source)
-                .as("La URL JDBC deve specificare useSSL o allowPublicKeyRetrieval")
+                .as("La URL JDBC deve specificare serverTimezone e useSSL/allowPublicKeyRetrieval")
+                .contains("serverTimezone")
                 .containsPattern("useSSL|allowPublicKeyRetrieval");
     }
 
