@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import security.functional.BaseFunctionalTest;
 import security.functional.ServletTestSupport;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.*;
 
 /**
  * Test funzionali di sicurezza per Logout.
@@ -43,7 +43,7 @@ class LogoutFunctionalTest extends BaseFunctionalTest {
 
     @Test
     @DisplayName("FIXED: Logout utente anonimo non lancia NPE")
-    void testLogoutUtenteAnonimo() throws Exception {
+    void testLogoutUtenteAnonimo() {
         // Setup: sessione senza user
         when(support.session.getAttribute("user")).thenReturn(null);
         when(support.session.getAttribute("cart")).thenReturn(null);
