@@ -39,7 +39,7 @@ CREATE TABLE Ordine (
 
 CREATE TABLE Ordine_Prodotto (
 	Prodotto INT NOT NULL,
-    Quantità INT NOT NULL,
+    Quantita INT NOT NULL,
     Prezzo DOUBLE(10, 2),
     Ordine INT REFERENCES Ordine(ID_Ordine)
 );
@@ -56,7 +56,7 @@ CREATE TABLE Pagamento (
 
 CREATE TABLE Carrello (
 	Prodotto INT NOT NULL REFERENCES Prodotto(ID_Prodotto),
-    Quantità INT NOT NULL,
+    Quantita INT NOT NULL,
     Utente INT NOT NULL REFERENCES Utente(ID_Utente)
 );
 
@@ -90,7 +90,7 @@ INSERT INTO Ordine (Utente, Totale) VALUES
                                         (2, 259.99);
 
 -- Inserimento prodotti negli ordini
-INSERT INTO Ordine_Prodotto (Prodotto, Quantità, Prezzo, Ordine) VALUES
+INSERT INTO Ordine_Prodotto (Prodotto, Quantita, Prezzo, Ordine) VALUES
                                                                      (3, 1, 492.99, 1),
                                                                      (4, 2, 178.90, 2);
 

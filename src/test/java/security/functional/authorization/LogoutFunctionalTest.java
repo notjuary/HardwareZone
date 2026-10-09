@@ -6,9 +6,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import security.functional.BaseFunctionalTest;
 import security.functional.ServletTestSupport;
-
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;import static org.mockito.Mockito.*;
 
 /**
  * Test funzionali di sicurezza per Logout.
@@ -43,16 +42,22 @@ class LogoutFunctionalTest extends BaseFunctionalTest {
     }
 
     @Test
-    @DisplayName("SECURITY: logout causa NPE se utente non loggato (finding)")
-    void testLogoutUtenteAnonimo()  {
+    @DisplayName("FIXED: Logout utente anonimo non lancia NPE")
+    void testLogoutUtenteAnonimo() throws Exception {
+        // Setup: sessione senza user
         when(support.session.getAttribute("user")).thenReturn(null);
+        when(support.session.getAttribute("cart")).thenReturn(null);
+        when(support.request.getSession(false)).thenReturn(support.session);
 
         Logout servlet = new Logout();
-        assertThrows(Exception.class, () ->
-                        support.invokeDoGet(servlet, support.request, support.response),
-                "Atteso NPE: user.isAdmin() senza null check");
-    }
 
+        // FIX: non deve più lanciare NPE
+        assertDoesNotThrow(() ->
+                support.invokeDoGet(servlet, support.request, support.response));
+
+        // FIX: la sessione viene invalidata
+        verify(support.session).invalidate();
+    }
     @Test
     @DisplayName("SECURITY: logout reindirizza a index.jsp")
     void testLogoutRedirect() throws Exception {

@@ -107,7 +107,7 @@ public abstract class BaseFunctionalTest {
 
             st.execute("CREATE TABLE Ordine_Prodotto (" +
                     "Prodotto INT NOT NULL," +
-                    "Quantità INT NOT NULL," +
+                    "Quantita INT NOT NULL," +
                     "Prezzo DOUBLE," +
                     "Ordine INT" +
                     ")");
@@ -124,7 +124,7 @@ public abstract class BaseFunctionalTest {
 
             st.execute("CREATE TABLE Carrello (" +
                     "Prodotto INT NOT NULL," +
-                    "Quantità INT NOT NULL," +
+                    "Quantita INT NOT NULL," +
                     "Utente INT NOT NULL" +
                     ")");
 

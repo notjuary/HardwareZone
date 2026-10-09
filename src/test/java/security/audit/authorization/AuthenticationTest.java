@@ -93,28 +93,35 @@ class AuthenticationTest {
     }
 
     @Test
-    @DisplayName("FINDING: Logout usa user.isAdmin() senza null check")
+    @DisplayName("FIXED: Logout verifica user != null prima di isAdmin()")
     void testDocumentMissingNullCheckInLogout() throws Exception {
         String source = readSource("src/main/java/Controller/Logout.java");
-        boolean unsafe =
-                source.contains("UserBean user = (UserBean) session.getAttribute(\"user\")") &&
-                        source.contains("user.isAdmin()") &&
-                        !source.contains("user != null");
-        assertThat(unsafe).as("FINDING: NPE Logout su user null").isTrue();
+
+        boolean isFixed =
+                source.contains("user != null") &&
+                        source.contains("cartBean != null");
+
+        assertThat(isFixed)
+                .as("FIXED: Logout ora verifica che user != null e cartBean != null "
+                        + "prima di chiamare isAdmin() e getCartList(). "
+                        + "L'NPE (CWE-476) è stato risolto.")
+                .isTrue();
     }
 
     @Test
-    @DisplayName("FINDING: Logout usa cartBean senza null check (NPE nel for)")
+    @DisplayName("FIXED: Logout usa getSession(false) per non creare sessioni vuote")
     void testDocumentNullCartBeanInLogout() throws Exception {
         String source = readSource("src/main/java/Controller/Logout.java");
-        boolean unsafe =
-                source.contains("CartBean cartBean = (CartBean) session.getAttribute(\"cart\")") &&
-                        source.contains("for (ProductCartBean product : cartBean.getCartList())") &&
-                        !source.contains("cartBean != null") &&
-                        !source.contains("if (cartBean");
-        assertThat(unsafe).as("FINDING: NPE Logout su cartBean null").isTrue();
-    }
 
+        boolean isFixed =
+                source.contains("getSession(false)") &&
+                        source.contains("if (session != null)");
+
+        assertThat(isFixed)
+                .as("FIXED: Logout usa getSession(false) e verifica che session != null. "
+                        + "Il bug è stato risolto.")
+                .isTrue();
+    }
     @Test
     @DisplayName("UserBean: un utente attivo ha state='true'")
     void testActiveUserState() {

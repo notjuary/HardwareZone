@@ -7,10 +7,10 @@ public class OrderProductDAO {
 
     private static final String SELECT = "SELECT ";
     private static final String COLUMNS =
-            "Prodotto, Quantità, Prezzo, Ordine";
+            "Prodotto, Quantita, Prezzo, Ordine";
 
     public void doSave(OrderProductBean orderProductBean) {
-        String sql = "INSERT INTO Ordine_Prodotto (Prodotto, Quantità, Prezzo, Ordine) VALUES (?,?,?,?)";
+        String sql = "INSERT INTO Ordine_Prodotto (Prodotto, Quantita, Prezzo, Ordine) VALUES (?,?,?,?)";
         try (Connection con = ConPool.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -41,7 +41,7 @@ public class OrderProductDAO {
                 while (rs.next()) {
                     OrderProductBean product = new OrderProductBean();
                     product.setProduct(rs.getInt("Prodotto"));
-                    product.setQuantity(rs.getInt("Quantità"));
+                    product.setQuantity(rs.getInt("Quantita"));
                     product.setPrice(rs.getDouble("Prezzo"));
                     product.setOrder(rs.getInt("Ordine"));
                     products.add(product);

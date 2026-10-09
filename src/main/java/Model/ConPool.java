@@ -47,7 +47,12 @@ public class ConPool {
 
 			String timezone = TimeZone.getDefault().getID();
 			String url = String.format(
-					"jdbc:mysql://%s:%s/%s?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=%s",
+					"jdbc:mysql://%s:%s/%s"
+							+ "?useSSL=false"
+							+ "&allowPublicKeyRetrieval=true"
+							+ "&serverTimezone=%s"
+							+ "&useUnicode=true"
+							+ "&characterEncoding=UTF-8",
 					dbHost, dbPort, dbName, timezone
 			);
 

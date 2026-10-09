@@ -479,11 +479,11 @@ src/test/java/security/functional/
 
 **`LogoutFunctionalTest.java` — 3 test**
 
-| # | Metodo | Cosa verifica |
-|:--|:---|:---|
-| 1 | `testLogoutInvalidaSessione` | `session.invalidate()` |
-| 2 | `testLogoutUtenteAnonimo` | NPE documentato |
-| 3 | `testLogoutRedirect` | Redirect a index |
+| # | Metodo | Cosa verifica                      |
+|:--|:---|:-----------------------------------|
+| 1 | `testLogoutInvalidaSessione` | `session.invalidate()`             |
+| 2 | `testLogoutUtenteAnonimo` | **FIXED** — gestito con null check |
+| 3 | `testLogoutSenzaCarrello` | **FIXED** — nessun NPE             |
 
 **`RegistrationFunctionalTest.java` — 3 test** (vedi A03)
 
@@ -636,6 +636,7 @@ I test funzionali hanno **scoperto a runtime** i seguenti finding. Alcuni sono s
 | Loop infinito homepage | `ProductsHomepageFunctionalTest` | **FIXED**   |
 | CVV getter esposto | `PaymentBeanFunctionalTest` | Documentato |
 | Bug `removeProduct` | `CartBeanFunctionalTest` | **FIXED**   |
+| NPE su `cartBean` in Logout | `LogoutFunctionalTest` | **FIXED**   |
 
 ## 13. Dettaglio dei finding documentati
 
@@ -766,13 +767,14 @@ if (user != null && user.isActive().equalsIgnoreCase("true")) {
 
 #### Fix applicato
 
-```java
+```text
 ProductBean productBean = service.doRetrieveById(productId);
 
 if (productBean == null) {
     response.sendError(404); // NOSONAR
     return;
 }
+```
 
 #### Scenario
 
@@ -819,6 +821,7 @@ void testQuantityNegativa() throws Exception {
     verify(support.response).sendError(400);
     verify(support.session, never()).setAttribute(eq("cart"), any());
 }
+```
 
 #### Scenario
 
@@ -1054,6 +1057,7 @@ void testDocumentInfiniteLoopInProductsHomepage() throws Exception {
 
     assertThat(isFixed).isTrue();
 }
+```
 
 #### Scenario
 
@@ -1152,60 +1156,3 @@ public String toString() {
 | 10 | Bug `removeProduct`                 | CWE-20  |   Media  | `CartBeanFunctionalTest`, `BusinessLogicTest`                                            |  **FIXED**  |
 | 11 | Boundary bug filtro prezzi          | CWE-20  |   Media  | `BusinessLogicTest`, `ProductCatalogTest`                                                |  **FIXED**  |
 
-## 14. Changelog
-
-### 07/10/2026 — Remediation iterazione 1
-
-**Fix applicati:**
-
-| # | Area | File | Descrizione |
-| :--- | :--- | :--- | :--- |
-| 1 | A04 | `AddToCart.java` | Aggiunto try/catch su `Integer.parseInt(productId)` |
-| 2 | A04 | `AddToCart.java` | Aggiunta validazione `quantity > 0` |
-| 3 | A04 | `AddToCart.java` | Aggiunto `return;` dopo ogni `sendError` |
-| 4 | A04 | `AddToCart.java` | Aggiunto null check su `productBean` con `sendError(404)` |
-| 5 | A04 | `CartBean.java` | `removeProduct` non rimuove più elementi se ID inesistente |
-| 6 | A04 | `ProductDAO.java` | Filtro prezzi usa `>=` e `<=` invece di `>` e `<` |
-| 7 | A05 | `UserDAO.java` | `PreparedStatement` al posto di `Statement` (già fixato) |
-| 8 | A05 | `ProductDAO.java` | Try-with-resources per `PreparedStatement` e `ResultSet` |
-| 9 | A05 | `CartDAO.java` | Try-with-resources per `PreparedStatement` e `ResultSet` |
-
-**Test aggiornati:**
-
-| File | Test | Modifica |
-| :--- | :--- | :--- |
-| `AddToCartFunctionalTest.java` | `testQuantityNegativa` | Verifica `sendError(400)` invece del bug |
-| `AddToCartFunctionalTest.java` | `testProdottoInesistente` | Verifica `sendError(404)` invece di NPE |
-| `BusinessLogicTest.java` | `testDocumentFilterBoundaryBug` | Verifica `>=` e `<=` |
-| `BusinessLogicTest.java` | `testRemoveNonExistentProductIsBuggy` | Aspetta `size == 2` |
-| `CartBeanFunctionalTest.java` | `testRemoveNonexistentBug` | Aspetta `size == 2` |
-| `CartManagementTest.java` | Vari test | Aggiornati al formato FIXED |
-
-**Finding ancora aperti (non fixati in questa iterazione):**
-
-- SHA-1 come algoritmo di hashing password (`UserBean.java`)
-- CSRF su azioni GET (`SetAdmin`, `SetStateUser`, `EditProfile`)
-- Privilege escalation e self-lockout in `SetStateUser`
-- File upload senza restrizioni in `AddProduct`
-- NPE in vari controller (Login, ShowCart, RemoveFromCart)
-- Numero carta in chiaro (PCI-DSS)
-- CVV getter esposto
-
-**Nota metodologica:** i test funzionali sono stati aggiornati per verificare il **fix** e fungono da **regression protection**: se qualcuno reintroduce la vulnerabilità, il test fallisce.
-### 08/10/2026 — Remediation iterazione 2
-
-**Fix applicati:**
-
-| # | Area | File | Descrizione |
-| :--- | :--- | :--- | :--- |
-| 1 | A04 | `ProductsHomepage.java` | Sostituito `while` con `Collections.shuffle()` + `Math.min` |
-| 2 | A04 | `ProductsHomepage.java` | Gestione DB vuoto con `if (allProducts.isEmpty())` |
-| 3 | A04 | `ProductsHomepage.java` | Rimosso `doRetrieveById(random)` → usa tutti i prodotti |
-| 4 | A04 | `ProductsHomepage.java` | `RANDOM` static final (warning SonarQube) |
-
-**Test aggiornati:**
-
-| File | Modifica |
-| :--- | :--- |
-| `ProductViewTest.java` | 4 test aggiornati al formato FIXED (loop, DB vuoto, null product, Random) |
-| `ProductsHomepageFunctionalTest.java` | Rimosso riferimento a "loop infinito documentato" |

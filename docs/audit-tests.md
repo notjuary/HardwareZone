@@ -307,11 +307,11 @@ src/test/java/security/audit/
 
 **Logout:**
 
-| **#** | **Metodo**                             | **Cosa verifica**      |
-| :---- | :------------------------------------- | :--------------------- |
-| 8     | `testLogoutInvalidatesSession`         | `session.invalidate()` |
-| 9     | `testDocumentMissingNullCheckInLogout` | NPE                    |
-| 10    | `testDocumentNullCartBeanInLogout`     | NPE                    |
+| **#** | **Metodo**                             | **Cosa verifica**                                               |
+| :---- | :------------------------------------- |:----------------------------------------------------------------|
+| 8     | `testLogoutInvalidatesSession`         | `session.invalidate()`                                          |
+| 9  | `testDocumentMissingNullCheckInLogout` | **FIXED** — Logout verifica `user != null` e `cartBean != null` |
+| 10 | `testDocumentNullCartBeanInLogout`     | **FIXED** — `getSession(false)` + null check su `session`       |
 
 **Session:**
 
@@ -623,13 +623,13 @@ Coperti da `AuthenticationTest.java` — vedi sezione 4.5.
 
 ### 10.3 Finding documentati
 
-I test di audit hanno **scoperto 40+ finding**, di cui **8 risolti** durante l'ultimo ciclo di remediation.
+I test di audit hanno **scoperto 40+ finding**, di cui **10 risolti** durante l'ultimo ciclo di remediation.
 
 | **Categoria** | **# Totali** | **# Risolti** | **# Aperti** | **Esempi** |
 |:--------------| :--- | :--- | :--- | :--------- |
-| **Critici**   | 12 | 3 | 9 | Privilege escalation, CSRF, PCI-DSS, race condition |
-| **Alti**      | 8 | 1 | 7 | SQL Injection, DoS, file upload |
-| **Medi**      | 20+ | 4 | 16+ | NPE, bug logici, NumberFormatException |
+| **Critici**   | 12 | 4 | 8 | Privilege escalation, CSRF, PCI-DSS |
+| **Alti**      | 8  | 2 | 6 | SQL Injection, DoS, NPE |
+| **Medi**      | 20+| 4 | 16+| NPE, bug logici |
 
 **Finding risolti:**
 
@@ -643,6 +643,8 @@ I test di audit hanno **scoperto 40+ finding**, di cui **8 risolti** durante l'u
 | 6 | Filtro prezzi usa `>=` e `<=` | `ProductDAO.java` | `ProductCatalogTest.testDocumentFilterBoundaryBug` |
 | 7 | Loop infinito homepage | `ProductsHomepage.java` | `ProductViewTest.testDocumentInfiniteLoopInProductsHomepage` |
 | 8 | DB vuoto e product null | `ProductsHomepage.java` | `ProductViewTest.testDocumentEmptyDatabaseRisk`, `testDocumentNullProductRisk` |
+| 9  | NPE su `user` in Logout (anonimo) | `Logout.java` | `AuthenticationTest.testDocumentMissingNullCheckInLogout` |
+| 10 | NPE su `cartBean` in Logout       | `Logout.java` | `AuthenticationTest.testDocumentNullCartBeanInLogout` |
 
 ### 10.4 Blockers SonarQube risolti (Overall Code)
 
@@ -949,7 +951,7 @@ public void removeProduct(int id) {
 - **Test:** `CartManagementTest.testDocumentNullProductInAddToCart`
 - **Fix applicato:**
 - 
-```java
+```text
 ProductBean productBean = service.doRetrieveById(productId);
 
 if (productBean == null) {
@@ -964,7 +966,7 @@ if (productBean == null) {
 - **Test:** `ProductViewTest.testDocumentInfiniteLoopInProductsHomepage`
 - **Fix applicato:** `sostituito while (listProduct.size() != 12)` con:
 
-```java
+```text
 private static final Random RANDOM = new Random();
 private static final int HOMEPAGE_SIZE = 12;
 
@@ -987,48 +989,37 @@ if (allProducts.isEmpty()) {
 - **Fix applicato:** gestione `allProducts.isEmpty()` e rimozione di `doRetrieveById(random)` (usa shuffle sulla lista completa).
 - **Stato:** FIXED
 
-## 12. Changelog
+### 11.6 FIXED — NPE su Logout
 
-### 08/10/2026 — Remediation iterazione 1
+- **File:** `src/main/java/Controller/Logout.java`
+- **Test:** `AuthenticationTest.testDocumentMissingNullCheckInLogout`
+- **CWE:** CWE-476 (NULL Pointer Dereference)
+- **Severità:** Alta
+- **Stato:** RISOLTO
 
-**Fix applicati (8 finding risolti):**
+#### Vulnerabilità (storica)
 
-| # | Area | File | Descrizione |
-| :--- | :--- | :--- | :--- |
-| 1 | A04 | `AddToCart.java` | Try/catch su `Integer.parseInt(productId)` |
-| 2 | A04 | `AddToCart.java` | Validazione `quantity > 0` |
-| 3 | A04 | `AddToCart.java` | `return;` dopo ogni `sendError` |
-| 4 | A04 | `AddToCart.java` | Null check su `productBean` con `sendError(404)` |
-| 5 | A04 | `CartBean.java` | `removeProduct` non rimuove se ID inesistente |
-| 6 | A04 | `ProductDAO.java` | Filtro usa `>=` e `<=` |
-| 7 | A04 | `ProductsHomepage.java` | Sostituito `while` con `Collections.shuffle()` |
-| 8 | A04 | `ProductsHomepage.java` | Gestione DB vuoto e product null |
+Il servlet `Logout` chiamava `user.isAdmin()` e `cartBean.getCartList()` senza verificare che gli oggetti non fossero null. Un utente anonimo o un utente loggato senza carrello causavano NPE.
 
-**Test aggiornati al formato FIXED:**
+#### Fix applicato
 
-| File | Test |
-| :--- | :--- |
-| `CartManagementTest.java` | 5 test |
-| `ProductCatalogTest.java` | 1 test |
-| `ProductViewTest.java` | 4 test |
+```text
+HttpSession session = request.getSession(false);
 
-### 08/10/2026 — Remediation iterazione 2
+if (session != null) {
+    UserBean user = (UserBean) session.getAttribute("user");
+    CartBean cartBean = (CartBean) session.getAttribute("cart");
 
-**Fix applicati:**
+    if (user != null && cartBean != null) {
+        CartDAO serviceCart = new CartDAO();
+        serviceCart.doDelete(user.getId());
+        for (ProductCartBean product : cartBean.getCartList()) {
+            serviceCart.doSave(user.getId(), product.getId(), product.getQuantity());
+        }
+    }
 
-| # | Area | File | Descrizione |
-| :--- | :--- | :--- | :--- |
-| 1 | A04 | `ProductsHomepage.java` | Sostituito `while` con `Collections.shuffle()` + `Math.min` |
-| 2 | A04 | `ProductsHomepage.java` | Gestione DB vuoto con `if (allProducts.isEmpty())` |
-| 3 | A04 | `ProductsHomepage.java` | Rimosso `doRetrieveById(random)` |
-| 4 | A04 | `ProductsHomepage.java` | `RANDOM` static final |
-| 5 | A04 | `ProductsHomepage.java` | `Math.min(HOMEPAGE_SIZE, size)` |
+    session.invalidate();
+}
+```
 
-**Test aggiornati:**
 
-| File | Modifica |
-| :--- | :--- |
-| `ProductViewTest.java` | 4 test aggiornati al formato FIXED |
-| `ProductsHomepageFunctionalTest.java` | Rimosso riferimento a "loop infinito documentato" |
-| `CartManagementTest.java` | Test allineati al formato FIXED |
-| `ProductCatalogTest.java` | Test boundary filter allineato |

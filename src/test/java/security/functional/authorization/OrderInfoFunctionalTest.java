@@ -41,7 +41,7 @@ class OrderInfoFunctionalTest extends BaseFunctionalTest {
 
         executeSql("INSERT INTO Prodotto (Nome, Descrizione, Prezzo, Quantita_Disponibile, Sconto, Immagine, Categoria) " +
                 "VALUES ('Ryzen 5', 'CPU AMD', 299.99, 10, 0, '/img/ryzen.png', 'CPU')");
-        executeSql("INSERT INTO Ordine_Prodotto (Prodotto, Quantità, Prezzo, Ordine) VALUES (1, 1, 100.00, 1)");
+        executeSql("INSERT INTO Ordine_Prodotto (Prodotto, Quantita, Prezzo, Ordine) VALUES (1, 1, 100.00, 1)");
 
         when(support.request.getRequestDispatcher("/WEB-INF/results/orderInfo.jsp")).thenReturn(support.dispatcher);
         when(support.request.getRequestDispatcher("/WEB-INF/user/orderInfo.jsp")).thenReturn(support.dispatcher);
