@@ -48,7 +48,7 @@ jobs:
   sonarcloud:
     name: SonarCloud Analysis
     needs: [ test ]
-    uses: ./.github/workflows/sonarcloud.yml
+    uses: ./.github/workflows/sonar.yml
     secrets: inherit
 
   # ============================================
