@@ -1,31 +1,45 @@
 services:
-  tomcat:
-    build: .
+  app:
+    image: francescobarlotti/hardwarezone:latest
+    container_name: hardwarezone-app
+    restart: unless-stopped
     ports:
       - "8080:8080"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
-      MYSQL_HOST: db
-      MYSQL_PORT: 3306
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      - MYSQL_HOST=db
+      - MYSQL_PORT=3306
+      - MYSQL_DATABASE=${MYSQL_DATABASE:-ecommerce}
+      - MYSQL_USER=${MYSQL_USER:-root}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-rootpassword}
     networks:
       - ecommerce-net
 
   db:
     image: mysql:8
-    restart: always
+    container_name: hardwarezone-db
+    restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD:-rootpassword}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-ecommerce}
     ports:
       - "3306:3306"
     volumes:
+      - db_data:/var/lib/mysql
       - ./database/createDB.sql:/docker-entrypoint-initdb.d/createDB.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${MYSQL_PASSWORD:-rootpassword}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
     networks:
       - ecommerce-net
 
 networks:
   ecommerce-net:
+    driver: bridge
+
+volumes:
+  db_data:
