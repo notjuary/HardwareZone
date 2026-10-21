@@ -151,14 +151,10 @@ class AdminFunctionsTest {
     void testEditProductUsesDecimalRegex() throws Exception {
         String source = readSource("src/main/java/Controller/EditProduct.java");
 
-        // Verifica che la vecchia regex vulnerabile sia sparita
+        // FIX S5853: Assertion chain
         assertThat(source)
-                .as("La vecchia regex con backtracking non deve più esserci")
-                .doesNotContain("Pattern.compile(\"^\\\\d*\\\\.?\\\\d*$\")");
-
-        // Verifica che ci sia la nuova regex sicura
-        assertThat(source)
-                .as("EditProduct deve usare la nuova regex sicura")
+                .as("La vecchia regex non deve esserci e la nuova deve essere presente")
+                .doesNotContain("Pattern.compile(\"^\\\\d*\\\\.?\\\\d*$\")")
                 .contains("private static final Pattern DECIMAL_PATTERN = Pattern.compile(\"^\\\\d+(\\\\.\\\\d+)?$\");");
     }
 

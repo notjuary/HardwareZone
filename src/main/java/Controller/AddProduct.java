@@ -19,6 +19,10 @@ public class AddProduct extends HttpServlet {
     private static final Pattern DECIMAL_PATTERN = Pattern.compile("^\\d+(\\.\\d+)?$");
     private static final Pattern INT_PATTERN = Pattern.compile("^\\d+$");
 
+    // FIX S1192: Costanti estratte per evitare duplicazioni
+    private static final String REDIRECT_URL = "add-product-servlet";
+    private static final String DEFAULT_IMAGE = "./img/products/nophoto.png";
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
@@ -57,23 +61,22 @@ public class AddProduct extends HttpServlet {
                 || price == null || !DECIMAL_PATTERN.matcher(price).find()
                 || quantity == null || !INT_PATTERN.matcher(quantity).find()
                 || sales == null || !INT_PATTERN.matcher(sales).find()) {
-            sendError(request, response, "Errore inserimento", "add-product-servlet");
+            sendError(request, response, "Errore inserimento", REDIRECT_URL);
             return;
         }
 
         ProductDAO serviceProduct = new ProductDAO();
 
         if (serviceProduct.isAlreadyRegistered(name, description)) {
-            sendError(request, response, "Prodotto già presente", "add-product-servlet");
+            sendError(request, response, "Prodotto già presente", REDIRECT_URL);
             return;
         }
 
-        // FIX: Cattura le eccezioni di getPart
         Part imagePart;
         try {
             imagePart = request.getPart("image");
         } catch (IOException | ServletException e) {
-            sendError(request, response, "Errore caricamento immagine", "add-product-servlet");
+            sendError(request, response, "Errore caricamento immagine", REDIRECT_URL);
             return;
         }
 
@@ -100,15 +103,14 @@ public class AddProduct extends HttpServlet {
         return value != null && !value.trim().isEmpty() && value.length() <= maxLength;
     }
 
-    // FIX: Cattura IOException internamente
     private String handleImageUpload(Part part) {
         if (part == null || part.getSubmittedFileName() == null || part.getSubmittedFileName().isEmpty()) {
-            return "./img/products/nophoto.png";
+            return DEFAULT_IMAGE;
         }
 
         String fileName = part.getSubmittedFileName().toLowerCase();
         if (!fileName.endsWith(".jpg") && !fileName.endsWith(".jpeg") && !fileName.endsWith(".png")) {
-            return "./img/products/nophoto.png";
+            return DEFAULT_IMAGE;
         }
 
         try {
@@ -117,7 +119,7 @@ public class AddProduct extends HttpServlet {
             part.write(imagePath);
             return "./img/products/" + part.getSubmittedFileName();
         } catch (IOException e) {
-            return "./img/products/nophoto.png"; // Fallback in caso di errore di scrittura
+            return DEFAULT_IMAGE;
         }
     }
 
@@ -133,7 +135,6 @@ public class AddProduct extends HttpServlet {
         serviceCategory.doSave(categoryName);
     }
 
-    // FIX: Cattura le eccezioni e lancia RuntimeException
     private void sendError(HttpServletRequest request, HttpServletResponse response, String msg, String redirect) {
         try {
             request.setAttribute("type", "alert");

@@ -599,6 +599,23 @@ try (Connection con = ConPool.getConnection();
 
 **Impatto:** Reliability Rating mantenuto a **A**. Rimosso il rischio di `NotSerializableException` a runtime (Tomcat session persistence). Prevenuto il rischio di ReDoS (Denial of Service) tramite regex.
 
+### 6.10 Medium/Low risolte — Accessibilità WCAG 2-A (Overall Code)
+
+| File | Regola | Descrizione | Fix |
+|:---|:---:|:---|:---|
+| `Cart.jsp` | S5254 | Manca l'attributo `lang` nel tag `<html>` | Aggiunto `lang="it"` |
+| `userinfo.jsp` | S5254 | Manca la dichiarazione `<!DOCTYPE>` e `lang` | Aggiunti `<!DOCTYPE html>` e `lang="it-IT"` |
+| `menu-admin.jsp`, `menu.jsp` | S4084 | `<div>` usati come elementi interattivi (`onclick`) | Aggiunti `role="button"`, `tabindex="0"` e gestione evento `onkeydown` per l'accesso da tastiera |
+| `profile-admin.jsp` | S6853 | `<label>` usati come titoli di sezione senza `for` | Sostituiti con `<div class="text-section">` |
+| `profile-user.jsp` | S6853 | `<label>` usati come titoli di sezione senza `for` | Sostituiti con `<div class="text-section">` |
+| `productInfo.jsp` | S6853 | `<label>` usati come titoli di sezione senza `for` | Sostituiti con `<div class="text-section">` |
+| `product.jsp` | S6853 | `<label>` attorno agli input non associati esplicitamente | Separati gli input e aggiunto `for` esplicito; il bottone ora è un `<button>` nativo |
+
+**Impatto:**
+- **Accessibilità:** Migliorata l'esperienza per utenti con disabilità visive (screen reader) e motorie (navigazione da tastiera).
+- **Qualità:** Risolti i warning di Consistency/Reliability su file legacy (JSP).
+- **Rating:** Contribuisce a mantenere la Maintainability e la Reliability a **A**.
+
 ### 6.7 Impatto sull'Overall Code
 
 | Categoria | Prima | Dopo | Δ |
