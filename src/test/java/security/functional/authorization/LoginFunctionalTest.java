@@ -1,6 +1,8 @@
 package security.functional.authorization;
 
 import Controller.Login;
+import Model.UserBean;
+import Model.UserDAO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,14 +30,58 @@ class LoginFunctionalTest extends BaseFunctionalTest {
         support = new ServletTestSupport() {};
         support.setUpBase();
 
+        // FIX: Usa UserDAO per creare gli utenti e far generare l'hash BCrypt automaticamente
+        UserDAO userDAO = new UserDAO();
 
-        executeSql("INSERT INTO Utente (Nome, Cognome, Data_Nascita, Email, Accesso, Telefono, Citta, Provincia, Codice_Postale, Indirizzo, Data_Registrazione, Stato, Amministratore) " +
-                "VALUES ('Admin','Test','1990-01-01','admin@test.com','cbfdac6008f9cab4083784cbd1874f76618d2a97','3331234567','SA','SA','84100','Via 1','2024-01-01','true','true')");
-        executeSql("INSERT INTO Utente (Nome, Cognome, Data_Nascita, Email, Accesso, Telefono, Citta, Provincia, Codice_Postale, Indirizzo, Data_Registrazione, Stato, Amministratore) " +
-                "VALUES ('User','Test','1995-01-01','user@test.com','cbfdac6008f9cab4083784cbd1874f76618d2a97','3339999999','NA','NA','80100','Via 2','2024-01-02','true','false')");
-        executeSql("INSERT INTO Utente (Nome, Cognome, Data_Nascita, Email, Accesso, Telefono, Citta, Provincia, Codice_Postale, Indirizzo, Data_Registrazione, Stato, Amministratore) " +
-                "VALUES ('Disabled','Test','1995-01-01','disabled@test.com','cbfdac6008f9cab4083784cbd1874f76618d2a97','3338888888','NA','NA','80100','Via 3','2024-01-03','false','false')");
+        UserBean admin = new UserBean();
+        admin.setName("Admin");
+        admin.setSurname("Test");
+        admin.setEmail("admin@test.com");
+        admin.setPassword("password123");
+        admin.setBirthday("1990-01-01");
+        admin.setPhone("3331234567");
+        admin.setCity("SA");
+        admin.setProvince("SA");
+        admin.setPostalCode("84100");
+        admin.setAddress("Via 1");
+        admin.setRegister("2024-01-01");
+        admin.setState("true");
+        admin.setAdmin("true");
+        userDAO.doSave(admin);
 
+        UserBean user = new UserBean();
+        user.setName("User");
+        user.setSurname("Test");
+        user.setEmail("user@test.com");
+        user.setPassword("password123");
+        user.setBirthday("1995-01-01");
+        user.setPhone("3339999999");
+        user.setCity("NA");
+        user.setProvince("NA");
+        user.setPostalCode("80100");
+        user.setAddress("Via 2");
+        user.setRegister("2024-01-02");
+        user.setState("true");
+        user.setAdmin("false");
+        userDAO.doSave(user);
+
+        UserBean disabled = new UserBean();
+        disabled.setName("Disabled");
+        disabled.setSurname("Test");
+        disabled.setEmail("disabled@test.com");
+        disabled.setPassword("password123");
+        disabled.setBirthday("1995-01-01");
+        disabled.setPhone("3338888888");
+        disabled.setCity("NA");
+        disabled.setProvince("NA");
+        disabled.setPostalCode("80100");
+        disabled.setAddress("Via 3");
+        disabled.setRegister("2024-01-03");
+        disabled.setState("false");
+        disabled.setAdmin("false");
+        userDAO.doSave(disabled);
+
+        // Mock dei dispatcher
         when(support.request.getRequestDispatcher("WEB-INF/admin/admin.jsp")).thenReturn(support.dispatcher);
         when(support.request.getRequestDispatcher("index.jsp")).thenReturn(support.dispatcher);
         when(support.request.getRequestDispatcher("/WEB-INF/error.jsp")).thenReturn(support.dispatcher);

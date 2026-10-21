@@ -334,10 +334,10 @@ src/test/java/security/audit/
 | **#** | **Metodo**                                     | **Cosa verifica**            |
 | :---- | :--------------------------------------------- | :--------------------------- |
 | 1     | `testPasswordIsNotStoredInPlaintext`           | Password non in chiaro       |
-| 2     | `testPasswordHashHasExpectedLength`            | SHA-1 = 40 char              |
-| 3     | `testPasswordHashIsHexadecimal`                | Solo `[0-9a-f]`              |
-| 4     | `testSamePasswordProducesSameHash`             | SHA-1 deterministico         |
-| 5     | `testPasswordHashMatchesManualSha1Computation` | Correttezza SHA-1            |
+| 2     | `testPasswordHashHasExpectedLength`            | BCrypt = 60 char             |
+| 3     | `testPasswordHashHasBCryptPrefix`              | Inizia con `$2a$`            |
+| 4     | `testSamePasswordProducesDifferentHash`        | BCrypt salt casuale          |
+| 5     | `testPasswordHashMatchesBCryptComputation`     | Verifica con `checkpw`       |
 | 6     | `testDifferentPasswordsProduceDifferentHashes` | Diversi input → diversi hash |
 | 7     | `testSetPasswordHandlesUtf8Characters`         | Supporto UTF-8               |
 | 8     | `testConPoolHasNoHardcodedPassword`            | No password hardcoded        |
@@ -561,8 +561,8 @@ Validazione completa di tutti i campi del form di registrazione:
 **Schema DB:**
 
 | **#** | **Metodo**                               | **Cosa verifica**     |
-| :---- | :--------------------------------------- | :-------------------- |
-| 8     | `testSchemaPasswordColumnIsHashSized`    | `VARCHAR(40)`         |
+| :---- | :--------------------------------------- |:----------------------|
+| 8     | `testSchemaPasswordColumnIsHashSized`    | `VARCHAR(72)`         |
 | 9     | `testSchemaHasNoPlaintextPasswordColumn` | No password in chiaro |
 | 10    | `testSchemaEmailIsUnique`                | UNIQUE su email       |
 | 11    | `testSchemaTablesHavePrimaryKeys`        | AUTO_INCREMENT        |
@@ -645,6 +645,8 @@ I test di audit hanno **scoperto 40+ finding**, di cui **10 risolti** durante l'
 | 8 | DB vuoto e product null | `ProductsHomepage.java` | `ProductViewTest.testDocumentEmptyDatabaseRisk`, `testDocumentNullProductRisk` |
 | 9  | NPE su `user` in Logout (anonimo) | `Logout.java` | `AuthenticationTest.testDocumentMissingNullCheckInLogout` |
 | 10 | NPE su `cartBean` in Logout       | `Logout.java` | `AuthenticationTest.testDocumentNullCartBeanInLogout` |
+| 11 | SHA-1 weak hash (CWE-916) | `UserBean.java`, `UserDAO.java` | `DataProtectionTest` (aggiornato a BCrypt) |
+
 
 ### 10.4 Blockers SonarQube risolti (Overall Code)
 
@@ -662,14 +664,13 @@ I test di audit hanno **scoperto 40+ finding**, di cui **10 risolti** durante l'
 | `OrderDAO.java`, `CategoryDAO.java`, `CartDAO.java` | Ritorno `ArrayList` invece di `List` | Cambiato il tipo di ritorno in `List<...>` |
 
 ### 10.5 Finding ancora aperti
-
-- SHA-1 come algoritmo di hashing password (`UserBean.java`) — decisione consapevole
 - CSRF su azioni GET (`SetAdmin`, `SetStateUser`, `EditProfile`)
 - Privilege escalation e self-lockout in `SetStateUser`
 - File upload senza restrizioni in `AddProduct`
 - NPE in vari controller (Login, ShowCart, RemoveFromCart)
 - Numero carta in chiaro (PCI-DSS)
 - CVV getter esposto
+  *(Rimosso SHA-1, ora risolto)*
 
 ## 11. Dettaglio dei Finding
 
@@ -987,6 +988,17 @@ if (allProducts.isEmpty()) {
 - **File:** `Controller/ProductsHomepage.java`
 - **Test:** `ProductViewTest.testDocumentEmptyDatabaseRisk, testDocumentNullProductRisk`
 - **Fix applicato:** gestione `allProducts.isEmpty()` e rimozione di `doRetrieveById(random)` (usa shuffle sulla lista completa).
+- **Stato:** FIXED
+
+#### 11.5.9 A02 — Migrazione da SHA-1 a BCrypt
+
+- **File:** `Model/UserBean.java`, `Model/UserDAO.java`
+- **Test:** `DataProtectionTest`, `UserBeanFunctionalTest`
+- **Fix applicato:**
+    - `UserBean.setPassword` usa `BCrypt.hashpw(password, BCrypt.gensalt(12))`
+    - Aggiunto `UserBean.checkPassword(plainPassword)` per validare l'hash
+    - `UserDAO.doRetrieveByEmailAndPassword` estrae l'utente e chiama `checkPassword()`
+    - `createDB.sql`: colonna `Accesso` portata a `VARCHAR(72)`
 - **Stato:** FIXED
 
 ### 11.6 FIXED — NPE su Logout

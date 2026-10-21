@@ -9,7 +9,7 @@ CREATE TABLE Utente (
     Cognome VARCHAR(20) NOT NULL,
     Data_Nascita DATE NOT NULL,
     Email VARCHAR(20) UNIQUE NOT NULL,
-    Accesso VARCHAR(40) NOT NULL,
+    Accesso VARCHAR(72) NOT NULL,
     Telefono CHAR(10) NOT NULL,
     Citta VARCHAR(20) NOT NULL,
     Provincia CHAR(2) NOT NULL,
@@ -67,9 +67,9 @@ CREATE TABLE Categoria (
 -- Inserimento utenti
 INSERT INTO Utente (Nome, Cognome, Data_Nascita, Email, Accesso, Telefono, Citta, Provincia, Codice_Postale, Indirizzo, Data_Registrazione, Stato, Amministratore)
 VALUES
-    ("Teodoro","Grauso","2001-10-12","teo@ecommerce.com","5cec175b165e3d5e62c9e13ce848ef6feac81bff","1234567890","Fisciano","SA","84040","Via 1","2022-01-01","true","true"),
-    ("Michele","Spinelli","2000-07-06","mike@ecommerce.com","5cec175b165e3d5e62c9e13ce848ef6feac81bff","1234567890","Fisciano","SA","84040","Via 2","2022-01-01","true","true"),
-    ("Junhuang","Chen","2001-02-11","chen@ecommerce.com","5cec175b165e3d5e62c9e13ce848ef6feac81bff","1234567890","Fisciano","SA","84040","Via 3","2022-01-01","true","true");
+    ("Teodoro","Grauso","2001-10-12","teo@ecommerce.com","$2a$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi","1234567890","Fisciano","SA","84040","Via 1","2022-01-01","true","true"),
+    ("Michele","Spinelli","2000-07-06","mike@ecommerce.com","$2a$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi","1234567890","Fisciano","SA","84040","Via 2","2022-01-01","true","true"),
+    ("Junhuang","Chen","2001-02-11","chen@ecommerce.com","$2a$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi","1234567890","Fisciano","SA","84040","Via 3","2022-01-01","true","true");
 
 -- Inserimento categorie corrette (senza spazi extra)
 INSERT INTO Categoria (Nome_Categoria) VALUES

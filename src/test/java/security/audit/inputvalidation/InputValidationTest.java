@@ -72,7 +72,10 @@ class InputValidationTest {
     @DisplayName("setPassword gestisce stringa vuota senza crashare")
     void testSetPasswordHandlesEmptyString() {
         user.setPassword("");
-        assertThat(user.getPassword()).hasSize(40);
+        assertThat(user.getPassword())
+                .as("BCrypt genera un hash di 60 caratteri, non più 40")
+                .hasSize(60) // era 40
+                .startsWith("$2a$");
     }
 
     // ==========================================================
@@ -166,21 +169,25 @@ class InputValidationTest {
     // ==========================================================
 
     @Test
-    @DisplayName("SHA-1 produce hash deterministici anche con input speciali")
-    void testSha1DeterminismWithSpecialInput() {
+    @DisplayName("BCrypt produce hash diversi (salt casuale) anche con input speciali")
+    void testBcryptDeterminismWithSpecialInput() {
         UserBean u1 = new UserBean();
         UserBean u2 = new UserBean();
 
         u1.setPassword("P@ssw0rd!€#");
         u2.setPassword("P@ssw0rd!€#");
 
-        assertThat(u1.getPassword()).isEqualTo(u2.getPassword());
+        // BCrypt usa un salt casuale, quindi i due hash saranno DIVERSI
+        assertThat(u1.getPassword()).isNotEqualTo(u2.getPassword());
     }
 
     @Test
-    @DisplayName("SHA-1 gestisce input con soli caratteri Unicode")
-    void testSha1HandlesUnicode() {
+    @DisplayName("BCrypt gestisce input con soli caratteri Unicode")
+    void testBcryptHandlesUnicode() {
         user.setPassword("ÀÈÌÒÙ");
-        assertThat(user.getPassword()).hasSize(40);
+
+        assertThat(user.getPassword())
+                .hasSize(60) // era 40
+                .startsWith("$2a$");
     }
 }

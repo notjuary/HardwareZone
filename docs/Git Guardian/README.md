@@ -1,4 +1,4 @@
-# GitGuardian — Secret Scanning
+# GitGuardian - Secret Scanning
 
 **Strumento:** GitGuardian (ggshield)
 **Tipo di analisi:** Rilevamento di segreti hardcoded (password) nel codice sorgente e nella cronologia Git.
@@ -25,7 +25,7 @@ Il workflow esegue una scansione ad ogni push, analizzando i nuovi commit e segn
 
 Il processo di identificazione della vulnerabilità si è svolto in due fasi distinte:
 
-### Fase 1 — Scansione iniziale (incidente rilevato)
+### Fase 1 - Scansione iniziale (incidente rilevato)
 
 La repository è stata collegata a GitGuardian e scansionata per la prima volta. La scansione ha **immediatamente generato un incidente critico**: GitGuardian ha rilevato una **password in chiaro** all'interno del file `src/main/java/Model/ConPool.java`, nel commit `8fcd1fd`.
 
@@ -37,7 +37,7 @@ La repository è stata collegata a GitGuardian e scansionata per la prima volta.
 
 L'analisi manuale del codice ha poi confermato che la stessa password era replicata anche in `docker-compose.yaml`, in due punti distinti (variabile `MYSQL_PASSWORD` del servizio `tomcat` e `MYSQL_ROOT_PASSWORD` del servizio `db`).
 
-### Fase 2 — Remediation e ripristino
+### Fase 2 - Remediation e ripristino
 
 Dopo la conferma del rilevamento, si è proceduto al **fix definitivo**:
 - Rimozione della password da `ConPool.java`.
@@ -63,7 +63,7 @@ La scansione ha prodotto due alert distinti, entrambi classificati come **critic
 
 ## 4. Dettaglio delle vulnerabilità
 
-### SEC-01 — Credenziale hardcoded in `ConPool.java`
+### SEC-01 - Credenziale hardcoded in `ConPool.java`
 
 **Descrizione.** La password dell'utente `root` del database MySQL era inserita in chiaro nel metodo `getConnection()`, alla riga `p.setPassword("teograuso01")`.
 
@@ -71,7 +71,7 @@ La scansione ha prodotto due alert distinti, entrambi classificati come **critic
 
 **Impatto.** Chiunque avesse accesso alla repository (o alla sua cronologia Git) avrebbe potuto leggere la password e ottenere accesso completo al database, con possibilità di lettura, modifica e cancellazione dei dati.
 
-### SEC-02 — Credenziale hardcoded in `docker-compose.yaml`
+### SEC-02 - Credenziale hardcoded in `docker-compose.yaml`
 
 **Descrizione.** La stessa password era replicata in due punti del file `docker-compose.yaml`:
 - `MYSQL_PASSWORD` (servizio `tomcat`)
@@ -93,13 +93,6 @@ La scansione ha prodotto due alert distinti, entrambi classificati come **critic
 6. **Chiusura dell'incidente.** Gli alert su GitGuardian sono stati marcati come `Resolved` con motivazione *"Credential rotated and removed from source code"*.
 
 ---
-
-## 6. Verifica
-
-- **GitHub Actions:** Il workflow viene eseguito automaticamente ad ogni push; i log mostrano il messaggio `No secrets have been found` sull'ultimo commit.
-- **Dashboard GitGuardian:** La repository risulta `Monitored`, con `Open incidents: 0` e `Last scan: Successful`.
-- **Test funzionale:** L'applicazione si avvia correttamente con le variabili d'ambiente (in locale tramite `.env`, in CI/CD tramite i GitHub Secrets), confermando che la connessione al database avviene tramite la configurazione esternalizzata.
-- **Docker Compose:** `docker compose up -d --build` completa correttamente; il container Tomcat si connette al container MySQL usando le credenziali passate via variabili d'ambiente.
 
 
 

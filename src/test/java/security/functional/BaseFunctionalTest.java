@@ -77,7 +77,7 @@ public abstract class BaseFunctionalTest {
                     "Cognome VARCHAR(20) NOT NULL," +
                     "Data_Nascita DATE," +
                     "Email VARCHAR(100) UNIQUE NOT NULL," +
-                    "Accesso VARCHAR(40) NOT NULL," +
+                    "Accesso VARCHAR(72) NOT NULL," +
                     "Telefono CHAR(10)," +
                     "Citta VARCHAR(20)," +
                     "Provincia CHAR(2)," +

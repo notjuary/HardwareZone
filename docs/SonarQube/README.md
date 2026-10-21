@@ -1,6 +1,6 @@
 # SonarCloud — Code Quality, Code Coverage & SAST — HardwareZone
 
-**Progetto:** HardwareZone — E-commerce di componenti hardware  
+**Progetto:** HardwareZone - E-commerce di componenti hardware  
 **Piattaforma:** SonarCloud (SonarSource)  
 **Tool:** SonarScanner for Maven 3.x  
 **Quality Gate:** Sonar way (customizzato)  
@@ -198,22 +198,22 @@ jobs:
 
 ## 3. Suite di test OWASP
 
-| Area OWASP | Classi audit | Test audit | Classi funzionali | Test funzionali |
-|:---|:---:|:---:|:---:|:---:|
-| A01 — Broken Access Control | 5 | ~93 | 15 | ~45 |
-| A02 — Cryptographic Failures | 3 | ~40 | 2 | ~14 |
-| A03 — Injection | 2 | ~51 | 2 | ~11 |
-| A04 — Insecure Design | 4 | ~76 | 14 | ~20 |
-| A05 — Security Misconfiguration | 1 | ~18 | - | - |
-| A07 — Authentication Failures | (in A01) | ~15 | 2 | ~10 |
-| GDPR / Business Logic / DAO | - | - | (in A04) | ~75 |
-| **TOTALE** | **15** | **~275** | **40** | **~179** |
+| Area OWASP                      | Classi audit | Test audit | Classi funzionali | Test funzionali |
+|:--------------------------------|:---:|:---:|:---:|:---:|
+| A01 - Broken Access Control     | 5 | ~93 | 15 | ~45 |
+| A02 - Cryptographic Failures    | 3 | ~40 | 2 | ~14 |
+| A03 - Injection                 | 2 | ~51 | 2 | ~11 |
+| A04 - Insecure Design           | 4 | ~76 | 14 | ~20 |
+| A05 - Security Misconfiguration | 1 | ~18 | - | - |
+| A07 - Authentication Failures   | (in A01) | ~15 | 2 | ~10 |
+| GDPR / Business Logic / DAO     | - | - | (in A04) | ~75 |
+| **TOTALE**                      | **15** | **~275** | **40** | **~179** |
 
 **Totale complessivo:** 55 classi di test, **~454 test**.
 
 >  **Documentazione dettagliata:**
-> - Test di audit statistico: [`docs/TestCase/audit-test.md`](./audit-test.md)
-> - Test funzionali H2: [`docs/TestCase/functional.md`](./functional.md)
+> - Test di audit statistico: [`docs/audit-tests.md`](./audit-tests.md)
+> - Test funzionali H2: [`docs/functional-tests.md`](./functional-tests.md)
 
 ---
 
@@ -223,13 +223,13 @@ jobs:
 
 **New Code (prima analisi):**
 
-| Metrica | Valore | Soglia |   Esito    |
-|---------|:------:|:------:|:----------:|
-| Quality Gate | — | — | **FAILED** |
-| Reliability Rating | **E** | A |  Fallito   |
-| Coverage | **75.0%** | ≥ 80% |  Fallito   |
-| Duplications | 0.0% | ≤ 3% |     Ok     |
-| New Issues | 7 | 0 |   Warning  |
+| Metrica |  Valore   | Soglia |   Esito    |
+|---------|:---------:|:------:|:----------:|
+| Quality Gate |     -     |   -    | **FAILED** |
+| Reliability Rating |   **E**   |   A    |  Fallito   |
+| Coverage | **75.0%** | ≥ 80%  |  Fallito   |
+| Duplications |   0.0%    |  ≤ 3%  |     Ok     |
+| New Issues |     7     |   0    |   Warning  |
 
 **Dettaglio coverage baseline:**
 
@@ -278,7 +278,7 @@ jobs:
 
 **Test aggiornati:** `ProductCatalogTest.java` (1 test), `ProductViewTest.java` (4 test).
 
-### 4.4 Iterazione 3 — Refactoring DAO
+### 4.4 Iterazione 3 - Refactoring DAO
 
 **File modificati:** `CartDAO.java`, `ProductDAO.java`, `UserDAO.java`, `OrderDAO.java`, `OrderProductDAO.java`, `CategoryDAO.java`, `PaymentDAO.java`
 
@@ -372,10 +372,10 @@ try (Connection con = ConPool.getConnection();
 
 | Categoria | Issue aperte | Rating |
 |-----------|:------------:|:------:|
-| Security | 1 | B |
-| Reliability | **25+** | **E** |
-| Maintainability | 15+ | A |
-| **Totale** | **40+** | — |
+| Security | 1 |   B    |
+| Reliability | **25+** | **E**  |
+| Maintainability | 15+ |   A    |
+| **Totale** | **40+** |   -    |
 
 **Criteri di selezione:**
 
@@ -409,7 +409,7 @@ try (Connection con = ConPool.getConnection();
 | Altri fix collaterali | ~10 | 15% |
 | **TOTALE** | **~60** | 100% |
 
-### 6.3 Blocker risolte — S2095 (try-with-resources)
+### 6.3 Blocker risolte - S2095 (try-with-resources)
 
 **Regola S2095** - *"Use try-with-resources or close this PreparedStatement in a finally clause"*
 
@@ -488,7 +488,7 @@ try (Connection con = ConPool.getConnection();
 |--------|-----|
 | `doSave` | `PreparedStatement` in try-with-resources |
 
-### 6.4 High risolte — S2119 (Random)
+### 6.4 High risolte - S2119 (Random)
 
 **Regola S2119** - *"Save and re-use this Random"*
 
@@ -525,7 +525,7 @@ try (Connection con = ConPool.getConnection();
 | `Payment.java` | `java.util.ArrayList` |
 | `OrderDAOFunctionalTest.java` | `Model.OrderProductBean` |
 
-**Regola S5853** — *"Join these multiple assertions"*
+**Regola S5853** - *"Join these multiple assertions"*
 
 | File | Fix |
 |------|-----|
@@ -538,9 +538,9 @@ try (Connection con = ConPool.getConnection();
 |------|-----|
 | `AddToCart.java` | Aggiunto `// NOSONAR` con motivazione (falso positivo: `doGet` dichiara già `throws IOException`) |
 
-### 6.6 High risolte — NPE su Logout (S2259)
+### 6.6 High risolte - NPE su Logout (S2259)
 
-**Regola S2259** — *"Null pointers should not be dereferenced"*
+**Regola S2259** - *"Null pointers should not be dereferenced"*
 
 | File | Linea | Descrizione | Fix |
 |:---|:---:|:---|:---|
@@ -561,6 +561,7 @@ try (Connection con = ConPool.getConnection();
 | **TOTALE** | **40+** | **1** | **-40+** |
 
 **Il Reliability Rating è passato da E a A.**
+**Security Rating: A** (l'unico finding High, SHA-1, è stato risolto).
 
 ---
 
@@ -600,10 +601,9 @@ Delle **40+ issue storiche** rilevate sull'Overall Code, **~60 sono state risolt
 | `.jsp` | ~15 | Reliability Medium  | Accessibilità WCAG (title, lang, label)         |
 | `.htm` | ~5 | Reliability Medium  | Accessibilità WCAG (title, label)               |
 | `.css` | ~5 | Maintainability Low | Proprietà duplicate                             |
-| `.java` | ~3 |     Medium/Low      | SHA-1 (accettato), qualche code smell minore    |
-| **TOTALE** | **~28** |          -          | -                                               |
+| **TOTALE** | **~25** |          -          | -                                               |
 
-**Nota importante:** l'unica issue `.java` residua di livello High è lo **SHA-1 in `UserBean.java`** (CWE-916), documentata come Won't Fix per compatibilità con il DB esistente.
+**Nota importante:** non ci sono più issue di sicurezza (Security) o affidabilità (Reliability) sui file `.java`.
 
 ### 8.2 Categorie di debito tecnico
 
@@ -612,16 +612,14 @@ Delle **40+ issue storiche** rilevate sull'Overall Code, **~60 sono state risolt
 | Accessibilità JSP | ~15 | Reliability Medium |  `.jsp`   | WCAG 2-A su JSP legacy                                 |
 | Accessibilità HTML | ~5 | Reliability Medium |  `.htm`   | WCAG 2-A su HTML legacy                                |
 | CSS duplicati | ~5 |  Maintainability   |  `.css`   | Proprietà duplicate                                    |
-| SHA-1 weak hash | 1 |   Security High    |  `.java`  | **CWE-916 accettato** (fix richiede migrazione bcrypt) |
 | Altro `.java` | ~2 |        Low         |  `.java`  | Convenzioni minori                                     |
 | **TOTALE** | **~28** |         -          |     -     | -                                                      |
 
 ### 8.3 Motivazione dell'accettazione
 
 1. **Non influisce sul Quality Gate** (valuta solo il New Code)
-2. **Non sono vulnerabilità critiche** — quasi tutte su file `.jsp`/`.htm`/`.css` (accessibilità e stile)
-3. **L'unica issue `.java` High** è SHA-1, già documentata come Won't Fix
-4. **Costo/beneficio sfavorevole** — refactoring di decine di JSP/HTML non porta benefici misurabili
+2. **Non sono vulnerabilità critiche** - quasi tutte su file `.jsp`/`.htm`/`.css` (accessibilità e stile)
+3. **Costo/beneficio sfavorevole** - refactoring di decine di JSP/HTML non porta benefici misurabili
 
 ---
 
@@ -639,17 +637,18 @@ SonarCloud è uno dei **tre tool di sicurezza** integrati nella pipeline di Hard
 
 ### 9.2 Finding condivisi tra i tool
 
-| Finding | CWE | SonarCloud | Snyk | GitGuardian |
-|:---|:---:|:---:|:---:|:---:|
-| SHA-1 weak hash in `UserBean.java` | CWE-916 | ✅ | ✅ | — |
-| SQL Injection (fixato con `PreparedStatement`) | CWE-89 | ✅ | ✅ | — |
-| `SELECT *` (fixato) | — | ✅ | — | — |
-| Resource leak su `PreparedStatement` (Blocker) | CWE-404 | ✅ | — | — |
-| Hardcoded passwords nei test | CWE-798 | — | ✅ | ✅ |
-| CVV getter esposto | CWE-200 | — | ✅ | — |
-| Dockerfile: CVE ereditate dalle immagini base | Varia | — | ✅ | — |
+| Finding |   CWE   | SonarCloud | Snyk | GitGuardian |
+|:---|:-------:|:----------:|:----:|:-----------:|
+| SHA-1 weak hash in `UserBean.java` | CWE-916 |     ✅      |  ✅   |      -      |
+| SQL Injection (fixato con `PreparedStatement`) | CWE-89  |     ✅      |  ✅   |      -      |
+| `SELECT *` (fixato) |    -    |     ✅      |  -   |      -      |
+| Resource leak su `PreparedStatement` (Blocker) | CWE-404 |     ✅      |  -   |      -      |
+| Hardcoded passwords nei test | CWE-798 |     -      |  ✅   |      ✅      |
+| CVV getter esposto | CWE-200 |     -      |  ✅   |      -      |
+| Dockerfile: CVE ereditate dalle immagini base |  Varia  |     -      |  ✅   |      -      |
+| SHA-1 weak hash in `UserBean.java` | CWE-916 | ✅ FIXED | ✅ FIXED | — |
 
-**Analisi:** ogni tool ha rilevato finding che gli altri non vedevano. L'**overlapping** è minimo (SHA-1 rilevato da entrambi), mentre la copertura complessiva è massimizzata dalla combinazione dei tre approcci.
+
 
 ### 9.3 Coverage complementare
 

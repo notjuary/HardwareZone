@@ -130,16 +130,16 @@ Questa convenzione permette di distinguere i due approcci già dal nome.
 
 ## 5. Copertura per area OWASP
 
-| Area OWASP | Test Audit | Test Funzionali | Totale |
-|:---|:---:|:---:|:---:|
-| **A01** — Broken Access Control | ~93 | ~45 | **~138** |
-| **A02** — Cryptographic Failures | ~40 | ~14 | **~54** |
-| **A03** — Injection | ~51 | ~11 | **~62** |
-| **A04** — Insecure Design | ~76 | ~20 | **~96** |
-| **A05** — Security Misconfiguration | ~18 | ~6 | **~24** |
-| **A07** — Authentication Failures | ~15 | ~10 | **~25** |
-| **GDPR / Business Logic / DAO** | — | ~75 | **~75** |
-| **TOTALE** | **~275** | **~175** | **~450** |
+| Area OWASP                          | Test Audit | Test Funzionali | Totale |
+|:------------------------------------|:----------:|:---:|:---:|
+| **A01** - Broken Access Control     |    ~93     | ~45 | **~138** |
+| **A02** - Cryptographic Failures    |    ~40     | ~14 | **~54** |
+| **A03** - Injection                 |    ~51     | ~11 | **~62** |
+| **A04** - Insecure Design           |    ~76     | ~20 | **~96** |
+| **A05** - Security Misconfiguration |    ~18     | ~6 | **~24** |
+| **A07** - Authentication Failures   |    ~15     | ~10 | **~25** |
+| **GDPR / Business Logic / DAO**     |     -      | ~75 | **~75** |
+| **TOTALE**                          |  **~275**  | **~175** | **~450** |
 
 ---
 
@@ -159,7 +159,7 @@ La suite ha identificato **40+ finding**, di cui **12 critici**. La seguente tab
 | 8 | Loop infinito `ProductsHomepage` | CWE-835 |  Critica | `ProductViewTest` |
 | 9 | PCI-DSS: numero carta in chiaro | CWE-312 |  Critica | `PaymentDAOFunctionalTest` |
 | 10 | NPE su `user.isAdmin()` (12+ Servlet) | CWE-476 |  Alta | `AuthorizationTest` |
-| 11 | SHA-1 per password | CWE-916 |  Alta | `UserBeanFunctionalTest` |
+| 11 | SHA-1 per password | CWE-916 | **FIXED** | `UserBeanFunctionalTest` |
 | 12 | No verifica password attuale | CWE-620 |  Alta | `ProfileAndCartTest` |
 | 13 | No session-timeout in `web.xml` | CWE-613 |  Alta | `AuthenticationTest` |
 | 14 | Quantità negative `AddToCart` | CWE-20 |  Alta | `AddToCartFunctionalTest` |

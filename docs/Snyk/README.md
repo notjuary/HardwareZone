@@ -2,8 +2,8 @@
 
 Questo documento raccoglie i risultati di due analisi Snyk:
 
-1. **Software Composition Analysis (SCA)** — dipendenze Java (`pom.xml`)
-2. **Container Scanning** — base image Docker (`Dockerfile`)
+1. **Software Composition Analysis (SCA)** - dipendenze Java (`pom.xml`)
+2. **Container Scanning** - base image Docker (`Dockerfile`)
 
 ---
 ## Indice generale
@@ -34,7 +34,7 @@ Questo documento raccoglie i risultati di due analisi Snyk:
 
 ---
 
-# Parte 1 — Snyk — Software Composition Analysis (SCA)
+# Parte 1 - Snyk - Software Composition Analysis (SCA)
 
 **Strumento:** Snyk (Software Composition Analysis)
 **Tipo di analisi:** Rilevamento di vulnerabilità note (CVE) nelle dipendenze dichiarate nel `pom.xml`.

@@ -112,14 +112,15 @@ class DaoIntegrationTest {
     // ==========================================================
 
     @Test
-    @DisplayName("Schema DB: la colonna Accesso (password) e VARCHAR(40)")
+    @DisplayName("Schema DB: la colonna Accesso (password) e VARCHAR(72)")
     void testSchemaPasswordColumnIsHashSized() throws Exception {
         String schema = readSource("database/createDB.sql");
 
+        // Da VARCHAR(40) a VARCHAR(72) per contenere l'hash BCrypt
         assertThat(schema)
-                .as("La colonna Accesso in Utente deve essere VARCHAR(40) "
-                        + "per contenere un hash SHA-1 hex")
-                .containsPattern("Accesso\\s+VARCHAR\\(40\\)");
+                .as("La colonna Accesso in Utente deve essere VARCHAR(72) "
+                        + "per contenere un hash BCrypt di 60 caratteri")
+                .containsPattern("Accesso\\s+VARCHAR\\(72\\)");
     }
 
     @Test

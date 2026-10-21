@@ -208,7 +208,7 @@ class ProfileAndCartTest {
     void testUserBeanPasswordIsHashed() {
         user.setPassword("MySecretPass");
         assertThat(user.getPassword()).isNotEqualTo("MySecretPass");
-        assertThat(user.getPassword()).hasSize(40);
+        assertThat(user.getPassword()).hasSize(60);
     }
 
     private String readSource(String path) throws Exception {

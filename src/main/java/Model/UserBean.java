@@ -6,6 +6,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import org.mindrot.jbcrypt.BCrypt;
+
 
 public class UserBean {
 
@@ -60,19 +62,25 @@ public class UserBean {
         return password;
     }
 
-    public void setPassword(String password) {
-
-        try {
-
-            MessageDigest digest = MessageDigest.getInstance("SHA-1");
-            digest.reset();
-            digest.update(password.getBytes(StandardCharsets.UTF_8));
-            this.password = String.format("%040x", new BigInteger(1, digest.digest()));
-
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
+    // Imposta l'hash (usato quando si legge dal DB)
+    public void setPasswordHash(String hashedPassword) {
+        this.password = hashedPassword;
     }
+
+
+    // Hasha la password in chiaro (usato in registrazione/modifica)
+    public void setPassword(String password) {
+        this.password = BCrypt.hashpw(password, BCrypt.gensalt(12));
+    }
+
+    // Verifica la password in chiaro contro l'hash salvato
+    public boolean checkPassword(String plainPassword) {
+        if (this.password == null || this.password.isEmpty()) {
+            return false;
+        }
+        return BCrypt.checkpw(plainPassword, this.password);
+    }
+
 
     public String getPhone() {
 

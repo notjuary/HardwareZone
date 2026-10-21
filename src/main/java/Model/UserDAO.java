@@ -71,20 +71,23 @@ public class UserDAO {
     }
 
     public UserBean doRetrieveByEmailAndPassword(String email, String password) {
-        String sql = SELECT + COLUMNS + " FROM Utente WHERE Email=? AND Accesso=SHA1(?)";
+        // Query senza SHA1
+        String sql = SELECT + COLUMNS + " FROM Utente WHERE Email=?";
         try (Connection con = ConPool.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, email);
-            ps.setString(2, password);
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return mapRow(rs);
+                    UserBean user = mapRow(rs);
+                    // Verifica in Java con BCrypt
+                    if (user.checkPassword(password)) {
+                        return user;
+                    }
                 }
             }
             return null;
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -188,7 +191,7 @@ public class UserDAO {
         user.setSurname(rs.getString("Cognome"));
         user.setBirthday(rs.getString("Data_Nascita"));
         user.setEmail(rs.getString("Email"));
-        user.setPassword(rs.getString("Accesso"));
+        user.setPasswordHash(rs.getString("Accesso"));
         user.setPhone(rs.getString("Telefono"));
         user.setCity(rs.getString("Citta"));
         user.setProvince(rs.getString("Provincia"));

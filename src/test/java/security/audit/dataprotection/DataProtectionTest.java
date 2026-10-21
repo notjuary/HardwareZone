@@ -5,21 +5,20 @@ import Model.UserBean;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.MessageDigest;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * Test di sicurezza per l'area "Data Protection".
  * Verifica che:
  *  - le password non siano memorizzate in chiaro
- *  - venga applicato un algoritmo di hashing
+ *  - venga applicato un algoritmo di hashing sicuro (BCrypt)
  *  - il pool di connessione non contenga credenziali hardcoded
  *  - la configurazione del DB avvenga tramite variabili d'ambiente
  *
@@ -36,7 +35,7 @@ class DataProtectionTest {
     }
 
     // ============================================================
-    // TEST SU UserBean - Hashing della password
+    // TEST SU UserBean - Hashing della password (BCrypt)
     // ============================================================
 
     @Test
@@ -53,58 +52,63 @@ class DataProtectionTest {
     }
 
     @Test
-    @DisplayName("L'hash della password deve essere lungo 40 caratteri (SHA-1 hex)")
+    @DisplayName("L'hash della password deve essere lungo 60 caratteri (BCrypt)")
     void testPasswordHashHasExpectedLength() {
         user.setPassword("AnyPassword123");
 
         assertThat(user.getPassword())
-                .as("Un hash SHA-1 in formato hex è lungo 40 caratteri")
-                .hasSize(40);
+                .as("Un hash BCrypt è lungo esattamente 60 caratteri")
+                .hasSize(60);
     }
 
     @Test
-    @DisplayName("L'hash deve contenere solo caratteri esadecimali")
-    void testPasswordHashIsHexadecimal() {
+    @DisplayName("L'hash deve avere il prefisso BCrypt ($2a$)")
+    void testPasswordHashHasBCryptPrefix() {
         user.setPassword("AnyPassword123");
 
         assertThat(user.getPassword())
-                .as("L'hash SHA-1 hex contiene solo caratteri [0-9a-f]")
-                .matches("[0-9a-f]{40}");
+                .as("BCrypt genera hash che iniziano con $2a$, $2b$ o $2y$")
+                .startsWith("$2a$");
     }
 
     @Test
-    @DisplayName("La stessa password produce lo stesso hash (SHA-1 senza salt)")
-    void testSamePasswordProducesSameHash() {
+    @DisplayName("La stessa password produce hash diversi (BCrypt usa salt casuale)")
+    void testSamePasswordProducesDifferentHash() {
         UserBean user1 = new UserBean();
         UserBean user2 = new UserBean();
 
         user1.setPassword("SamePassword");
         user2.setPassword("SamePassword");
 
+        // Con BCrypt, due hash della stessa password sono DIVERSI (grazie al salt)
         assertThat(user1.getPassword())
-                .as("SHA-1 è deterministico: stessa password -> stesso hash")
-                .isEqualTo(user2.getPassword());
+                .as("BCrypt genera hash diversi per la stessa password (salt casuale)")
+                .isNotEqualTo(user2.getPassword());
+
+        // Ma entrambi devono validare correttamente la password originale
+        assertThat(user1.checkPassword("SamePassword")).isTrue();
+        assertThat(user2.checkPassword("SamePassword")).isTrue();
     }
 
     @Test
-    @DisplayName("L'hash corrisponde al valore SHA-1 calcolato manualmente")
-    void testPasswordHashMatchesManualSha1Computation() throws Exception {
+    @DisplayName("BCrypt: l'hash generato è verificabile tramite checkPassword")
+    void testPasswordHashMatchesBCryptComputation() {
         String plainPassword = "HelloWorld";
+
+        // Genera l'hash tramite UserBean
         user.setPassword(plainPassword);
+        String hashedPassword = user.getPassword();
 
-        MessageDigest digest = MessageDigest.getInstance("SHA-1");
-        digest.reset();
-        digest.update(plainPassword.getBytes(java.nio.charset.StandardCharsets.UTF_8));
-        byte[] expectedBytes = digest.digest();
+        // Verifica che l'hash non sia la password in chiaro
+        assertThat(hashedPassword).isNotEqualTo(plainPassword);
 
-        StringBuilder sb = new StringBuilder();
-        for (byte b : expectedBytes) {
-            sb.append(String.format("%02x", b));
-        }
+        // Verifica che BCrypt (e il nostro metodo checkPassword) riesca a validare la password
+        assertThat(BCrypt.checkpw(plainPassword, hashedPassword)).isTrue();
+        assertThat(user.checkPassword(plainPassword)).isTrue();
 
-        assertThat(user.getPassword())
-                .as("L'hash deve corrispondere al risultato atteso dello SHA-1")
-                .isEqualTo(sb.toString());
+        // Verifica che rifiuti una password errata
+        assertThat(BCrypt.checkpw("WrongPassword", hashedPassword)).isFalse();
+        assertThat(user.checkPassword("WrongPassword")).isFalse();
     }
 
     @Test
@@ -127,9 +131,11 @@ class DataProtectionTest {
         user.setPassword("Pàsswòrd€123");
 
         assertThat(user.getPassword())
-                .as("Caratteri UTF-8 non devono causare errori")
+                .as("Caratteri UTF-8 non devono causare errori e l'hash deve essere di 60 caratteri")
                 .isNotNull()
-                .hasSize(40);
+                .hasSize(60);
+
+        assertThat(user.checkPassword("Pàsswòrd€123")).isTrue();
     }
 
     // ============================================================

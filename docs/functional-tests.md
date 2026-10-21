@@ -328,12 +328,14 @@ src/test/java/security/functional/
 
 **`UserBeanFunctionalTest.java` — 11 test**
 
-| # | Metodo | Cosa verifica                         |
-|:--|:---|:--------------------------------------|
-| 1 | `testPasswordHash` | SHA-1 hex, 40 caratteri               |
-| 2 | `testPasswordNotPlaintext` | Password non in chiaro                |
-| 3 | `testDeterministicHash` | SHA-1 deterministico                  |
-| 4 | `testDifferentPasswordsProduceDifferentHashes` | Input diversi → hash diversi          |
+**`UserBeanFunctionalTest.java` — 11 test**
+
+| # | Metodo | Cosa verifica |
+|:--|:---|:---|
+| 1 | `testPasswordHash` | BCrypt hash (60 char, prefisso `$2a$`) |
+| 2 | `testPasswordNotPlaintext` | Password non in chiaro |
+| 3 | `testDifferentPasswordsProduceDifferentHashes` | Input diversi → hash diversi |
+| 4 | `testCheckPassword` | Verifica `checkPassword` (corretta/errata) |
 | 5 | `testGetSetAll` | Getter/setter dei campi               |
 | 6 | `testBirthday` | Parsing data di nascita               |
 | 7 | `testRegister` | Data di registrazione                 |
@@ -631,12 +633,13 @@ I test funzionali hanno **scoperto a runtime** i seguenti finding. Alcuni sono s
 | Quantità negative accettate | `AddToCartFunctionalTest` | **FIXED**   |
 | Prodotto inesistente causa NPE | `AddToCartFunctionalTest` | **FIXED**   |
 | Numero carta in chiaro (PCI-DSS) | `PaymentDAOFunctionalTest` | Documentato |
-| SHA-1 per password | `UserBeanFunctionalTest` | Documentato |
+| SHA-1 per password | `UserBeanFunctionalTest` | **FIXED** |
 | NPE su carrello null | `ShowCartFunctionalTest`, `RemoveFromCartFunctionalTest` | Documentato |
 | Loop infinito homepage | `ProductsHomepageFunctionalTest` | **FIXED**   |
 | CVV getter esposto | `PaymentBeanFunctionalTest` | Documentato |
 | Bug `removeProduct` | `CartBeanFunctionalTest` | **FIXED**   |
 | NPE su `cartBean` in Logout | `LogoutFunctionalTest` | **FIXED**   |
+
 
 ## 13. Dettaglio dei finding documentati
 
@@ -901,49 +904,19 @@ ps.setString(3, encrypted);
 
 ---
 
-### 13.7 SHA-1 per password (non Bcrypt)
+### 13.7 FIXED — SHA-1 per password (migrato a BCrypt)
 
 - **File:** `src/main/java/Model/UserBean.java`
 - **Test:** `UserBeanFunctionalTest`
 - **CWE:** CWE-916 (Use of Password Hash With Insufficient Computational Effort)
 - **Severità:** Alta
+- **Stato:** RISOLTO
 
-#### Vulnerabilità
+#### Vulnerabilità (storica)
+Il metodo `setPassword` usava **SHA-1**, un algoritmo veloce, senza salt, vulnerabile a rainbow tables e brute-force.
 
-Il metodo `setPassword` usa **SHA-1**, un algoritmo veloce e non progettato per le password. SHA-1 non ha **salt**, quindi due utenti con la stessa password hanno lo stesso hash → rainbow tables funzionano.
-
-#### Test
-
-```java
-@Test
-@DisplayName("FINDING: SHA-1 invece di bcrypt")
-void testDocumentSha1Usage() {
-    user.setPassword("password123");
-    assertThat(user.getPassword())
-        .as("FINDING: SHA-1 è veloce e vulnerabile a brute-force. Raccomandato bcrypt/Argon2 (CWE-916).")
-        .hasSize(40);
-}
-```
-
-#### Scenario
-
-| Scenario                     |    Comportamento attuale     |
-| :--------------------------- |:----------------------------:|
-| Due utenti con "password123" |         Stesso hash          |
-| Attaccante ottiene il DB     |  Rainbow tables funzionano   |
-| Attaccante usa GPU           | ~10 miliardi di hash/secondo |
-
-#### Patch raccomandata
-
-**Migrare a bcrypt** (work factor 12):
-
-```xml
-<dependency>
-    <groupId>org.mindrot</groupId>
-    <artifactId>jbcrypt</artifactId>
-    <version>0.4</version>
-</dependency>
-```
+#### Fix applicato
+Migrazione all'algoritmo **BCrypt** con cost factor 12. L'hash è ora di 60 caratteri e include un salt casuale.
 
 ```java
 public void setPassword(String password) {
@@ -954,11 +927,6 @@ public boolean checkPassword(String plainPassword) {
     return BCrypt.checkpw(plainPassword, this.password);
 }
 ```
-
-**Richiede:**
-
-* Aggiornamento DB: `ALTER TABLE Utente MODIFY Accesso VARCHAR(72)`
-* Reset password degli utenti esistenti
 
 ---
 

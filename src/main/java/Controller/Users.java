@@ -18,6 +18,12 @@ public class Users extends HttpServlet {
         HttpSession session = request.getSession();
         UserBean userAdmin = (UserBean) session.getAttribute("user");
 
+        // FIX: Null check per evitare NPE
+        if (userAdmin == null || !userAdmin.isAdmin().equalsIgnoreCase("true")) {
+            request.getRequestDispatcher("index.jsp").forward(request, response);
+            return;
+        }
+
         if (userAdmin.isAdmin().equalsIgnoreCase("true")) {
 
             UserDAO service = new UserDAO();

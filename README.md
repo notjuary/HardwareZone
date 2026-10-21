@@ -82,9 +82,7 @@
 - **Checkout e pagamento** (simulato)
 - **Area amministratore** per la gestione di prodotti, utenti e ordini
 
-L'applicazione è stata progettata seguendo i principi **DevSecOps**, integrando tool di analisi statica (SonarCloud, Snyk, GitGuardian) direttamente nella pipeline CI/CD.
-
-### 1.2 Stack Tecnologico
+### 1.2 Stack tecnologico
 
 | Livello | Tecnologia | Versione                 |
 |:---|:---|:-------------------------|
@@ -101,7 +99,7 @@ L'applicazione è stata progettata seguendo i principi **DevSecOps**, integrando
 | **CI/CD** | GitHub Actions | -                        |
 | **SAST** | SonarCloud, Snyk Code, GitGuardian | -                        |
 
-### 1.3 System Design — Class Diagram
+### 1.3 System Design - Class Diagram
 
 Il progetto segue il pattern **MVC (Model-View-Controller)**:
 
@@ -152,14 +150,172 @@ L'applicazione è deployata su **Tomcat 10.1** (Jakarta EE 9+) e containerizzata
 ### 2.3 Matrice di Accesso RBAC
 
 | Endpoint / Risorsa | Anonimo | Utente | Admin |
-|:---|:---:|:---:|:---:|
-| Catalogo, Ricerca, Dettaglio prodotto | ✅ | ✅ | ✅ |
-| Aggiungi al carrello, Rimuovi dal carrello | ❌ | ✅ | ✅ |
-| Checkout, Pagamento | ❌ | ✅ | ✅ |
-| Profilo utente | ❌ | ✅ | ✅ |
-| Gestione prodotti (CRUD) | ❌ | ❌ | ✅ |
-| Gestione utenti (lista, stato, promozione) | ❌ | ❌ | ✅ |
-| Visualizzazione tutti gli ordini | ❌ | ❌ | ✅ |
+|:---|:-------:|:------:|:-----:|
+| Catalogo, Ricerca, Dettaglio prodotto |   Sì    |   Sì   |  Sì   |
+| Aggiungi al carrello, Rimuovi dal carrello |   No    |   Sì   |  Sì   |
+| Checkout, Pagamento |   No    |   Sì   |  Sì   |
+| Profilo utente |   No    |   Sì   |  Sì   |
+| Gestione prodotti (CRUD) |   No    |   No   |  Sì   |
+| Gestione utenti (lista, stato, promozione) |   No    |   No   |  Sì   |
+| Visualizzazione tutti gli ordini |   No    |   No   |  Sì   |
+
+### 2.4 Architettura e struttura
+
+Il progetto segue un'architettura **MVC (Model-View-Controller)** con separazione netta tra logica di business, presentazione e accesso ai dati, secondo lo standard **Jakarta EE (Servlet + JSP)**.
+
+### Struttura delle directory
+
+```
+HardwareZone/src/
+├── main/
+│   ├── java/
+│   │   ├── Controller/              # 25 Servlet (Controller HTTP)
+│   │   │   ├── AddProduct.java
+│   │   │   ├── AddToCart.java
+│   │   │   ├── EditProduct.java
+│   │   │   ├── EditProfile.java
+│   │   │   ├── FilterProduct.java
+│   │   │   ├── Login.java
+│   │   │   ├── Logout.java
+│   │   │   ├── OrderInfo.java
+│   │   │   ├── Orders.java
+│   │   │   ├── Payment.java
+│   │   │   ├── ProductInfo.java
+│   │   │   ├── Products.java
+│   │   │   ├── ProductsHomepage.java
+│   │   │   ├── Registration.java
+│   │   │   ├── RemoveFromCart.java
+│   │   │   ├── SearchProduct.java
+│   │   │   ├── SetAdmin.java
+│   │   │   ├── SetStateUser.java
+│   │   │   ├── ShowCart.java
+│   │   │   ├── ShowCatalog.java
+│   │   │   ├── ShowProduct.java
+│   │   │   ├── ShowSales.java
+│   │   │   ├── UserInfo.java
+│   │   │   ├── UserProfile.java
+│   │   │   └── Users.java
+│   │   │
+│   │   └── Model/                    # 17 classi (Bean + DAO + Utility)
+│   │       ├── CartBean.java
+│   │       ├── CartDAO.java
+│   │       ├── CategoryBean.java
+│   │       ├── CategoryDAO.java
+│   │       ├── ConPool.java          # Connection pool (fail-fast)
+│   │       ├── OrderBean.java
+│   │       ├── OrderDAO.java
+│   │       ├── OrderProductBean.java
+│   │       ├── OrderProductDAO.java
+│   │       ├── PaymentBean.java
+│   │       ├── PaymentDAO.java
+│   │       ├── ProductBean.java
+│   │       ├── ProductCartBean.java
+│   │       ├── ProductDAO.java
+│   │       ├── UserBean.java
+│   │       └── UserDAO.java
+│   │
+│   └── webapp/                       # View (JSP)
+│       ├── img/                      # Immagini prodotti e UI
+│       ├── script/                   # JavaScript client-side
+│       ├── style/                    # CSS
+│       ├── WEB-INF/                  # Protetto da accesso diretto
+│       │   ├── admin/                # JSP solo per admin
+│       │   ├── results/              # JSP di output (catalog, cart, ...)
+│       │   └── ...
+│       ├── Cart.jsp
+│       ├── chiSiamo.jsp
+│       ├── footer.jsp
+│       ├── index.jsp
+│       ├── login.jsp
+│       ├── menu.jsp
+│       └── register.jsp
+│
+└── test/
+    └── java/
+        └── security/                 # 55 classi di test
+            ├── audit/                # Test di audit statico (SAST manuale)
+            │   ├── authorization/    # A01 + A07 — ~93 test
+            │   ├── businesslogic/    # A04 — ~76 test
+            │   ├── daointegration/   # A03 + A05 — ~18 test
+            │   ├── dataprotection/   # A02 — ~40 test
+            │   └── inputvalidation/  # A03 — ~51 test
+            │
+            ├── functional/           # Test funzionali H2
+            │   ├── BaseFunctionalTest.java   # Setup H2 + schema
+            │   ├── ServletTestSupport.java   # Mock Servlet API
+            │   ├── authorization/    # ~45 test
+            │   ├── businesslogic/    # ~20 test
+            │   ├── daointegration/   # ~30 test
+            │   ├── dataprotection/   # ~14 test
+            │   └── inputvalidation/  # ~11 test
+            │
+            └── (audit + functional = ~454 test su 55 classi)
+```
+
+### Ruolo delle directory
+
+**`Controller/` - 25 Servlet**
+
+Ogni Servlet gestisce un **endpoint HTTP specifico** e ha una singola responsabilità. Il nome è autoesplicativo e segue una convenzione verbale:
+
+| Categoria               | Servlet | Responsabilità |
+|:------------------------|:---|:---|
+| **Autenticazione**      | `Login`, `Logout`, `Registration` | Gestione ciclo di vita sessione utente |
+| **Catalogo (pubblico)** | `ShowCatalog`, `ShowProduct`, `ShowSales`, `SearchProduct`, `FilterProduct`, `ProductsHomepage` | Visualizzazione prodotti, ricerca, filtri |
+| **Carrello**            | `AddToCart`, `RemoveFromCart`, `ShowCart` | Gestione carrello (sessione + DB) |
+| **Profilo utente**      | `UserProfile`, `EditProfile`, `UserInfo` | Visualizzazione e modifica dati personali |
+| **Ordini e pagamento**  | `Payment`, `Orders`, `OrderInfo` | Checkout, storico ordini, dettagli |
+| **Admin - prodotti**    | `AddProduct`, `EditProduct`, `Products`, `ProductInfo` | CRUD prodotti (solo admin) |
+| **Admin - utenti**      | `Users`, `SetAdmin`, `SetStateUser` | Gestione utenti (promozione, disabilitazione) |
+
+Ogni Servlet delega l'accesso ai dati al **DAO** corrispondente e la presentazione alla **JSP**. Non contiene query SQL direttamente.
+
+**`Model/` - 17 classi**
+
+Il Model è suddiviso in **tre tipi di classi**:
+
+| Tipo | Classi | Ruolo |
+|:---|:---|:---|
+| **Bean** (7) | `UserBean`, `ProductBean`, `CartBean`, `OrderBean`, `OrderProductBean`, `PaymentBean`, `CategoryBean`, `ProductCartBean` | Contenitori di dati (POJO) con getter/setter e logica minima (es. hashing password in `UserBean`) |
+| **DAO** (7) | `UserDAO`, `ProductDAO`, `CartDAO`, `OrderDAO`, `OrderProductDAO`, `PaymentDAO`, `CategoryDAO` | Accesso al database tramite `PreparedStatement` (no SQL Injection) e try-with-resources (no resource leak) |
+| **Utility** (1) | `ConPool` | Connection pool Tomcat con **fail-fast**: se `MYSQL_PASSWORD` non è impostata, l'app non parte |
+
+**Caratteristiche del Model:**
+
+- **Bean serializzabili**: `CartBean` e gli altri bean salvati in sessione implementano `Serializable` (requisito Tomcat per la persistenza di sessione)
+- **Tutti i DAO usano `PreparedStatement`**: nessuna concatenazione di stringhe SQL (protezione da SQL Injection)
+- **Tutti i DAO usano try-with-resources**: chiusura automatica di `Connection`, `PreparedStatement`, `ResultSet`
+- **`ConPool` singleton static**: pattern Singleton per la `DataSource`
+
+**`webapp/` - View (JSP)**
+
+La directory segue la separazione tra **pagine pubbliche** e **pagine protette**:
+
+| Path | Visibilità | Esempi |
+|:---|:---|:---|
+| `webapp/*.jsp` | Pubblico (accessibile direttamente) | `index.jsp`, `login.jsp`, `register.jsp`, `chiSiamo.jsp`, `Cart.jsp` |
+| `webapp/WEB-INF/` | **Protetto** (solo forward interno dal Servlet) | JSP di output, admin panel, pagine di errore |
+| `webapp/img/` | Pubblico | Immagini prodotti, logo, UI |
+| `webapp/script/` | Pubblico | JavaScript client-side |
+| `webapp/style/` | Pubblico | CSS |
+
+**Nota sulla sicurezza:** le JSP dentro `WEB-INF/` **non sono accessibili direttamente dal browser**. Solo i Servlet possono farci forward tramite `RequestDispatcher`. Questo previene accessi non autorizzati a pagine che assumono uno stato di sessione valido (es. pagine admin, dettagli ordine).
+
+**`test/java/security/` - Suite di test**
+
+La suite è organizzata specularmente al codice di produzione, con **due strategie complementari**:
+
+| Directory | Tipo | Approccio |
+|:---|:---|:---|
+| **`audit/`** | **SAST manuale** (analisi statica) | Legge il sorgente come testo con `Files.readAllBytes` e verifica la presenza/assenza di pattern (`source.contains(...)`) |
+| **`functional/`** | **Test funzionali** (esecuzione codice) | Esegue i Servlet e i DAO con Mockito (Servlet API) e H2 in-memory (database reale) |
+
+Entrambe le directory sono ulteriormente suddivise per **area OWASP** (`authorization`, `businesslogic`, `daointegration`, `dataprotection`, `inputvalidation`), così è immediato capire quale area di sicurezza copre ogni test.
+
+**Classi di supporto:**
+
+- **`BaseFunctionalTest`** - Classe astratta che configura H2 in-memory con lo schema completo, registra l'alias `SHA1()` per compatibilità con MySQL, e fornisce i metodi `cleanDatabase()` e `executeSql()`.
+- **`ServletTestSupport`** - Fornisce mock preconfigurati di `HttpServletRequest`, `HttpServletResponse`, `HttpSession`, `RequestDispatcher`, oltre ai metodi helper `invokeDoGet()`, `invokeDoPost()`, `createAdminUser()`, `createNormalUser()`.
 
 ---
 
@@ -194,6 +350,8 @@ Elenco delle Servlet principali:
 
 ## 4. Test e qualità del codice
 
+**File di report completo:** [`docs/security-tests.md`](docs/security-tests.md)
+
 Il progetto adotta una strategia di test **a più livelli**:
 
 - **Test di audit statico** (SAST manuale): analizzano il codice sorgente come testo per documentare pattern di sicurezza (SQL Injection, NPE, CSRF, privilege escalation).
@@ -202,7 +360,7 @@ Il progetto adotta una strategia di test **a più livelli**:
 
 ### 4.1 Test di audit statistico
 
-**File di report completo:** [`docs/TestCase/audit-test.md`](docs/audit-tests.md)
+**File di report completo:** [`docs/audit-test.md`](docs/audit-tests.md)
 
 I test di audit sono **~275** e coprono:
 
@@ -217,7 +375,7 @@ I test di audit sono **~275** e coprono:
 
 ### 4.2 Test funzionali
 
-**File di report completo:** [`docs/TestCase/functional.md`](docs/functional-tests.md)
+**File di report completo:** [`docs/functional-tests.md`](docs/functional-tests.md)
 
 I test funzionali sono **~179** e utilizzano:
 
@@ -239,7 +397,7 @@ I test funzionali sono **~179** e utilizzano:
 
 ### 4.3 Report SonarCloud
 
-**File di report completo:** [`docs/SonarCloud/README.md`](docs/SonarCloud/README.md)
+**File di report completo:** [`docs/SonarQube/README.md`](docs/SonarQube/README.md)
 
 SonarCloud è integrato nella pipeline CI/CD e valuta:
 
@@ -297,7 +455,7 @@ Snyk è configurato in 3 job:
 
 ### 4.5 Report GitGuardian
 
-**File di report completo:** [`docs/GitGuardian/README.md`](docs/GitGuardian/README.md)
+**File di report completo:** [`docs/GitGuardian/README.md`](docs/Git Guardian/README.md)
 
 GitGuardian scansiona i commit per rilevare **secret hardcoded** (API key, token, password).
 
@@ -458,13 +616,13 @@ Push / PR
 
 **Secrets richiesti:**
 
-| Secret | Usato da |
-|:---|:---|
-| `SONAR_TOKEN` | SonarCloud |
-| `SNYK_API_KEY` | Snyk |
-| `GITGUARDIAN_API_KEY` | GitGuardian |
-| `DOCKERHUB_USERNAME` | Docker |
-| `DOCKERHUB_TOKEN` | Docker |
+| Secret | Servizio utilizzato | Workflow | Tipo | Utilizzo |
+|:---|:---|:---|:---|:---|
+| `SONAR_TOKEN` | SonarCloud | Analisi statica del codice | Token API | Autenticazione per l'analisi della qualità e della sicurezza del codice |
+| `SNYK_API_KEY` | Snyk | Security scan delle dipendenze | API Key | Rilevamento di vulnerabilità nelle dipendenze del progetto |
+| `GITGUARDIAN_API_KEY` | GitGuardian | Secret scanning | API Key | Rilevamento di credenziali e segreti esposti nel repository |
+| `DOCKERHUB_USERNAME` | Docker Hub | Build e pubblicazione dell'immagine | Username | Identificazione dell'account utilizzato per pubblicare l'immagine Docker |
+| `DOCKERHUB_TOKEN` | Docker Hub | Build e pubblicazione dell'immagine | Access Token | Autenticazione per il push dell'immagine Docker sul registry |
 
 ---
 

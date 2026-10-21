@@ -26,12 +26,12 @@ class UserBeanFunctionalTest {
     // ==========================================================
 
     @Test
-    @DisplayName("SECURITY: password hashata con SHA-1 (40 caratteri hex)")
+    @DisplayName("BCrypt: hash di 60 caratteri con prefisso $2a$")
     void testPasswordHash() {
         user.setPassword("password123");
         assertThat(user.getPassword())
-                .hasSize(40)
-                .matches("[0-9a-f]{40}");
+                .hasSize(60)
+                .startsWith("$2a$");
     }
 
     @Test
@@ -42,13 +42,30 @@ class UserBeanFunctionalTest {
     }
 
     @Test
-    @DisplayName("SECURITY: stessa password produce lo stesso hash (SHA-1 deterministico)")
+    @DisplayName("BCrypt: checkPassword verifica correttamente")
+    void testCheckPassword() {
+        user.setPassword("password123");
+        assertThat(user.checkPassword("password123")).isTrue();
+        assertThat(user.checkPassword("wrongpassword")).isFalse();
+    }
+
+    @Test
+    @DisplayName("BCrypt: stessa password produce hash diversi (salt casuale)")
     void testDeterministicHash() {
-        UserBean u1 = new UserBean();
-        UserBean u2 = new UserBean();
-        u1.setPassword("samepass");
-        u2.setPassword("samepass");
-        assertThat(u1.getPassword()).isEqualTo(u2.getPassword());
+        UserBean user1 = new UserBean();
+        UserBean user2 = new UserBean();
+
+        user1.setPassword("SamePassword");
+        user2.setPassword("SamePassword");
+
+        // Con BCrypt, i due hash saranno DIVERSI
+        assertThat(user1.getPassword())
+                .as("BCrypt usa un salt casuale, quindi gli hash sono diversi")
+                .isNotEqualTo(user2.getPassword()); // era isEqualTo
+
+        // Ma entrambi validano correttamente la password
+        assertThat(user1.checkPassword("SamePassword")).isTrue();
+        assertThat(user2.checkPassword("SamePassword")).isTrue();
     }
 
     @Test
@@ -143,13 +160,12 @@ class UserBeanFunctionalTest {
     // ==========================================================
 
     @Test
-    @DisplayName("FINDING: SHA-1 usato per password (raccomandato bcrypt)")
+    @DisplayName("BCrypt: hash di 60 caratteri (CWE-916 risolto)")
     void testDocumentSha1Usage() {
-        user.setPassword("test");
-        // Documenta l'uso di SHA-1 (40 char) invece di bcrypt (60 char)
+        user.setPassword("password123");
         assertThat(user.getPassword())
-                .as("FINDING: SHA-1 è veloce e vulnerabile a brute-force. "
-                        + "Raccomandato bcrypt/Argon2 (CWE-916).")
-                .hasSize(40);
+                .as("BCrypt genera un hash di 60 caratteri, non più 40")
+                .hasSize(60) // era 40
+                .startsWith("$2a$");
     }
 }
