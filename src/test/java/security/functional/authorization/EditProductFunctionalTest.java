@@ -46,7 +46,7 @@ class EditProductFunctionalTest extends BaseFunctionalTest {
     // QUESTO È IL TEST CHE CHIEDEVI: va messo qui!
     @Test
     @DisplayName("FIXED: EditProduct gestisce utente anonimo senza NPE")
-    void testUtenteAnonimo() throws Exception {
+    void testUtenteAnonimo()  {
         when(support.session.getAttribute("user")).thenReturn(null);
 
         EditProduct servlet = new EditProduct();
@@ -62,7 +62,7 @@ class EditProductFunctionalTest extends BaseFunctionalTest {
 
     @Test
     @DisplayName("FIXED: EditProduct con admin non crasha su input invalido")
-    void testAdminInputInvalido() throws Exception {
+    void testAdminInputInvalido()  {
         when(support.session.getAttribute("user")).thenReturn(support.createAdminUser());
         when(support.request.getParameter("id")).thenReturn("1");
         when(support.request.getParameter("name")).thenReturn("");

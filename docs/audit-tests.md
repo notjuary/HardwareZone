@@ -190,14 +190,14 @@ src/test/java/security/audit/
 
 **Validazione input:**
 
-| **#** | **Metodo**                                  | **Cosa verifica**                                |
-|:------| :------------------------------------------ |:-------------------------------------------------|
-| 8     | `testAddProductPriceAcceptsDecimal`         | Regex prezzo                                     |
-| 9     | `testAddProductQuantityAcceptsOnlyIntegers` | Regex quantità                                   |
-| 10    | `testAddProductReplacesCommaInPrice`        | Sostituzione `,` → `.`                           |
-| 11    | `testAddProductRequiresAllSixFieldsValid`   | **FIXED** - Validazione con Early Return         |
-| 12    | `testAddProductRejectsDuplicates`           | **FIXED** - Controllo duplicati con Early Return |
-| 12b   | `testEditProductRequiresAllFieldsValid`     | **FIXED** - Validazione con Early Return         |
+| **#** | **Metodo** | **Cosa verifica**                                |
+|:---|:---|:-------------------------------------------------|
+| 8 | `testAddProductPriceAcceptsDecimal` | **FIXED** — Regex sicura per i decimali          |
+| 9 | `testAddProductQuantityAcceptsOnlyIntegers` | Regex quantità                                   |
+| 10 | `testAddProductReplacesCommaInPrice` | Sostituzione `,` → `.`                           |
+| 11 | `testAddProductRequiresAllSixFieldsValid` | **FIXED** — Validazione con Early Return         |
+| 12 | `testAddProductRejectsDuplicates` | **FIXED** — Controllo duplicati con Early Return |
+| 13 | `testEditProductUsesDecimalRegex` | **FIXED** — Regex sicura (no backtracking)       |
 
 **File upload:**
 
@@ -651,6 +651,8 @@ I test di audit hanno **scoperto 40+ finding**, di cui **10 risolti** durante l'
 | 13 | NPE su `user` in AddProduct/EditProduct/Users | `AddProduct.java`, `EditProduct.java`, `Users.java` | `AdminFunctionsTest` (test aggiornati) |
 | 14 | Cognitive Complexity (S3776) in AddProduct/EditProduct | `AddProduct.java`, `EditProduct.java` | (Risolto per SonarCloud) |
 | 15 | Unrestricted File Upload in EditProduct | `EditProduct.java` | (Risolto con whitelist) |
+| 16 | Regex vulnerabile a backtracking (ReDoS) | `AddProduct.java`, `EditProduct.java` | `AdminFunctionsTest.testAddProductPriceAcceptsDecimal`, `testEditProductUsesDecimalRegex` |
+| 17 | Eccezioni non gestite in `sendError` e `getPart` | `AddProduct.java`, `EditProduct.java` | (Risolto per SonarQube) |
 
 ### 10.4 Blockers SonarQube risolti (Overall Code)
 

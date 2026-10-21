@@ -58,7 +58,7 @@ class AddProductFunctionalTest extends BaseFunctionalTest {
 
     @Test
     @DisplayName("FIXED: AddProduct gestisce utente anonimo senza NPE")
-    void testDoGetUtenteAnonimo() throws Exception {
+    void testDoGetUtenteAnonimo()  {
         when(support.session.getAttribute("user")).thenReturn(null);
 
         AddProduct servlet = new AddProduct();

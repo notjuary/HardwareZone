@@ -587,6 +587,18 @@ try (Connection con = ConPool.getConnection();
 
 **Impatto:** Maintainability Rating ripristinato a **A**. Bug potenziali (NPE) e vulnerabilità critiche (RCE via upload) risolte.
 
+### 6.9 Medium/Low risolte — Serializzazione, Regex e Gestione Eccezioni
+
+| File | Regola | Descrizione | Fix |
+|:---|:---:|:---|:---|
+| `UserBean.java`, `CartBean.java`, `ProductCartBean.java` | S2441 | Oggetti non serializzabili in sessione | Aggiunto `implements Serializable` e `serialVersionUID` |
+| `EditProduct.java`, `AddProduct.java` | S5852 | Regex con backtracking super-lineare (ReDoS) | Sostituita `^\d*\.?\d*$` con `^\d+(\.\d+)?$` |
+| `AddProduct.java`, `EditProduct.java` | S1989 | Eccezioni propagate da `sendError` e `getPart` | Catturate e rilanciate come `RuntimeException` o gestite con fallback |
+| `AdminFunctionsTest.java` | S1128 | Import inutilizzato (`assertThrows`) | Rimosso l'import |
+| `AdminFunctionsTest.java`, `EditProductFunctionalTest.java` | S1130 | `throws Exception` non necessario | Rimosso dalle firme dei metodi di test |
+
+**Impatto:** Reliability Rating mantenuto a **A**. Rimosso il rischio di `NotSerializableException` a runtime (Tomcat session persistence). Prevenuto il rischio di ReDoS (Denial of Service) tramite regex.
+
 ### 6.7 Impatto sull'Overall Code
 
 | Categoria | Prima | Dopo | Δ |

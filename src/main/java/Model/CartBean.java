@@ -1,9 +1,13 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CartBean {
+// FIX S2441: Rendi la classe Serializable
+public class CartBean implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private int numberObject;
     private ArrayList<ProductCartBean> cartList;

@@ -1,5 +1,6 @@
 package Model;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -8,9 +9,10 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import org.mindrot.jbcrypt.BCrypt;
 
+// FIX S2441: Rendi la classe Serializable
+public class UserBean implements Serializable {
 
-public class UserBean {
-
+    private static final long serialVersionUID = 1L;
     private int id;
     private String name, surname, email, password, phone, city, province, postalCode, address, state, admin;
     private GregorianCalendar birthday, register;

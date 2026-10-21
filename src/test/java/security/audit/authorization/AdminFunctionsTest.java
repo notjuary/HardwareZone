@@ -98,12 +98,15 @@ class AdminFunctionsTest {
     }
 
     @Test
-    @DisplayName("AddProduct: regex prezzo accetta '19.99'")
+    @DisplayName("AddProduct: il prezzo accetta numeri decimali (Regex semplificata)")
     void testAddProductPriceAcceptsDecimal() throws Exception {
         String source = readSource("src/main/java/Controller/AddProduct.java");
-        assertThat(source).contains("Pattern.compile(\"^(\\\\d+(?:[.,]\\\\d{2})?)$\")");
-    }
 
+        // Verifica la presenza della nuova regex sicura
+        assertThat(source)
+                .as("AddProduct deve usare una regex sicura per i prezzi")
+                .contains("private static final Pattern DECIMAL_PATTERN = Pattern.compile(\"^\\\\d+(\\\\.\\\\d+)?$\");");
+    }
     @Test
     @DisplayName("AddProduct: regex quantita accetta solo interi positivi")
     void testAddProductQuantityAcceptsOnlyIntegers() throws Exception {
@@ -144,10 +147,19 @@ class AdminFunctionsTest {
     }
 
     @Test
-    @DisplayName("EditProduct: usa regex decimal_String per il prezzo")
+    @DisplayName("FIXED: EditProduct usa una regex sicura per i decimali")
     void testEditProductUsesDecimalRegex() throws Exception {
         String source = readSource("src/main/java/Controller/EditProduct.java");
-        assertThat(source).contains("Pattern.compile(\"^\\\\d*\\\\.?\\\\d*$\")");
+
+        // Verifica che la vecchia regex vulnerabile sia sparita
+        assertThat(source)
+                .as("La vecchia regex con backtracking non deve più esserci")
+                .doesNotContain("Pattern.compile(\"^\\\\d*\\\\.?\\\\d*$\")");
+
+        // Verifica che ci sia la nuova regex sicura
+        assertThat(source)
+                .as("EditProduct deve usare la nuova regex sicura")
+                .contains("private static final Pattern DECIMAL_PATTERN = Pattern.compile(\"^\\\\d+(\\\\.\\\\d+)?$\");");
     }
 
     @Test

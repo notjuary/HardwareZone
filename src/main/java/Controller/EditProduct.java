@@ -15,7 +15,8 @@ import java.util.regex.Pattern;
 @WebServlet(name = "editProductServlet", value = "/edit-product-servlet")
 public class EditProduct extends HttpServlet {
 
-    private static final Pattern DECIMAL_PATTERN = Pattern.compile("^\\d*\\.?\\d*$");
+    // FIX: Regex semplificata per evitare backtracking (super-linear performance)
+    private static final Pattern DECIMAL_PATTERN = Pattern.compile("^\\d+(\\.\\d+)?$");
     private static final Pattern INT_PATTERN = Pattern.compile("^\\d+$");
 
     @Override
@@ -24,13 +25,11 @@ public class EditProduct extends HttpServlet {
 
         UserBean user = (UserBean) request.getSession().getAttribute("user");
 
-        // 1. FIX S2259: Null check per evitare NPE
         if (user == null || !user.isAdmin().equalsIgnoreCase("true")) {
             request.getRequestDispatcher("index.jsp").include(request, response); // NOSONAR
             return;
         }
 
-        // 2. Estrazione e validazione ID (FIX NumberFormatException)
         int id;
         try {
             id = Integer.parseInt(request.getParameter("id"));
@@ -41,12 +40,11 @@ public class EditProduct extends HttpServlet {
 
         String name = request.getParameter("name");
         String description = request.getParameter("description");
-        String price = request.getParameter("price");
+        String price = request.getParameter("price") != null ? request.getParameter("price").replace(",", ".") : "";
         String quantity = request.getParameter("quantity");
         String sales = request.getParameter("sales");
         String category = request.getParameter("category");
 
-        // 3. FIX S3776 (Cognitive Complexity): Validazione con Early Return
         if (!isValidString(name, 20) || !isValidString(description, 255) || !isValidString(category, 20)
                 || price == null || !DECIMAL_PATTERN.matcher(price).find()
                 || quantity == null || !INT_PATTERN.matcher(quantity).find()
@@ -57,10 +55,17 @@ public class EditProduct extends HttpServlet {
 
         ProductDAO service = new ProductDAO();
 
-        // 4. FIX CWE-434: Gestione Upload Immagine con Whitelist (Metodo Estratto)
-        String subpath = handleImageUpload(request.getPart("image"), service, id);
+        // FIX: Cattura le eccezioni di getPart
+        Part imagePart;
+        try {
+            imagePart = request.getPart("image");
+        } catch (IOException | ServletException e) {
+            sendError(request, response, "Errore caricamento immagine");
+            return;
+        }
 
-        // 5. Aggiornamento Prodotto
+        String subpath = handleImageUpload(imagePart, service, id);
+
         ProductBean product = new ProductBean();
         product.setId(id);
         product.setName(name);
@@ -75,36 +80,40 @@ public class EditProduct extends HttpServlet {
         response.sendRedirect("products-servlet");
     }
 
-    // ==========================================
-    // METODI HELPER (Abbassano la Cognitive Complexity)
-    // ==========================================
-
     private boolean isValidString(String value, int maxLength) {
         return value != null && !value.trim().isEmpty() && value.length() <= maxLength;
     }
 
-    private String handleImageUpload(Part part, ProductDAO service, int id) throws IOException {
-        // Se non c'è un nuovo file, mantieni l'immagine esistente
+    // FIX: Cattura IOException internamente
+    private String handleImageUpload(Part part, ProductDAO service, int id) {
         if (part == null || part.getSubmittedFileName() == null || part.getSubmittedFileName().isEmpty()) {
             return service.doRetrieveById(id).getImage();
         }
 
-        // FIX CWE-434: Controllo dell'estensione (Whitelist)
         String fileName = part.getSubmittedFileName().toLowerCase();
         if (!fileName.endsWith(".jpg") && !fileName.endsWith(".jpeg") && !fileName.endsWith(".png")) {
-            return service.doRetrieveById(id).getImage(); // File non valido, mantieni la vecchia
+            return service.doRetrieveById(id).getImage();
         }
 
-        String uploadPath = getServletContext().getRealPath("") + "\\img\\products";
-        String imagePath = uploadPath + File.separator + part.getSubmittedFileName();
-        part.write(imagePath);
-        return "./img/products/" + part.getSubmittedFileName();
+        try {
+            String uploadPath = getServletContext().getRealPath("") + "\\img\\products";
+            String imagePath = uploadPath + File.separator + part.getSubmittedFileName();
+            part.write(imagePath);
+            return "./img/products/" + part.getSubmittedFileName();
+        } catch (IOException e) {
+            return service.doRetrieveById(id).getImage(); // Fallback
+        }
     }
 
-    private void sendError(HttpServletRequest request, HttpServletResponse response, String msg) throws ServletException, IOException {
-        request.setAttribute("type", "alert");
-        request.setAttribute("msg", msg);
-        request.setAttribute("redirect", "products-servlet");
-        request.getRequestDispatcher("/WEB-INF/error.jsp").include(request, response); // NOSONAR
+    // FIX: Cattura le eccezioni e lancia RuntimeException
+    private void sendError(HttpServletRequest request, HttpServletResponse response, String msg) {
+        try {
+            request.setAttribute("type", "alert");
+            request.setAttribute("msg", msg);
+            request.setAttribute("redirect", "products-servlet");
+            request.getRequestDispatcher("/WEB-INF/error.jsp").include(request, response);
+        } catch (ServletException | IOException e) {
+            throw new RuntimeException("Errore critico durante il forward", e);
+        }
     }
 }

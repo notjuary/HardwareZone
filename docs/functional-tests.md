@@ -634,20 +634,20 @@ I test GDPR sono **integrati** in `ProfileAndCartFunctionalTest`:
 
 I test funzionali hanno **scoperto a runtime** i seguenti finding. Alcuni sono stati **risolti** durante l'ultima iterazione.
 
-| Finding | Test | Stato       |
-|:---|:---|:------------|
-| Privilege escalation (`SetStateUser`) | `SetStateUserFunctionalTest` | Documentato |
-| NPE su login anonimo | `LoginFunctionalTest` | Documentato |
-| Quantità negative accettate | `AddToCartFunctionalTest` | **FIXED**   |
-| Prodotto inesistente causa NPE | `AddToCartFunctionalTest` | **FIXED**   |
-| Numero carta in chiaro (PCI-DSS) | `PaymentDAOFunctionalTest` | Documentato |
-| SHA-1 per password | `UserBeanFunctionalTest` | **FIXED** |
-| NPE su carrello null | `ShowCartFunctionalTest`, `RemoveFromCartFunctionalTest` | Documentato |
-| Loop infinito homepage | `ProductsHomepageFunctionalTest` | **FIXED**   |
-| CVV getter esposto | `PaymentBeanFunctionalTest` | Documentato |
-| Bug `removeProduct` | `CartBeanFunctionalTest` | **FIXED**   |
-| NPE su `cartBean` in Logout | `LogoutFunctionalTest` | **FIXED**   |
-
+| Finding | Test | Stato                     |
+|:---|:---|:--------------------------|
+| Privilege escalation (`SetStateUser`) | `SetStateUserFunctionalTest` | Documentato               |
+| NPE su login anonimo | `LoginFunctionalTest` | Documentato               |
+| Quantità negative accettate | `AddToCartFunctionalTest` | **FIXED**                 |
+| Prodotto inesistente causa NPE | `AddToCartFunctionalTest` | **FIXED**                 |
+| Numero carta in chiaro (PCI-DSS) | `PaymentDAOFunctionalTest` | Documentato               |
+| SHA-1 per password | `UserBeanFunctionalTest` | **FIXED**                 |
+| NPE su carrello null | `ShowCartFunctionalTest`, `RemoveFromCartFunctionalTest` | Documentato               |
+| Loop infinito homepage | `ProductsHomepageFunctionalTest` | **FIXED**                 |
+| CVV getter esposto | `PaymentBeanFunctionalTest` | Documentato               |
+| Bug `removeProduct` | `CartBeanFunctionalTest` | **FIXED**                 |
+| NPE su `cartBean` in Logout | `LogoutFunctionalTest` | **FIXED**                 |
+| Serializzazione sessione (Tomcat) | `UserBean`, `CartBean` |  **FIXED** (Serializable) |
 
 ## 13. Dettaglio dei finding documentati
 
@@ -1111,9 +1111,21 @@ public String toString() {
             '}';
 }
 ```
+---
+### 13.11 FIXED — Oggetti non serializzabili in sessione
+
+- **File:** `UserBean.java`, `CartBean.java`, `ProductCartBean.java`
+- **CWE:** CWE-501 (Trust Boundary Violation)
+- **Severità:** Media
+- **Stato:** RISOLTO
+
+#### Vulnerabilità (storica)
+Tomcat, per gestire la persistenza delle sessioni o il clustering, potrebbe tentare di serializzare gli oggetti salvati in sessione (`UserBean` e `CartBean`). Poiché non implementavano `java.io.Serializable`, si sarebbe verificata una `NotSerializableException` a runtime, causando un errore 500 all'utente.
+
+#### Fix applicato
+Aggiunta dell'interfaccia `Serializable` e del `serialVersionUID` alle classi `UserBean`, `CartBean` e `ProductCartBean` (essendo quest'ultimo contenuto nella lista del carrello).
 
 ---
-
 
 ### 13.9 Riepilogo finding dei test funzionali
 
