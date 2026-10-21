@@ -233,11 +233,19 @@ src/test/java/security/functional/
 
 **`AddProductFunctionalTest.java` — 3 test**
 
-| # | Metodo | Cosa verifica |
-|:--|:---|:---|
-| 1 | `testDoGetAdminRichiesto` | Admin → `/WEB-INF/admin/add-product.jsp` |
-| 2 | `testDoGetUtenteNormale` | Utente normale → `index.jsp` |
-| 3 | `testDoGetUtenteAnonimo` | NPE documentato |
+| # | Metodo | Cosa verifica                                    |
+|:--|:---|:-------------------------------------------------|
+| 1 | `testDoGetAdminRichiesto` | Admin → `/WEB-INF/admin/add-product.jsp`         |
+| 2 | `testDoGetUtenteNormale` | Utente normale → `index.jsp`                     |
+| 3 | `testDoGetUtenteAnonimo` |  **FIXED** — gestito con null check (nessun NPE) |
+
+**`EditProductFunctionalTest.java` — 3 test**
+
+| # | Metodo | Cosa verifica                                        |
+|:--|:---|:-----------------------------------------------------|
+| 1 | `testAdminRichiesto` | Modifica solo admin                                  |
+| 2 | `testUtenteAnonimo` | **FIXED** — gestito con null check (nessun NPE)      |
+| 3 | `testAdminInputInvalido` |  **FIXED** — Early return verso `/WEB-INF/error.jsp` |
 
 **`EditProductFunctionalTest.java` — 2 test**
 
@@ -1107,20 +1115,20 @@ public String toString() {
 ---
 
 
-### 13.9 Riepilogo finding dei test funzionali 
+### 13.9 Riepilogo finding dei test funzionali
 
-
-| #  | Finding                             |   CWE   | Severità | Test                                                                                     |    Stato    |
-| :- | :---------------------------------- | :-----: |:--------:|:-----------------------------------------------------------------------------------------|:-----------:|
-| 1  | Privilege Escalation `SetStateUser` | CWE-269 | Critica  | `SetStateUserFunctionalTest`                                                             | Documentato |
-| 2  | NPE su Login anonimo                | CWE-476 | Critica  | `LoginFunctionalTest`                                                                    | Documentato |
-| 3  | Quantità negative `AddToCart`       |  CWE-20 | Critica  | `AddToCartFunctionalTest`                                                                |  **FIXED**  |
-| 4  | NPE prodotto inesistente `AddToCart`| CWE-476 | Critica  | `AddToCartFunctionalTest`                                                                |  **FIXED**  |
-| 5  | Numero carta in chiaro (PCI-DSS)    | CWE-312 | Critica  | `PaymentDAOFunctionalTest`                                                               | Documentato |
-| 6  | SHA-1 per password                  | CWE-916 |   Alta   | `UserBeanFunctionalTest`                                                                 | Documentato |
-| 7  | NPE su carrello null                | CWE-476 |   Alta   | `ShowCartFunctionalTest`, `RemoveFromCartFunctionalTest`, `ProfileAndCartFunctionalTest` | Documentato |
-| 8  | Loop infinito `ProductsHomepage`    | CWE-835 | Critica  | `ProductsHomepageFunctionalTest`, `ProductViewTest`                                      |  **FIXED**  |
-| 9  | CVV getter esposto                  | CWE-200 |   Alta   | `PaymentBeanFunctionalTest`                                                              | Documentato |
-| 10 | Bug `removeProduct`                 | CWE-20  |   Media  | `CartBeanFunctionalTest`, `BusinessLogicTest`                                            |  **FIXED**  |
-| 11 | Boundary bug filtro prezzi          | CWE-20  |   Media  | `BusinessLogicTest`, `ProductCatalogTest`                                                |  **FIXED**  |
-
+| #  | Finding                                     |   CWE   | Severità | Test                                                                                     |    Stato    |
+| :- | :------------------------------------------ | :-----: |:--------:|:-----------------------------------------------------------------------------------------|:-----------:|
+| 1  | Privilege Escalation `SetStateUser`         | CWE-269 | Critica  | `SetStateUserFunctionalTest`                                                             | Documentato |
+| 2  | NPE su Login anonimo                        | CWE-476 | Critica  | `LoginFunctionalTest`                                                                    | Documentato |
+| 3  | Quantità negative `AddToCart`               |  CWE-20 | Critica  | `AddToCartFunctionalTest`                                                                |  **FIXED**  |
+| 4  | NPE prodotto inesistente `AddToCart`        | CWE-476 | Critica  | `AddToCartFunctionalTest`                                                                |  **FIXED**  |
+| 5  | Numero carta in chiaro (PCI-DSS)            | CWE-312 | Critica  | `PaymentDAOFunctionalTest`                                                               | Documentato |
+| 6  | SHA-1 per password                          | CWE-916 |   Alta   | `UserBeanFunctionalTest`                                                                 |  **FIXED**  |
+| 7  | NPE su carrello null                        | CWE-476 |   Alta   | `ShowCartFunctionalTest`, `RemoveFromCartFunctionalTest`, `ProfileAndCartFunctionalTest` | Documentato |
+| 8  | Loop infinito `ProductsHomepage`            | CWE-835 | Critica  | `ProductsHomepageFunctionalTest`, `ProductViewTest`                                      |  **FIXED**  |
+| 9  | CVV getter esposto                          | CWE-200 |   Alta   | `PaymentBeanFunctionalTest`                                                              | Documentato |
+| 10 | Bug `removeProduct`                         | CWE-20  |   Media  | `CartBeanFunctionalTest`, `BusinessLogicTest`                                            |  **FIXED**  |
+| 11 | Boundary bug filtro prezzi                  | CWE-20  |   Media  | `BusinessLogicTest`, `ProductCatalogTest`                                                |  **FIXED**  |
+| 12 | NPE su `user` (AddProduct/EditProduct/Users)| CWE-476 |   Alta   | `AddProductFunctionalTest`, `EditProductFunctionalTest`, `UsersFunctionalTest`           |  **FIXED**  |
+| 13 | Upload non validato (Unrestricted Upload)   | CWE-434 | Critica  | `AddProductFunctionalTest`, `EditProductFunctionalTest`                                  |  **FIXED**  |

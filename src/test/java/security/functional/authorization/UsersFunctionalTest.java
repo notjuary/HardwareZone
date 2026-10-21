@@ -66,7 +66,7 @@ class UsersFunctionalTest extends BaseFunctionalTest {
 
     @Test
     @DisplayName("FIXED: Users non causa NPE se utente non loggato")
-    void testUtenteAnonimo() throws Exception {
+    void testUtenteAnonimo()  {
         when(support.session.getAttribute("user")).thenReturn(null);
 
         Users servlet = new Users();

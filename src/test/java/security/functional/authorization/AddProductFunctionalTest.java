@@ -6,6 +6,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import security.functional.BaseFunctionalTest;
 import security.functional.ServletTestSupport;
+
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
@@ -55,13 +57,18 @@ class AddProductFunctionalTest extends BaseFunctionalTest {
     }
 
     @Test
-    @DisplayName("SECURITY: AddProduct.doGet con utente null causa NPE (finding)")
-    void testDoGetUtenteAnonimo() {
+    @DisplayName("FIXED: AddProduct gestisce utente anonimo senza NPE")
+    void testDoGetUtenteAnonimo() throws Exception {
         when(support.session.getAttribute("user")).thenReturn(null);
+
         AddProduct servlet = new AddProduct();
 
-        assertThrows(Exception.class, () ->
-                        support.invokeDoGet(servlet, support.request, support.response),
-                "Atteso NPE per utente non autenticato");
+        // FIX: non deve più lanciare NPE
+        assertDoesNotThrow(() ->
+                support.invokeDoGet(servlet, support.request, support.response)
+        );
+
+        // Deve reindirizzare alla index.jsp
+        verify(support.request).getRequestDispatcher("index.jsp");
     }
 }

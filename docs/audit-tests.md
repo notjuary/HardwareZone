@@ -182,29 +182,30 @@ src/test/java/security/audit/
 
 **Finding NPE:**
 
-| **#** | **Metodo**                                  | **Finding**               |
-| :---- | :------------------------------------------ | :------------------------ |
-| 5     | `testDocumentMissingNullCheckInAddProduct`  | NPE in `AddProduct.java`  |
-| 6     | `testDocumentMissingNullCheckInEditProduct` | NPE in `EditProduct.java` |
-| 7     | `testDocumentMissingNullCheckInUsers`       | NPE in `Users.java`       |
+| **#** | **Metodo**                                  | **Finding**                                       |
+|:------| :------------------------------------------ |:--------------------------------------------------|
+| 5     | `testDocumentMissingNullCheckInAddProduct`  | **FIXED** - `AddProduct` verifica `user != null`  |
+| 6     | `testDocumentMissingNullCheckInEditProduct` | **FIXED** - `EditProduct` verifica `user != null` |
+| 7     | `testDocumentMissingNullCheckInUsers`       | **FIXED** - `Users` verifica `userAdmin != null`  |
 
 **Validazione input:**
 
-| **#** | **Metodo**                                  | **Cosa verifica**      |
-| :---- | :------------------------------------------ | :--------------------- |
-| 8     | `testAddProductPriceAcceptsDecimal`         | Regex prezzo           |
-| 9     | `testAddProductQuantityAcceptsOnlyIntegers` | Regex quantità         |
-| 10    | `testAddProductReplacesCommaInPrice`        | Sostituzione `,` → `.` |
-| 11    | `testAddProductRequiresAllSixFieldsValid`   | `level == 6`           |
-| 12    | `testAddProductRejectsDuplicates`           | No duplicati           |
+| **#** | **Metodo**                                  | **Cosa verifica**                                |
+|:------| :------------------------------------------ |:-------------------------------------------------|
+| 8     | `testAddProductPriceAcceptsDecimal`         | Regex prezzo                                     |
+| 9     | `testAddProductQuantityAcceptsOnlyIntegers` | Regex quantità                                   |
+| 10    | `testAddProductReplacesCommaInPrice`        | Sostituzione `,` → `.`                           |
+| 11    | `testAddProductRequiresAllSixFieldsValid`   | **FIXED** - Validazione con Early Return         |
+| 12    | `testAddProductRejectsDuplicates`           | **FIXED** - Controllo duplicati con Early Return |
+| 12b   | `testEditProductRequiresAllFieldsValid`     | **FIXED** - Validazione con Early Return         |
 
 **File upload:**
 
-| **#** | **Metodo**                                       | **Finding**        |
-| :---- | :----------------------------------------------- |:-------------------|
-| 13    | `testDocumentUnrestrictedFileUploadInAddProduct` | **CWE-434**      |
-| 14    | `testAddProductHasMultipartConfig`               | `@MultipartConfig` |
-| 15    | `testEditProductHasMultipartConfig`              | `@MultipartConfig` |
+| **#** | **Metodo**                                       | **Finding**                                 |
+| :---- | :----------------------------------------------- |:--------------------------------------------|
+| 13 | `testDocumentUnrestrictedFileUploadInAddProduct` |  **FIXED** — Whitelist estensioni (CWE-434) |
+| 14    | `testAddProductHasMultipartConfig`               | `@MultipartConfig`                          |
+| 15    | `testEditProductHasMultipartConfig`              | `@MultipartConfig`                          |
 
 **Logica:**
 
@@ -633,20 +634,23 @@ I test di audit hanno **scoperto 40+ finding**, di cui **10 risolti** durante l'
 
 **Finding risolti:**
 
-| # | Finding | File | Test |
-| :--- | :--- | :--- | :--- |
-| 1 | Validazione `quantity > 0` in AddToCart | `AddToCart.java` | `CartManagementTest.testDocumentNegativeQuantityAcceptance` |
-| 2 | `return;` dopo `sendError` | `AddToCart.java` | `CartManagementTest.testDocumentMissingReturnAfterSendError` |
-| 3 | Gestione `NumberFormatException` | `AddToCart.java` | `CartManagementTest.testDocumentNumberFormatExceptionOnProductId` |
-| 4 | Null check `productBean` | `AddToCart.java` | `CartManagementTest.testDocumentNullProductInAddToCart` |
-| 5 | `removeProduct` non rimuove ID inesistente | `CartBean.java` | `CartManagementTest.testCartRemoveNonExistentBug` |
-| 6 | Filtro prezzi usa `>=` e `<=` | `ProductDAO.java` | `ProductCatalogTest.testDocumentFilterBoundaryBug` |
-| 7 | Loop infinito homepage | `ProductsHomepage.java` | `ProductViewTest.testDocumentInfiniteLoopInProductsHomepage` |
-| 8 | DB vuoto e product null | `ProductsHomepage.java` | `ProductViewTest.testDocumentEmptyDatabaseRisk`, `testDocumentNullProductRisk` |
+| #  | Finding | File | Test |
+|:---| :--- | :--- | :--- |
+| 1  | Validazione `quantity > 0` in AddToCart | `AddToCart.java` | `CartManagementTest.testDocumentNegativeQuantityAcceptance` |
+| 2  | `return;` dopo `sendError` | `AddToCart.java` | `CartManagementTest.testDocumentMissingReturnAfterSendError` |
+| 3  | Gestione `NumberFormatException` | `AddToCart.java` | `CartManagementTest.testDocumentNumberFormatExceptionOnProductId` |
+| 4  | Null check `productBean` | `AddToCart.java` | `CartManagementTest.testDocumentNullProductInAddToCart` |
+| 5  | `removeProduct` non rimuove ID inesistente | `CartBean.java` | `CartManagementTest.testCartRemoveNonExistentBug` |
+| 6  | Filtro prezzi usa `>=` e `<=` | `ProductDAO.java` | `ProductCatalogTest.testDocumentFilterBoundaryBug` |
+| 7  | Loop infinito homepage | `ProductsHomepage.java` | `ProductViewTest.testDocumentInfiniteLoopInProductsHomepage` |
+| 8  | DB vuoto e product null | `ProductsHomepage.java` | `ProductViewTest.testDocumentEmptyDatabaseRisk`, `testDocumentNullProductRisk` |
 | 9  | NPE su `user` in Logout (anonimo) | `Logout.java` | `AuthenticationTest.testDocumentMissingNullCheckInLogout` |
 | 10 | NPE su `cartBean` in Logout       | `Logout.java` | `AuthenticationTest.testDocumentNullCartBeanInLogout` |
 | 11 | SHA-1 weak hash (CWE-916) | `UserBean.java`, `UserDAO.java` | `DataProtectionTest` (aggiornato a BCrypt) |
-
+| 12 | Unrestricted File Upload (CWE-434) | `AddProduct.java` | `AdminFunctionsTest.testDocumentUnrestrictedFileUploadInAddProduct` |
+| 13 | NPE su `user` in AddProduct/EditProduct/Users | `AddProduct.java`, `EditProduct.java`, `Users.java` | `AdminFunctionsTest` (test aggiornati) |
+| 14 | Cognitive Complexity (S3776) in AddProduct/EditProduct | `AddProduct.java`, `EditProduct.java` | (Risolto per SonarCloud) |
+| 15 | Unrestricted File Upload in EditProduct | `EditProduct.java` | (Risolto con whitelist) |
 
 ### 10.4 Blockers SonarQube risolti (Overall Code)
 

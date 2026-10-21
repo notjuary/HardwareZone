@@ -345,7 +345,21 @@ try (Connection con = ConPool.getConnection();
 | 6 | `DaoIntegrationTest.java` | `SoftAssertions` per join multiple assertions |
 | 7 | `ProductViewTest.java` | 4 test aggiornati al formato FIXED |
 
+### 4.7 Iterazione 6 - Refactoring Servlets Admin (Cognitive Complexity)
 
+**File modificati:** `Users.java`, `AddProduct.java`, `EditProduct.java`
+
+**Fix applicati:**
+
+| # | Finding | Fix |
+|:-:|:---|:---|
+| 1 | **Cognitive Complexity 38/23** (S3776) | Refactoring di `doPost` in `AddProduct` ed `EditProduct` usando *Guard Clauses* (early return) |
+| 2 | Codice duplicato per gestione errori | Estratti metodi `sendError()`, `handleImageUpload()` e `saveCategoryIfNotExists()` |
+| 3 | NPE su `user.isAdmin()` (S2259) | Aggiunto `if (user == null \|\| !user.isAdmin()...)` in `AddProduct`, `EditProduct`, `Users` |
+| 4 | Unrestricted File Upload (CWE-434) | Aggiunta whitelist estensioni (`.jpg`, `.jpeg`, `.png`) in `EditProduct` |
+| 5 | Regex istanziate ad ogni chiamata | Estratte come costanti `private static final Pattern` |
+
+**Impatto:** Maintainability Rating ripristinato a **A**. Cognitive Complexity scesa sotto la soglia di 15. Bug NPE risolti.
 ---
 
 ## 5. Issue risolte sul New Code - Riepilogo
@@ -550,6 +564,28 @@ try (Connection con = ConPool.getConnection();
 | `Logout.java` | L23 | Check `isAdmin` escludeva gli admin | Rimosso |
 
 **Impatto:** il logout è ora sicuro per utenti anonimi, utenti loggati senza carrello e admin.
+
+### 6.7 Critical risolte — Unrestricted File Upload (CWE-434)
+
+| File | Descrizione | Fix |
+|:---|:---|:---|
+| `AddProduct.java` | Upload di file senza validazione dell'estensione | Aggiunta whitelist (`.jpg`, `.jpeg`, `.png`) nel metodo `handleImageUpload` |
+
+**Impatto:** Rimosso il rischio di Remote Code Execution (RCE) tramite upload di file JSP/Script malevoli.
+
+### 6.8 High/Critical risolte — Cognitive Complexity, NPE e File Upload
+
+| File | Regola | Descrizione | Fix |
+|:---|:---:|:---|:---|
+| `Users.java` | S2259 | NPE su `userAdmin.isAdmin()` | Aggiunto null check |
+| `AddProduct.java` | S3776 | Cognitive Complexity 38 (limite 15) | Riscritto `doPost` con Guard Clauses ed Estratto Metodi |
+| `AddProduct.java` | S2259 | NPE su `user.isAdmin()` | Aggiunto null check |
+| `AddProduct.java` | CWE-434 | Upload non ristretto | Aggiunta whitelist estensioni |
+| `EditProduct.java` | S3776 | Cognitive Complexity 23 (limite 15) | Riscritto `doPost` con Guard Clauses ed Estratto Metodi |
+| `EditProduct.java` | S2259 | NPE su `user.isAdmin()` | Aggiunto null check |
+| `EditProduct.java` | CWE-434 | Upload non ristretto | Aggiunta whitelist estensioni |
+
+**Impatto:** Maintainability Rating ripristinato a **A**. Bug potenziali (NPE) e vulnerabilità critiche (RCE via upload) risolte.
 
 ### 6.7 Impatto sull'Overall Code
 

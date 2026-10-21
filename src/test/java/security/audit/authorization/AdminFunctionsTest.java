@@ -61,36 +61,40 @@ class AdminFunctionsTest {
     }
 
     @Test
-    @DisplayName("FINDING: AddProduct usa user.isAdmin() senza null check")
+    @DisplayName("FIXED: AddProduct verifica che user != null prima di isAdmin()")
     void testDocumentMissingNullCheckInAddProduct() throws Exception {
         String source = readSource("src/main/java/Controller/AddProduct.java");
-        boolean unsafe =
-                source.contains("UserBean user = (UserBean) session.getAttribute(\"user\")") &&
-                        source.contains("if (user.isAdmin()") &&
-                        !source.contains("user != null && user.isAdmin()");
-        assertThat(unsafe).as("FINDING: AddProduct.java NPE su utente null").isTrue();
+
+        // Ora ci aspettiamo che il null check ci sia
+        boolean isFixed =
+                source.contains("user == null") &&
+                        source.contains("!user.isAdmin().equalsIgnoreCase(\"true\")");
+
+        assertThat(isFixed)
+                .as("FIXED: AddProduct ora verifica user == null (CWE-476 risolto)")
+                .isTrue();
     }
 
     @Test
-    @DisplayName("FINDING: EditProduct usa user.isAdmin() senza null check")
+    @DisplayName("FIXED: EditProduct verifica user != null prima di isAdmin()")
     void testDocumentMissingNullCheckInEditProduct() throws Exception {
         String source = readSource("src/main/java/Controller/EditProduct.java");
-        boolean unsafe =
-                source.contains("UserBean user = (UserBean) session.getAttribute(\"user\")") &&
-                        source.contains("if (user.isAdmin()") &&
-                        !source.contains("user != null && user.isAdmin()");
-        assertThat(unsafe).as("FINDING: EditProduct.java NPE su utente null").isTrue();
+        boolean isFixed = source.contains("user == null") && source.contains("!user.isAdmin().equalsIgnoreCase(\"true\")");
+        assertThat(isFixed).as("FIXED: EditProduct ora verifica user == null").isTrue();
     }
 
     @Test
-    @DisplayName("FINDING: Users usa userAdmin.isAdmin() senza null check")
+    @DisplayName("FIXED: Users verifica userAdmin != null prima di isAdmin()")
     void testDocumentMissingNullCheckInUsers() throws Exception {
         String source = readSource("src/main/java/Controller/Users.java");
-        boolean unsafe =
-                source.contains("UserBean userAdmin = (UserBean) session.getAttribute(\"user\")") &&
-                        source.contains("if (userAdmin.isAdmin()") &&
-                        !source.contains("userAdmin != null && userAdmin.isAdmin()");
-        assertThat(unsafe).as("FINDING: Users.java NPE su userAdmin null").isTrue();
+
+        boolean isFixed =
+                source.contains("userAdmin == null") &&
+                        source.contains("!userAdmin.isAdmin().equalsIgnoreCase(\"true\")");
+
+        assertThat(isFixed)
+                .as("FIXED: Users ora verifica che l'utente non sia null (CWE-476 risolto).")
+                .isTrue();
     }
 
     @Test
@@ -115,17 +119,28 @@ class AdminFunctionsTest {
     }
 
     @Test
-    @DisplayName("AddProduct: richiede level == 6 per salvare")
+    @DisplayName("AddProduct: valida i campi con early return")
     void testAddProductRequiresAllSixFieldsValid() throws Exception {
         String source = readSource("src/main/java/Controller/AddProduct.java");
-        assertThat(source).contains("level == 6");
-    }
 
+        // Verifica che ci siano i controlli sui campi obbligatori
+        assertThat(source)
+                .as("AddProduct deve validare i campi e uscire in caso di errore")
+                .contains("!isValidString(name, 20)")
+                .contains("sendError(request, response, \"Errore inserimento\"");
+    }
     @Test
-    @DisplayName("AddProduct: impedisce duplicati (name + description)")
+    @DisplayName("AddProduct: rifiuta i duplicati con Early Return")
     void testAddProductRejectsDuplicates() throws Exception {
         String source = readSource("src/main/java/Controller/AddProduct.java");
-        assertThat(source).contains("!service.isAlreadyRegistered(name, description)");
+
+        boolean hasDuplicateCheck =
+                source.contains("serviceProduct.isAlreadyRegistered(name, description)") &&
+                        source.contains("return;");
+
+        assertThat(hasDuplicateCheck)
+                .as("AddProduct deve controllare i duplicati e interrompere l'esecuzione se esistono")
+                .isTrue();
     }
 
     @Test
@@ -136,26 +151,35 @@ class AdminFunctionsTest {
     }
 
     @Test
-    @DisplayName("EditProduct: richiede level == 6 per salvare")
+    @DisplayName("EditProduct: valida i campi con Early Return")
     void testEditProductRequiresAllFieldsValid() throws Exception {
         String source = readSource("src/main/java/Controller/EditProduct.java");
-        assertThat(source).contains("if (level == 6)");
-    }
 
-    @Test
-    @DisplayName("FINDING: AddProduct non valida l'estensione del file caricato")
-    void testDocumentUnrestrictedFileUploadInAddProduct() throws Exception {
-        String source = readSource("src/main/java/Controller/AddProduct.java");
-        boolean noExtensionCheck =
-                source.contains("part.getSubmittedFileName()") &&
-                        !source.contains(".endsWith(\".jpg\")") &&
-                        !source.contains(".endsWith(\".png\")") &&
-                        !source.contains("getContentType");
-        assertThat(noExtensionCheck)
-                .as("FINDING: file upload senza whitelist (CWE-434)")
+        // Ora il codice usa i controlli diretti anziché la variabile 'level'
+        boolean hasValidation =
+                source.contains("!isValidString(name, 20)") &&
+                        source.contains("!DECIMAL_PATTERN.matcher(price).find()") &&
+                        source.contains("sendError(request, response, \"Errore modifica: campi non validi\")");
+
+        assertThat(hasValidation)
+                .as("EditProduct deve validare tutti i campi e interrompere l'esecuzione se uno non è valido")
                 .isTrue();
     }
 
+    @Test
+    @DisplayName("FIXED: AddProduct valida l'estensione del file caricato (Whitelist)")
+    void testDocumentUnrestrictedFileUploadInAddProduct() throws Exception {
+        String source = readSource("src/main/java/Controller/AddProduct.java");
+
+        // Ora ci aspettiamo che ci sia il controllo sull'estensione
+        boolean isFixed =
+                source.contains("part.getSubmittedFileName()") &&
+                        (source.contains(".endsWith(\".jpg\")") || source.contains(".endsWith(\".png\")"));
+
+        assertThat(isFixed)
+                .as("FIXED: AddProduct valida l'estensione del file con una whitelist (CWE-434 risolto)")
+                .isTrue();
+    }
     @Test
     @DisplayName("AddProduct: usa @MultipartConfig con limiti file size")
     void testAddProductHasMultipartConfig() throws Exception {
@@ -171,7 +195,7 @@ class AdminFunctionsTest {
     }
 
     @Test
-    @DisplayName("EditProduct: preserva immagine se non ne viene caricata una nuova")
+    @DisplayName("EditProduct: preserva immagine se non c'è upload")
     void testEditProductPreservesImageIfNoUpload() throws Exception {
         String source = readSource("src/main/java/Controller/EditProduct.java");
         assertThat(source).contains("service.doRetrieveById(id).getImage()");
