@@ -18,7 +18,8 @@ public class OrderDAO {
             ps.setDouble(2, order.getTotal());
 
             if (ps.executeUpdate() != 1) {
-                throw new RuntimeException("INSERT error.");
+                // FIX S112: Uso di eccezione custom
+                throw new DataAccessException("INSERT error.");
             }
 
             try (ResultSet rs = ps.getGeneratedKeys()) {
@@ -31,7 +32,8 @@ public class OrderDAO {
             return -1;
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            // FIX S112: Uso di eccezione custom
+            throw new DataAccessException(e);
         }
     }
 
@@ -52,7 +54,8 @@ public class OrderDAO {
             return orders;
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            // FIX S112: Uso di eccezione custom
+            throw new DataAccessException(e);
         }
     }
 
@@ -71,7 +74,8 @@ public class OrderDAO {
             return null;
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            // FIX S112: Uso di eccezione custom
+            throw new DataAccessException(e);
         }
     }
 
@@ -90,7 +94,8 @@ public class OrderDAO {
             return orders;
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            // FIX S112: Uso di eccezione custom
+            throw new DataAccessException(e);
         }
     }
 

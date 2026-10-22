@@ -611,26 +611,44 @@ try (Connection con = ConPool.getConnection();
 | `CategoryBean`, `OrderBean`, `OrderProductBean`, `PaymentBean`, `ProductBean`, `ProductCartBean` | S1186 | Costruttori vuoti (Suspicious) | Aggiunto commento esplicativo: "Costruttore vuoto richiesto dalla specifica JavaBeans per l'istanziazione via reflection" |
 | `catalog.jsp`, `product.jsp`, `productInfo.jsp`, `product.js`, `validateForm.js` | S6853, S1118 | Warning di accessibilità (label, ruoli) e `parseInt` | Separati gli input dalle label, aggiunti `aria-label`, usato `Number.parseInt` |
 
-**Impatto:**
-- **Accessibilità:** Migliorata l'esperienza per utenti con disabilità visive (screen reader) e motorie (navigazione da tastiera). L'uso di elementi nativi `<button>` e `<a>` garantisce la massima compatibilità cross-browser e cross-device.
-- **Qualità:** Risolti i warning di Consistency/Reliability su file legacy (JSP).
-- **Rating:** Contribuisce a mantenere la Maintainability e la Reliability a **A**.
+**Impatto:** Migliorata l'esperienza per utenti con disabilità (screen reader e navigazione da tastiera) e risolti i warning su file legacy JSP. Maintainability e Reliability mantenute a **A**.
 
-### 6.11 High risolte — Definizione di costanti (S1192)
+---
+
+### 6.11 High risolte — Definizione di Costanti (S1192)
+
+La regola S1192 segnala la duplicazione di stringhe letterali, che rende il codice fragile (se cambi un percorso, devi modificarlo in decine di punti).
+
+| File | Descrizione | Fix |
+|:---|:---|:---|
+| `Login.java`, `Payment.java`, `Registration.java`, `SetAdmin.java`, `AddProduct.java`, `EditProduct.java` | Stringhe duplicate (`/WEB-INF/error.jsp`, `alert`, `redirect`, `users-servlet`, `add-product-servlet`) | Estratte come costanti `private static final String` |
+| `EditProduct.java`, `AddProduct.java` | Stringhe duplicate (`./img/products/nophoto.png`) | Estratte come costanti `private static final String DEFAULT_IMAGE` |
+
+---
+
+### 6.12 Medium risolte — Sicurezza e Manutenibilità (Overall Code)
 
 | File | Regola | Descrizione | Fix |
 |:---|:---:|:---|:---|
-| `Login.java` | S1192 | Stringhe duplicate (`/WEB-INF/error.jsp`, `alert`, `redirect`, `login.jsp`) | Estratte come costanti `private static final` |
-| `Payment.java` | S1192 | Stringhe duplicate (`/WEB-INF/error.jsp`, `alert`, `redirect`, `total`) | Estratte come costanti `private static final` |
-| `Registration.java` | S1192 | Stringhe duplicate (`/WEB-INF/error.jsp`, `redirect`, `type`) | Estratte come costanti `private static final` |
-| `SetAdmin.java` | S1192 | Stringhe duplicate (`/WEB-INF/error.jsp`, `redirect`, `type`) | Estratte come costanti `private static final` |
-| `Registration.java` | S106 | `System.out.println` in produzione | Rimosso (evita leak di dati nei log) |
-| `SetAdmin.java` | S2259 | NPE su `userAdmin` e `user` | Aggiunti null check espliciti |
-| `SetAdmin.java`, `Registration.java` | S1192, S125, S1989 | Stringhe duplicate, codice commentato, eccezioni non gestite | Estratte costanti, rimosso codice morto, incapsulate eccezioni in `RuntimeException` |
-| `SetAdmin.java` | S1192 | Stringa `"users-servlet"` ripetuta 5 volte | Estratta in costante `USERS_SERVLET` |
-| `PaymentBean`, `ProductBean`, `ProductCartBean`, `UserBean` | S1186 | Costruttori vuoti segnalati come "suspicious" | Aggiunto commento esplicativo per la specifica JavaBeans (reflection) |
+| Tutti i DAO (`UserDAO`, `ProductDAO`, `CartDAO`, `OrderDAO`, `OrderProductDAO`, `CategoryDAO`, `PaymentDAO`) | S112 | Uso di `RuntimeException` generica per gli errori SQL | Creata l'eccezione custom **`DataAccessException`** e sostituita in tutti i blocchi `catch (SQLException e)` |
+| `AddProduct.java`, `EditProduct.java` | S5852 | Regex con backtracking super-lineare (ReDoS) | Sostituita `^\d*\.?\d*$` con `^\d+(\.\d+)?$` |
+| `ConPool.java` | S1118 | Costruttore public implicito in una classe Utility | Aggiunto `private ConPool() {}` per nascondere il costruttore |
+| `OrderInfo.java` | S106 | Uso di `System.out.println` in produzione | Rimosso (evita leak di informazioni nei log) |
+| `AddProduct.java`, `EditProduct.java` | S1989 | Eccezioni `IOException`/`ServletException` non gestite in metodi helper | Incapsulate in `try/catch` e rilanciate come `RuntimeException` |
+| `Registration.java` | S125 | Blocco di codice commentato | Rimosso il codice morto |
 
-**Impatto:** Migliorata la manutenibilità del codice. In caso di modifiche ai percorsi delle JSP o ai nomi degli attributi di sessione, basterà modificare la costante in un unico punto.
+---
+
+### 6.13 Low risolte — Refactoring dei Test e Pulizia del Codice
+
+| File | Regola | Descrizione | Fix |
+|:---|:---:|:---|:---|
+| `PaymentSecurityTest.java` | S5976 | Test ripetuti per la stessa logica (es. validazione carta/CVV) | Convertiti in un unico `@ParameterizedTest` con `@CsvSource` |
+| `PaymentSecurityTest.java` | S1068 | Campo `HOLDER_STRING` dichiarato ma non utilizzato | Rimosso |
+| `SetAdminFunctionalTest.java`, `SetStateUserFunctionalTest.java`, `AddProductFunctionalTest.java` | S1128 | Import inutilizzati (`assertThrows`) dopo il passaggio a `assertDoesNotThrow` | Rimossi |
+| `SetAdminFunctionalTest.java`, `EditProductFunctionalTest.java` | S1130 | Dichiarazione `throws Exception` non necessaria | Rimosso dalle firme dei metodi |
+| `UserBean.java`, `PaymentBean.java` | S1110 | Parentesi inutili nelle espressioni di assegnazione o concatenazione | Rimosse |
+| `nav-menu.css`, `profile.css`, `general.css`, `chiSiamo.css` | S1119, S1874 | Uso di `!important`, selettori duplicati, contrasto colori non conforme | Rimosso `!important`, uniti i duplicati, scurito il colore del testo per rispettare WCAG 2-A |
 
 ### 6.7 Impatto sull'Overall Code
 

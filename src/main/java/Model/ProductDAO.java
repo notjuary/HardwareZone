@@ -27,7 +27,8 @@ public class ProductDAO {
             ps.setString(7, productBean.getCategory());
 
             if (ps.executeUpdate() != 1) {
-                throw new RuntimeException("INSERT error.");
+                // FIX S112: Uso di eccezione custom
+                throw new DataAccessException("INSERT error.");
             }
 
             try (ResultSet rs = ps.getGeneratedKeys()) {
@@ -38,7 +39,8 @@ public class ProductDAO {
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            // FIX S112: Uso di eccezione custom
+            throw new DataAccessException(e);
         }
     }
 
@@ -62,7 +64,8 @@ public class ProductDAO {
             ps.executeUpdate();
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            // FIX S112: Uso di eccezione custom
+            throw new DataAccessException(e);
         }
     }
 
@@ -80,7 +83,8 @@ public class ProductDAO {
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            // FIX S112: Uso di eccezione custom
+            throw new DataAccessException(e);
         }
     }
 
@@ -99,7 +103,8 @@ public class ProductDAO {
             return null;
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            // FIX S112: Uso di eccezione custom
+            throw new DataAccessException(e);
         }
     }
 
@@ -118,7 +123,8 @@ public class ProductDAO {
             return productsList;
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            // FIX S112: Uso di eccezione custom
+            throw new DataAccessException(e);
         }
     }
 
@@ -137,7 +143,8 @@ public class ProductDAO {
             return productsList;
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            // FIX S112: Uso di eccezione custom
+            throw new DataAccessException(e);
         }
     }
 
@@ -168,7 +175,8 @@ public class ProductDAO {
             return productsList;
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            // FIX S112: Uso di eccezione custom
+            throw new DataAccessException(e);
         }
     }
 

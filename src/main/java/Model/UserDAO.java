@@ -36,7 +36,8 @@ public class UserDAO {
             ps.setString(13, userBean.isAdmin());
 
             if (ps.executeUpdate() != 1) {
-                throw new RuntimeException("INSERT error.");
+                // FIX S112: Uso di eccezione custom
+                throw new DataAccessException("INSERT error.");
             }
 
             try (ResultSet rs = ps.getGeneratedKeys()) {
@@ -47,7 +48,8 @@ public class UserDAO {
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            // FIX S112: Uso di eccezione custom
+            throw new DataAccessException(e);
         }
     }
 
@@ -66,7 +68,8 @@ public class UserDAO {
             return null;
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            // FIX S112: Uso di eccezione custom
+            throw new DataAccessException(e);
         }
     }
 
@@ -89,7 +92,8 @@ public class UserDAO {
             }
             return null;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            // FIX S112: Uso di eccezione custom
+            throw new DataAccessException(e);
         }
     }
 
@@ -118,7 +122,8 @@ public class UserDAO {
             ps.executeUpdate();
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            // FIX S112: Uso di eccezione custom
+            throw new DataAccessException(e);
         }
     }
 
@@ -132,7 +137,8 @@ public class UserDAO {
             ps.executeUpdate();
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            // FIX S112: Uso di eccezione custom
+            throw new DataAccessException(e);
         }
     }
 
@@ -145,7 +151,8 @@ public class UserDAO {
             ps.executeUpdate();
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            // FIX S112: Uso di eccezione custom
+            throw new DataAccessException(e);
         }
     }
 
@@ -160,7 +167,8 @@ public class UserDAO {
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            // FIX S112: Uso di eccezione custom
+            throw new DataAccessException(e);
         }
     }
 
@@ -179,7 +187,8 @@ public class UserDAO {
             return usersList;
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            // FIX S112: Uso di eccezione custom
+            throw new DataAccessException(e);
         }
     }
 

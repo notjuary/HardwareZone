@@ -19,11 +19,13 @@ public class PaymentDAO {
             ps.setString(6, payment.getHolder());
 
             if (ps.executeUpdate() != 1) {
-                throw new RuntimeException("INSERT error.");
+                // FIX S112: Uso di eccezione custom
+                throw new DataAccessException("INSERT error.");
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            // FIX S112: Uso di eccezione custom
+            throw new DataAccessException(e);
         }
     }
 }
