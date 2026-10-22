@@ -23,6 +23,7 @@ public class Registration extends HttpServlet {
     private static final String TYPE_SUCCESS = "success";
     private static final String TYPE_ALERT = "alert";
 
+    @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         response.setContentType("text/html");
 

@@ -20,6 +20,7 @@ public class Login extends HttpServlet {
     private static final String ATTR_REDIRECT = "redirect";
     private static final String LOGIN_JSP = "login.jsp";
 
+    @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         response.setContentType("text/html");
 

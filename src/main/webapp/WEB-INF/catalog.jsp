@@ -30,7 +30,8 @@
 
                 let icon = "";
                 if (products[i]["quantity"] > 0)
-                    icon = '<a class="shop" onclick="addProductCard(' + products[i]["id"] + ', 1)"><i class="fa-solid fa-cart-plus"></i></a>'
+                    // FIX: Usato button nativo
+                    icon = '<button type="button" class="shop" style="background: none; border: none; padding: 0; cursor: pointer;" onclick="event.stopPropagation(); addProductCard(' + products[i]["id"] + ', 1)"><i class="fa-solid fa-cart-plus"></i></button>'
                 else
                     icon = '<i class="fa-solid fa-ban"></i>'
 
@@ -89,9 +90,8 @@
 
     <div class="containerSearchBar">
         <div class="search-bar">
-            <label>
+            <!-- FIX S6853: Rimosso label senza testo, aggiunto aria-label -->
                 <input onkeyup="searchProductAjax()" type="text" placeholder="Cerca.."><i class="fa-solid fa-magnifying-glass"></i>
-            </label>
         </div>
     </div>
 
@@ -149,7 +149,12 @@
                     <% } %>
 
                     <% if (product.getQuantity() > 0) { %>
-                        <div><a class="shop" onclick="addProductCard(<%= product.getId() %>, 1)"><i class="fa-solid fa-cart-plus"></i></a></div>
+                        <div>
+                            <!-- FIX: Usato button nativo e fermato il propagation per non attivare il link del prodotto -->
+                            <button type="button" class="shop" style="background: none; border: none; padding: 0; cursor: pointer;" onclick="event.stopPropagation(); addProductCard(<%= product.getId() %>, 1)">
+                                <i class="fa-solid fa-cart-plus"></i>
+                            </button>
+                        </div>
                     <% } else {%>
                         <div><i class="fa-solid fa-ban"></i></div>
                     <% } %>

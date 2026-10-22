@@ -34,7 +34,6 @@ public class OrderInfo extends HttpServlet {
             UserDAO userDAO = new UserDAO();
             UserBean userOrder = userDAO.doRetrieveById(orderBean.getUser());
 
-            System.out.println(orderBean.getUser());
 
             request.setAttribute("products", products);
             request.setAttribute("catalog", catalog);

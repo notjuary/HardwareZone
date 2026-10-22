@@ -609,6 +609,7 @@ try (Connection con = ConPool.getConnection();
 | `profile-admin.jsp`, `profile-user.jsp`, `productInfo.jsp` | S6853 | `<label>` usati come titoli di sezione senza `for` | Sostituiti con `<div class="text-section">` |
 | `product.jsp` | S6853 | `<label>` attorno agli input non associati esplicitamente | Separati gli input e aggiunto `for` esplicito; il bottone ora è un `<button>` nativo |
 | `CategoryBean`, `OrderBean`, `OrderProductBean`, `PaymentBean`, `ProductBean`, `ProductCartBean` | S1186 | Costruttori vuoti (Suspicious) | Aggiunto commento esplicativo: "Costruttore vuoto richiesto dalla specifica JavaBeans per l'istanziazione via reflection" |
+| `catalog.jsp`, `product.jsp`, `productInfo.jsp`, `product.js`, `validateForm.js` | S6853, S1118 | Warning di accessibilità (label, ruoli) e `parseInt` | Separati gli input dalle label, aggiunti `aria-label`, usato `Number.parseInt` |
 
 **Impatto:**
 - **Accessibilità:** Migliorata l'esperienza per utenti con disabilità visive (screen reader) e motorie (navigazione da tastiera). L'uso di elementi nativi `<button>` e `<a>` garantisce la massima compatibilità cross-browser e cross-device.

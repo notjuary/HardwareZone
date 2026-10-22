@@ -324,7 +324,8 @@ function validateSalesProduct() {
 
     let sales = document.getElementById("sales").value;
 
-    if (parseInt(sales) >= 0 && parseInt(sales) <= 100) {
+    // FIX: Number.parseInt invece di parseInt
+    if (Number.parseInt(sales) >= 0 && Number.parseInt(sales) <= 100) {
         $("#sales").css("border-color", "#E5E5E5");
         return true;
     }

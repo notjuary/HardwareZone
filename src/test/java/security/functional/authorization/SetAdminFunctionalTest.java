@@ -48,7 +48,7 @@ class SetAdminFunctionalTest extends BaseFunctionalTest {
 
     @Test
     @DisplayName("FIXED: SetAdmin gestisce utente anonimo senza NPE")
-    void testUtenteAnonimo() throws Exception {
+    void testUtenteAnonimo()  {
         // Utente non loggato (null)
         when(support.session.getAttribute("user")).thenReturn(null);
 

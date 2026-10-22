@@ -358,62 +358,57 @@ src/test/java/security/audit/
 | 6     | `testUrlJdbcCorretto`              | URL JDBC sicuro            |
 | 7     | `testParametriPoolConfigurati`     | Pool configurato           |
 
-### 5.3 `PaymentSecurityTest.java` (22 test)
+### 5.3 `PaymentSecurityTest.java` (13 metodi, 22 esecuzioni)
 
 **Validazione carta:**
 
-| **#** | **Metodo**                  | **Cosa verifica** |
-| :---- | :-------------------------- | :---------------- |
-| 1     | `testValidCardNumber`       | 16 cifre valide   |
-| 2     | `testCardNumberTooShort`    | <16 rifiutato     |
-| 3     | `testCardNumberTooLong`     | >16 rifiutato     |
-| 4     | `testCardNumberWithLetters` | Lettere rifiutate |
-| 5     | `testDocumentNoLuhnCheck`   |  **No Luhn check**  |
+| **#** | **Metodo** | **Cosa verifica** |
+| :--- | :--- | :--- |
+| 1 | `testCardNumberValidation` (param.) | 4 casi: 16 cifre (valido), 15 cifre, 17 cifre, lettere |
+| 2 | `testDocumentNoLuhnCheck` | **Finding**: No Luhn check |
 
 **CVV:**
 
-| **#** | **Metodo**        | **Cosa verifica** |
-| :---- | :---------------- | :---------------- |
-| 6     | `testValidCvv`    | 3 cifre           |
-| 7     | `testCvvTooShort` | <3 rifiutato      |
-| 8     | `testCvvTooLong`  | >3 rifiutato      |
+| **#** | **Metodo** | **Cosa verifica** |
+| :--- | :--- | :--- |
+| 3 | `testCvvValidation` (param.) | 3 casi: 3 cifre (valido), 2 cifre, 4 cifre |
 
 **Scadenza:**
 
-| **#** | **Metodo**                                | **Cosa verifica** |
-| :---- | :---------------------------------------- | :---------------- |
-| 9     | `testFutureDeadlineIsValid`               | Futuro valido     |
-| 10    | `testPastDeadlineIsInvalid`               | Passato invalido  |
-| 11    | `testDocumentNullDeadline`                | NPE su null       |
-| 12    | `testDocumentNumberFormatExceptionOnDate` | No try/catch      |
+| **#** | **Metodo** | **Cosa verifica** |
+|:---| :--- | :--- |
+| 4 | `testFutureDeadlineIsValid` | Futuro valido |
+| 5 | `testPastDeadlineIsInvalid` | Passato invalido |
+| 6 | `testDocumentNullDeadline` | **Finding**: NPE su null |
+| 7 | `testDocumentNumberFormatExceptionOnDate` | **Finding**: No try/catch |
 
 **PCI-DSS:**
 
-| **#** | **Metodo**                               | **Finding**        |
-| :---- | :--------------------------------------- |:-------------------|
-| 13    | `testDocumentPlaintextCardNumberStorage` | **PCI-DSS 3.4**    |
-| 14    | `testDocumentCvvStorage`                 | **PCI-DSS 3.2**  |
-| 15    | `testDocumentNoEncryptionColumn`         | No cifratura       |
-| 16    | `testDocumentCvvGetterExposure`          | Getter CVV esposto |
+| **#** | **Metodo** | **Finding** |
+| :--- | :--- |:---|
+| 8 | `testDocumentPlaintextCardNumberStorage` | **PCI-DSS 3.4** |
+| 9 | `testDocumentCvvStorage` | **PCI-DSS 3.2** |
+| 10 | `testDocumentNoEncryptionColumn` | No cifratura |
+| 11 | `testDocumentCvvGetterExposure` | Getter CVV esposto |
 
 **Login/Auth:**
 
-| **#** | **Metodo**                            | **Cosa verifica**           |
-| :---- | :------------------------------------ | :-------------------------- |
-| 17    | `testPaymentRequiresLogin`            | Login richiesto             |
-| 18    | `testDocumentMissingLoginCheckInPost` | NPE su login non verificato |
+| **#** | **Metodo** | **Cosa verifica** |
+| :--- | :--- | :--- |
+| 12 | `testPaymentRequiresLogin` | Login richiesto |
+| 13 | `testDocumentMissingLoginCheckInPost` | **Finding**: NPE su login non verificato |
 
 **Race condition:**
 
-| **#** | **Metodo**                         | **Finding**                   |
-| :---- | :--------------------------------- |:------------------------------|
-| 19    | `testDocumentRaceConditionOnStock` | **Race condition su stock** |
+| **#** | **Metodo** | **Finding** |
+| :--- | :--- |:---|
+| 14 | `testDocumentRaceConditionOnStock` | **Race condition su stock** |
 
 **Bean:**
 
-| **#** | **Metodo** | **Cosa verifica**         |
-| :---- | :--------- | :------------------------ |
-| 20-22 | altri      | Getter/setter PaymentBean |
+| **#** | **Metodo** | **Cosa verifica** |
+| :--- | :--- | :--- |
+| 15-18 | `testPaymentBeanSetCardNumber`, `testPaymentBeanSetCvv`, `testPaymentBeanSetHolder`, `testPaymentDAO_UsesPreparedStatement` | Getter/setter PaymentBean e PreparedStatement |
 
 ---
 

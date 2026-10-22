@@ -40,13 +40,14 @@
             <% if (product.getQuantity() > 0) { %>
             <form action="${pageContext.request.contextPath}/add-to-cart-servlet" method="get">
                 <input type="hidden" name="productId" id="productId" value="<%= product.getId() %>">
-                <label>
-                    <input type="number" name="quantity" id="quantity" value="1" min="1" max="<%= product.getQuantity() %>">
-                </label>
 
-                <label>
-                    <input type="button" onclick="addProductCard(document.getElementById('productId').value, document.getElementById('quantity').value)" value="Aggiungi al carrello">
-                </label>
+                <!-- FIX S6853: Separato label e input, usato button nativo -->
+                <label for="quantity">Quantità:</label>
+                <input type="number" name="quantity" id="quantity" value="1" min="1" max="<%= product.getQuantity() %>">
+
+                <button type="button" onclick="addProductCard(document.getElementById('productId').value, document.getElementById('quantity').value)">
+                    Aggiungi al carrello
+                </button>
             </form>
             <% } else { %>
                 <p style="text-align: center">Prodotto esaurito</p>

@@ -24,7 +24,7 @@ public class PaymentBean {
     public String getDatePayment() {
 
         return datePayment.get(Calendar.YEAR) + "-"
-                + ((datePayment.get(Calendar.MONTH) + 1)) + "-"
+                + (datePayment.get(Calendar.MONTH) + 1) + "-"
                 + (datePayment.get(Calendar.DAY_OF_MONTH));
     }
 
@@ -64,7 +64,7 @@ public class PaymentBean {
 
     public String getDeadline() {
         return deadline.get(Calendar.YEAR) + "-"
-                + ((deadline.get(Calendar.MONTH) + 1)) + "-"
+                + (deadline.get(Calendar.MONTH) + 1) + "-"
                 + (deadline.get(Calendar.DAY_OF_MONTH));
     }
 

@@ -46,7 +46,7 @@ class SetStateUserFunctionalTest extends BaseFunctionalTest {
 
     @Test
     @DisplayName("FIXED: SetStateUser gestisce utente anonimo senza NPE")
-    void testUtenteAnonimo() throws Exception {
+    void testUtenteAnonimo() {
         when(support.session.getAttribute("user")).thenReturn(null);
         when(support.request.getRequestDispatcher("index.jsp")).thenReturn(support.dispatcher);
 

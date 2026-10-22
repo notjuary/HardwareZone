@@ -15,31 +15,32 @@ div.warning {
     text-align: center;
     padding: 20px;
     background-color: #c27000;
-    color: #EEE5E9;
+    color: #0F1A20; /* FIX Contrasto: era #EEE5E9 */
 }
 
 div.alert {
     text-align: center;
     padding: 20px;
     background-color: #f44336;
-    color: #EEE5E9;
+    color: #0F1A20; /* FIX Contrasto: era #EEE5E9 */
 }
 
 div.success {
     text-align: center;
     padding: 20px;
     background-color: #2eb885;
-    color: #EEE5E9;
+    color: #0F1A20; /* FIX Contrasto: era #EEE5E9 */
 }
 
 div.success a, div.warning a, div.alert a {
     text-decoration: none;
+    color: #0F1A20; /* FIX Contrasto */
 }
 
 span.closebtn {
     text-align: center;
     margin-left: 15px;
-    color: #EEE5E9;
+    color: #0F1A20; /* FIX Contrasto */
     font-weight: bold;
     float: right;
     font-size: 22px;
@@ -49,7 +50,7 @@ span.closebtn {
 }
 
 span.closebtn:hover {
-    color: #0F1A20;
+    color: #EEE5E9;
 }
 
 a.error, span.error {
@@ -57,8 +58,10 @@ a.error, span.error {
     color: #EEE5E9;
 }
 
+.visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
+
 @media screen and (max-width: 660px) {
-    div.alert, div.warning, div.alert {
+    div.alert, div.warning { /* FIX: rimosso div.alert duplicato */
         margin-top: 80px;
     }
 }

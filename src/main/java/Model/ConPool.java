@@ -11,6 +11,9 @@ public class ConPool {
 	private static DataSource datasource;
 	private static DataSource testDataSource;
 
+	// FIX S1118: Nasconde il costruttore public implicito
+	private ConPool() {}
+
 	public static void setTestDataSource(DataSource ds) {
 		testDataSource = ds;
 	}

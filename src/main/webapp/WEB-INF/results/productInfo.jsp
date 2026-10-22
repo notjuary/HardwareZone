@@ -42,7 +42,9 @@
     <form action="${pageContext.request.contextPath}/edit-product-servlet" method="post" enctype="multipart/form-data" id="edit-product-form">
         <div class="containerProduct">
             <!-- FIX S6853: Rimosso il label attorno all'input hidden -->
-            <input type="text" value="<%= product.getId() %>" name="id" hidden>
+            <!-- FIX S6853: Aggiunto ID e label nascosta per l'accessibilità -->
+            <label for="id" class="visually-hidden">ID Prodotto</label>
+            <input type="text" id="id" value="<%= product.getId() %>" name="id" hidden>
 
             <div class="product-name">
                 <label for="name">Nome</label>

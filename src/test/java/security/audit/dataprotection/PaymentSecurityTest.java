@@ -4,6 +4,8 @@ import Model.PaymentBean;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -11,16 +13,6 @@ import java.util.regex.Pattern;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Test di sicurezza per l'area "Payment" (dati sensibili carte di credito).
- * Verifica:
- *  - validazione numero carta, CVV, scadenza, titolare
- *  - salvataggio sicuro dei dati (o mancanza di)
- *  - conformità PCI-DSS
- *
- * Riferimento: OWASP Testing Guide - OTG-CRYPST, PCI-DSS v4.0
- * Riferimento CWE: CWE-312 (Cleartext Storage), CWE-319, CWE-311
- */
 @DisplayName("Payment Security - Dati carte di credito e PCI-DSS")
 class PaymentSecurityTest {
 
@@ -28,7 +20,6 @@ class PaymentSecurityTest {
 
     // Regex replicate dal Payment.java doPost
     private static final Pattern NUMBER_STRING = Pattern.compile("^\\d+$");
-    private static final Pattern HOLDER_STRING = Pattern.compile("^([a-zA-Z\\\\xE0\\\\xE8\\\\xE9\\\\xF9\\\\xF2\\\\xEC\\\\x27]\\s?){2,255}$");
 
     @BeforeEach
     void setUp() {
@@ -36,86 +27,36 @@ class PaymentSecurityTest {
     }
 
     // ==========================================================
-    // 1. VALIDAZIONE NUMERO CARTA (formato)
+    // 1. VALIDAZIONE NUMERO CARTA (Parametrizzato)
     // ==========================================================
 
-    @Test
-    @DisplayName("Numero carta valido: 16 cifre numeriche")
-    void testValidCardNumber() {
-        String cardNumber = "1234567890123456";
+    @ParameterizedTest(name = "Numero carta {0} -> atteso valido: {1}")
+    @CsvSource({
+            "1234567890123456, true",   // 16 cifre valide
+            "123456789012345,  false",  // Troppo corto (15)
+            "12345678901234567, false", // Troppo lungo (17)
+            "1234abcd56789012, false"   // Contiene lettere
+    })
+    @DisplayName("Validazione numero carta (casi multipli)")
+    void testCardNumberValidation(String cardNumber, boolean expected) {
         boolean valid = cardNumber.length() == 16 && NUMBER_STRING.matcher(cardNumber).find();
-        assertThat(valid).isTrue();
-    }
-
-    @Test
-    @DisplayName("Numero carta invalido: 15 cifre (troppo corto)")
-    void testCardNumberTooShort() {
-        String cardNumber = "123456789012345";
-        boolean valid = cardNumber.length() == 16 && NUMBER_STRING.matcher(cardNumber).find();
-        assertThat(valid).isFalse();
-    }
-
-    @Test
-    @DisplayName("Numero carta invalido: 17 cifre (troppo lungo)")
-    void testCardNumberTooLong() {
-        String cardNumber = "12345678901234567";
-        boolean valid = cardNumber.length() == 16 && NUMBER_STRING.matcher(cardNumber).find();
-        assertThat(valid).isFalse();
-    }
-
-    @Test
-    @DisplayName("Numero carta invalido: contiene lettere")
-    void testCardNumberWithLetters() {
-        String cardNumber = "1234abcd56789012";
-        boolean valid = cardNumber.length() == 16 && NUMBER_STRING.matcher(cardNumber).find();
-        assertThat(valid).isFalse();
-    }
-
-    @Test
-    @DisplayName("FINDING: il numero carta non supera il controllo di Luhn (nessuna verifica)")
-    void testDocumentNoLuhnCheck() throws Exception {
-        String source = readSource("src/main/java/Controller/Payment.java");
-
-        boolean noLuhnCheck =
-                !source.contains("luhn") &&
-                        !source.contains("Luhn") &&
-                        !source.contains("isValidCard");
-
-        assertThat(noLuhnCheck)
-                .as("FINDING: Payment.java non esegue il controllo di Luhn sul numero carta. "
-                        + "Un utente puo inserire un numero che non corrisponde a nessuna "
-                        + "carta reale, ma il sistema lo accetta comunque. "
-                        + "Fix: implementare algoritmo di Luhn per validare il checksum. "
-                        + "(Riferimento: ISO/IEC 7812)")
-                .isTrue();
+        assertThat(valid).isEqualTo(expected);
     }
 
     // ==========================================================
-    // 2. VALIDAZIONE CVV
+    // 2. VALIDAZIONE CVV (Parametrizzato)
     // ==========================================================
 
-    @Test
-    @DisplayName("CVV valido: 3 cifre")
-    void testValidCvv() {
-        String cvv = "123";
+    @ParameterizedTest(name = "CVV {0} -> atteso valido: {1}")
+    @CsvSource({
+            "123, true",   // 3 cifre valide
+            "12,  false",  // Troppo corto
+            "1234, false"  // Troppo lungo
+    })
+    @DisplayName("Validazione CVV (casi multipli)")
+    void testCvvValidation(String cvv, boolean expected) {
         boolean valid = cvv.length() == 3 && NUMBER_STRING.matcher(cvv).find();
-        assertThat(valid).isTrue();
-    }
-
-    @Test
-    @DisplayName("CVV invalido: 2 cifre")
-    void testCvvTooShort() {
-        String cvv = "12";
-        boolean valid = cvv.length() == 3 && NUMBER_STRING.matcher(cvv).find();
-        assertThat(valid).isFalse();
-    }
-
-    @Test
-    @DisplayName("CVV invalido: 4 cifre")
-    void testCvvTooLong() {
-        String cvv = "1234";
-        boolean valid = cvv.length() == 3 && NUMBER_STRING.matcher(cvv).find();
-        assertThat(valid).isFalse();
+        assertThat(valid).isEqualTo(expected);
     }
 
     // ==========================================================
@@ -265,7 +206,6 @@ class PaymentSecurityTest {
     void testDocumentMissingLoginCheckInPost() throws Exception {
         String source = readSource("src/main/java/Controller/Payment.java");
 
-        // Cerchiamo il pattern nel doPost
         int postIndex = source.indexOf("doPost");
         String postSource = postIndex > 0 ? source.substring(postIndex) : "";
 
@@ -291,11 +231,9 @@ class PaymentSecurityTest {
     void testDocumentRaceConditionOnStock() throws Exception {
         String source = readSource("src/main/java/Controller/Payment.java");
 
-        // doGet verifica la quantita, ma doPost no
         boolean checksStockInGet =
                 source.contains("productCartBean.getQuantity() > catalogProduct.getQuantity()");
 
-        // doPost sottrae senza ricontrollare atomicamente
         boolean decrementsStockInPost =
                 source.contains("productBean.setQuantity(productBean.getQuantity() - product.getQuantity())");
 

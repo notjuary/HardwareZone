@@ -134,7 +134,7 @@ public class UserBean implements Serializable {
     public String getBirthday() {
 
         return birthday.get(Calendar.YEAR) + "-"
-                + ((birthday.get(Calendar.MONTH) + 1)) + "-"
+                + (birthday.get(Calendar.MONTH) + 1) + "-"
                 + (birthday.get(Calendar.DAY_OF_MONTH));
     }
 
@@ -154,7 +154,7 @@ public class UserBean implements Serializable {
     public String getRegister() {
 
         return register.get(Calendar.YEAR) + "-"
-                + ((register.get(Calendar.MONTH) + 1)) + "-"
+                + (register.get(Calendar.MONTH) + 1) + "-"
                 + (register.get(Calendar.DAY_OF_MONTH));
     }
 

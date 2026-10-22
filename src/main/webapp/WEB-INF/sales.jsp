@@ -45,7 +45,12 @@
                 <% } %>
 
                 <% if (product.getQuantity() > 0) { %>
-                <div><a class="shop" onclick="addProductCard(<%= product.getId() %>, 1)"><i class="fa-solid fa-cart-plus"></i></a></div>
+                <div>
+                    <!-- FIX: Usato button nativo e fermato il propagation per non attivare il link del prodotto -->
+                    <button type="button" class="shop" style="background: none; border: none; padding: 0; cursor: pointer;" onclick="event.stopPropagation(); addProductCard(<%= product.getId() %>, 1)">
+                        <i class="fa-solid fa-cart-plus"></i>
+                    </button>
+                </div>
                 <% } else {%>
                 <div><i class="fa-solid fa-ban"></i></div>
                 <% } %>

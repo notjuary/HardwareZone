@@ -6,9 +6,9 @@ div.navigation-bar {
 }
 
 div.item-logo {
-    background: none !important;
-    padding: 0 !important;
-    height:54px;
+    background: none;
+    padding: 0;
+    height: 54px;
     margin-bottom: 10px;
 }
 
@@ -58,11 +58,6 @@ div.admin-item-menu {
 div.item-menu:hover, div.admin-item-menu:hover {
     background-color: #C92403;
     color: #EEE5E9;
-}
-
-div.show-menu {
-    display: none;
-    cursor: pointer;
 }
 
 div.active {
@@ -131,7 +126,7 @@ div.item-submenu:hover {
     }
 
     div.item-menu, div.admin-item-menu {
-        float: none !important;
+        float: none;
         display: block;
         width: 200px;
         margin: 5px auto auto;
@@ -143,7 +138,6 @@ div.item-submenu:hover {
 }
 
 @media screen and (max-height: 800px) and (max-width: 400px) {
-
     div.item-logo {
         margin-bottom: 10px;
     }

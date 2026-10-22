@@ -5,7 +5,8 @@ function addProductCard(ID, quantity) {
         url: "add-to-cart-servlet",
         data: {"productId": ID, "quantity": quantity},
         success: function() {
-            let newQuantity = parseInt($("#count").text()) + parseInt(quantity);
+            // FIX: Number.parseInt invece di parseInt
+            let newQuantity = Number.parseInt($("#count").text()) + Number.parseInt(quantity);
             $("#count").text(newQuantity);
         },
 

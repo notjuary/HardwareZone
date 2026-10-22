@@ -67,7 +67,7 @@ public class Payment extends HttpServlet {
         response.setContentType("text/html");
 
         final Pattern number_string = Pattern.compile("^\\d+$");
-        final Pattern holder_string = Pattern.compile("^([a-zA-Z\\\\xE0\\xE8\\xE9\\xF9\\xF2\\xEC\\x27]\\s?){2,255}$");
+        final Pattern holder_string = Pattern.compile("^([a-zA-Z\\xE0\\xE8\\xE9\\xF9\\xF2\\xEC\\x27]\\s?){2,255}$");
 
         int level = 0;
 
