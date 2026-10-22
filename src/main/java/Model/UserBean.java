@@ -13,7 +13,9 @@ public class UserBean implements Serializable {
     private String name, surname, email, password, phone, city, province, postalCode, address, state, admin;
     private GregorianCalendar birthday, register;
 
-    public UserBean() {}
+    public UserBean() {
+        // Costruttore vuoto richiesto dalla specifica JavaBeans per l'istanziazione via reflection (es. JSP, Tomcat)
+    }
 
     public int getId() {
 

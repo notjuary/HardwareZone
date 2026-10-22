@@ -625,6 +625,9 @@ try (Connection con = ConPool.getConnection();
 | `SetAdmin.java` | S1192 | Stringhe duplicate (`/WEB-INF/error.jsp`, `redirect`, `type`) | Estratte come costanti `private static final` |
 | `Registration.java` | S106 | `System.out.println` in produzione | Rimosso (evita leak di dati nei log) |
 | `SetAdmin.java` | S2259 | NPE su `userAdmin` e `user` | Aggiunti null check espliciti |
+| `SetAdmin.java`, `Registration.java` | S1192, S125, S1989 | Stringhe duplicate, codice commentato, eccezioni non gestite | Estratte costanti, rimosso codice morto, incapsulate eccezioni in `RuntimeException` |
+| `SetAdmin.java` | S1192 | Stringa `"users-servlet"` ripetuta 5 volte | Estratta in costante `USERS_SERVLET` |
+| `PaymentBean`, `ProductBean`, `ProductCartBean`, `UserBean` | S1186 | Costruttori vuoti segnalati come "suspicious" | Aggiunto commento esplicativo per la specifica JavaBeans (reflection) |
 
 **Impatto:** Migliorata la manutenibilità del codice. In caso di modifiche ai percorsi delle JSP o ai nomi degli attributi di sessione, basterà modificare la costante in un unico punto.
 

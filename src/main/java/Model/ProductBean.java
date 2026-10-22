@@ -9,7 +9,7 @@ public class ProductBean implements Serializable {
     private double price;
 
     public ProductBean() {
-
+        // Costruttore vuoto richiesto dalla specifica JavaBeans per l'istanziazione via reflection
     }
 
     public int getId() {

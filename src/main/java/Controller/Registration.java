@@ -75,8 +75,6 @@ public class Registration extends HttpServlet {
         String date = request.getParameter("birthday");
         if (date != null) level++;
 
-        // Rimosso System.out.println(level) per evitare leak nei log
-
         UserDAO service = new UserDAO();
 
         if (!service.isAlreadyRegistered(email) && level == 10) {

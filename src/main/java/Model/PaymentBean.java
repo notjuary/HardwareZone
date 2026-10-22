@@ -9,7 +9,9 @@ public class PaymentBean {
     private String cardNumber, CVV, holder;
     private GregorianCalendar datePayment, deadline;
 
-    public PaymentBean() {}
+    public PaymentBean() {
+        // Costruttore vuoto richiesto dalla specifica JavaBeans per l'istanziazione via reflection
+    }
 
     public int getOrder() {
         return order;
