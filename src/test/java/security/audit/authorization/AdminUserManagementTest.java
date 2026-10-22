@@ -62,14 +62,18 @@ class AdminUserManagementTest {
     }
 
     @Test
-    @DisplayName("FINDING: SetAdmin usa userAdmin.isAdmin() senza null check")
+    @DisplayName("FIXED: SetAdmin verifica userAdmin != null prima di isAdmin()")
     void testDocumentMissingNullCheckInSetAdmin() throws Exception {
         String source = readSource("src/main/java/Controller/SetAdmin.java");
-        boolean unsafe =
-                source.contains("UserBean userAdmin = (UserBean) session.getAttribute(\"user\")") &&
-                        source.contains("if (userAdmin.isAdmin()") &&
-                        !source.contains("userAdmin != null && userAdmin.isAdmin()");
-        assertThat(unsafe).as("FINDING: SetAdmin.java NPE su userAdmin null").isTrue();
+
+        // Ora ci aspettiamo che il null check sia presente
+        boolean isFixed =
+                source.contains("userAdmin == null") &&
+                        source.contains("!userAdmin.isAdmin().equalsIgnoreCase(\"true\")");
+
+        assertThat(isFixed)
+                .as("FIXED: SetAdmin ora verifica che l'utente sia null prima di chiamare isAdmin()")
+                .isTrue();
     }
 
     @Test
@@ -115,14 +119,17 @@ class AdminUserManagementTest {
     }
 
     @Test
-    @DisplayName("FINDING: SetStateUser usa userAdmin.isAdmin() senza null check")
+    @DisplayName("FIXED: SetStateUser verifica userAdmin != null prima di isAdmin()")
     void testDocumentMissingNullCheckInSetStateUser() throws Exception {
         String source = readSource("src/main/java/Controller/SetStateUser.java");
-        boolean unsafe =
-                source.contains("UserBean userAdmin = (UserBean) session.getAttribute(\"user\")") &&
-                        source.contains("if (userAdmin.isAdmin()") &&
-                        !source.contains("userAdmin != null && userAdmin.isAdmin()");
-        assertThat(unsafe).as("FINDING: SetStateUser.java NPE su userAdmin null").isTrue();
+
+        boolean isFixed =
+                source.contains("userAdmin == null") &&
+                        source.contains("!userAdmin.isAdmin().equalsIgnoreCase(\"true\")");
+
+        assertThat(isFixed)
+                .as("FIXED: SetStateUser ora verifica che l'utente sia null prima di chiamare isAdmin()")
+                .isTrue();
     }
 
     @Test

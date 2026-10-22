@@ -1,6 +1,9 @@
 package Model;
 
-public class ProductBean {
+import java.io.Serializable;
+
+public class ProductBean implements Serializable {
+    private static final long serialVersionUID = 1L;
     private int id, quantity, sales;
     private String name, description, image, category;
     private double price;

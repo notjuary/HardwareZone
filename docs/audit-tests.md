@@ -219,24 +219,24 @@ src/test/java/security/audit/
 
 **SetAdmin:**
 
-| **#** | **Metodo**                               | **Cosa verifica**          |
-| :---- | :--------------------------------------- |:---------------------------|
-| 1     | `testSetAdminRequiresAdmin`              | Richiede admin             |
-| 2     | `testSetAdminRedirectsNonAdmin`          | Utente normale → index     |
-| 3     | `testSetAdminPreventsAlreadyAdmin`       | No doppia promozione       |
-| 4     | `testSetAdminPreventsInactiveUser`       | No promozione disabilitato |
-| 5     | `testDocumentMissingNullCheckInSetAdmin` | NPE                        |
-| 6     | `testDocumentCsrfInSetAdmin`             | **CSRF su GET**            |
-| 7     | `testDocumentUnrestrictedPromotion`      | **Privilege escalation** |
+| **#** | **Metodo**                               | **Cosa verifica**                                   |
+| :---- | :--------------------------------------- |:----------------------------------------------------|
+| 1     | `testSetAdminRequiresAdmin`              | Richiede admin                                      |
+| 2     | `testSetAdminRedirectsNonAdmin`          | Utente normale → index                              |
+| 3     | `testSetAdminPreventsAlreadyAdmin`       | No doppia promozione                                |
+| 4     | `testSetAdminPreventsInactiveUser`       | No promozione disabilitato                          |
+| 5 | `testDocumentMissingNullCheckInSetAdmin` | **FIXED** - `SetAdmin` verifica `userAdmin != null` |
+| 6     | `testDocumentCsrfInSetAdmin`             | **CSRF su GET**                                     |
+| 7     | `testDocumentUnrestrictedPromotion`      | **Privilege escalation**                            |
 
 **SetStateUser:**
 
 | **#** | **Metodo**                                      | **Cosa verifica**                      |
-| :---- | :---------------------------------------------- |:---------------------------------------|
+|:------| :---------------------------------------------- |:---------------------------------------|
 | 8     | `testSetStateUserRequiresAdmin`                 | Richiede admin                         |
 | 9     | `testSetStateUserInvertsState`                  | Inversione stato                       |
 | 10    | `testSetStateUserRedirectsAfterOperation`       | Redirect                               |
-| 11    | `testDocumentMissingNullCheckInSetStateUser`    | NPE                                    |
+|  11   | `testDocumentMissingNullCheckInSetStateUser` |  **FIXED** — `SetStateUser` verifica `userAdmin != null` |
 | 12    | `testDocumentPrivilegeEscalationInSetStateUser` | **Admin può disabilitare altri admin** |
 | 13    | `testDocumentSelfLockoutInSetStateUser`         | **Self-lockout**                       |
 | 14    | `testDocumentCsrfInSetStateUser`                | **CSRF su GET**                      |

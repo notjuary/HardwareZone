@@ -8,20 +8,19 @@
     <title>Menu</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/style/nav-menu.css">
     <script src='https://kit.fontawesome.com/c6b30e1924.js' crossorigin='anonymous'></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script type="text/javascript" src="script/product.js"></script>
 
     <script>
         <%
             UserBean myProfile = (UserBean) request.getSession().getAttribute("user");
 
-            String name, url;
+            String name;
 
             if (myProfile == null) {
                 name = "Accesso";
-                url = "location.href='login.jsp'";
             } else {
                 name = myProfile.getName();
-                url = "showSubMenu(this)";
             }
 
             int numberObject;
@@ -51,11 +50,9 @@
         }
 
         function showSubMenu(element) {
-
             let elementAttribute = element.getAttribute("data-name");
 
             $(".sub-menu").each(function() {
-
                 if (elementAttribute === (this.getAttribute("data-name")))
                     $(this).slideToggle();
                 else
@@ -64,11 +61,8 @@
         }
 
         function currentPage() {
-
             let currentPage = document.title;
-
             $(".item-menu").each(function() {
-
                 if (currentPage === (this.getAttribute("data-name"))) {
                     $(this).closest("div").addClass("active");
                 }
@@ -76,26 +70,50 @@
         }
     </script>
 
+    <style>
+        /* FIX per far sembrare i bottoni e i link dei normali div */
+        button.show-menu, button.item-menu, a.item-menu, a.item-submenu {
+            background: none;
+            border: none;
+            padding: 0;
+            margin: 0;
+            font: inherit;
+            color: inherit;
+            cursor: pointer;
+            text-align: inherit;
+            text-decoration: none;
+            display: block;
+        }
+    </style>
+
 </head>
 <body>
 
-    <div class="navigation-bar">
-        <div class="show-menu" onclick="showMenu()"><i class="fa-solid fa-bars"></i></div>
-        <div class="menu">
-            <div class="item-menu item-logo" onclick="location.href='${pageContext.request.contextPath}/index.jsp'"><img src="img/Logo_NoScritta.png" class="logo" alt="logo"></div>
-            <div class="item-menu" onclick="location.href='${pageContext.request.contextPath}/index.jsp'" data-name="HomePage"><i class="fa-solid fa-house iconMenu"></i>HomePage</div>
-            <div class="item-menu" onclick="location.href='${pageContext.request.contextPath}/show-catalog-servlet'" data-name="Catalogo"><i class="fa-solid fa-book-open iconMenu"></i>Catalogo</div>
-            <div class="item-menu" onclick="location.href='${pageContext.request.contextPath}/show-sales-servlet'" data-name="Offerte"><i class="fa-solid fa-dollar-sign iconMenu"></i>Offerte</div>
-            <div class="item-menu" onclick="location.href='${pageContext.request.contextPath}/Cart.jsp'" data-name="Carrello"><i class="fa-solid fa-cart-shopping iconMenu"></i>Carrello <span id="count"><%= numberObject %></span></div>
-            <div class="item-menu" onclick="location.href='${pageContext.request.contextPath}/chiSiamo.jsp'" data-name="Chi siamo"><i class="fa-solid fa-circle-info iconMenu"></i>Chi siamo</div>
-            <div class="item-menu" onclick="<%= url %>" style="position: relative" data-name="Login"><i class="fa-solid fa-user iconMenu"></i><%= name %>
-                <div class="sub-menu" data-name="Login">
-                    <div class="item-submenu" onclick="location.href='${pageContext.request.contextPath}/user-profile-servlet'">Profilo</div>
-                    <div class="item-submenu" onclick="location.href='${pageContext.request.contextPath}/show-order-user-servlet'">Ordini</div>
-                    <div class="item-submenu" onclick="location.href='${pageContext.request.contextPath}/logout-servlet'">Logout</div>
-                </div>
+<div class="navigation-bar">
+    <!-- FIX: Usato <button> nativo -->
+    <button type="button" class="show-menu" onclick="showMenu()"><i class="fa-solid fa-bars"></i></button>
+
+    <div class="menu">
+        <a href="${pageContext.request.contextPath}/index.jsp" class="item-menu item-logo"><img src="img/Logo_NoScritta.png" class="logo" alt="logo"></a>
+        <a href="${pageContext.request.contextPath}/index.jsp" class="item-menu" data-name="HomePage"><i class="fa-solid fa-house iconMenu"></i>HomePage</a>
+        <a href="${pageContext.request.contextPath}/show-catalog-servlet" class="item-menu" data-name="Catalogo"><i class="fa-solid fa-book-open iconMenu"></i>Catalogo</a>
+        <a href="${pageContext.request.contextPath}/show-sales-servlet" class="item-menu" data-name="Offerte"><i class="fa-solid fa-dollar-sign iconMenu"></i>Offerte</a>
+        <a href="${pageContext.request.contextPath}/Cart.jsp" class="item-menu" data-name="Carrello"><i class="fa-solid fa-cart-shopping iconMenu"></i>Carrello <span id="count"><%= numberObject %></span></a>
+        <a href="${pageContext.request.contextPath}/chiSiamo.jsp" class="item-menu" data-name="Chi siamo"><i class="fa-solid fa-circle-info iconMenu"></i>Chi siamo</a>
+
+        <% if (myProfile == null) { %>
+        <a href="${pageContext.request.contextPath}/login.jsp" class="item-menu" data-name="Login"><i class="fa-solid fa-user iconMenu"></i><%= name %></a>
+        <% } else { %>
+        <button type="button" class="item-menu" onclick="showSubMenu(this)" style="position: relative" data-name="Login"><i class="fa-solid fa-user iconMenu"></i><%= name %>
+            <div class="sub-menu" data-name="Login">
+                <a href="${pageContext.request.contextPath}/user-profile-servlet" class="item-submenu">Profilo</a>
+                <a href="${pageContext.request.contextPath}/show-order-user-servlet" class="item-submenu">Ordini</a>
+                <a href="${pageContext.request.contextPath}/logout-servlet" class="item-submenu">Logout</a>
             </div>
-        </div>
+        </button>
+        <% } %>
     </div>
+</div>
 
 </body>
+</html>

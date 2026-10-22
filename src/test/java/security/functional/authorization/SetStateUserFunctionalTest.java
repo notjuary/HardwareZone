@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import security.functional.BaseFunctionalTest;
 import security.functional.ServletTestSupport;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
@@ -45,14 +46,18 @@ class SetStateUserFunctionalTest extends BaseFunctionalTest {
     }
 
     @Test
-    @DisplayName("SECURITY: SetStateUser con utente anonimo causa NPE (finding)")
-    void testUtenteAnonimo() {
+    @DisplayName("FIXED: SetStateUser gestisce utente anonimo senza NPE")
+    void testUtenteAnonimo() throws Exception {
         when(support.session.getAttribute("user")).thenReturn(null);
+        when(support.request.getRequestDispatcher("index.jsp")).thenReturn(support.dispatcher);
 
         SetStateUser servlet = new SetStateUser();
-        assertThrows(Exception.class, () ->
-                        support.invokeDoGet(servlet, support.request, support.response),
-                "NPE atteso");
+
+        assertDoesNotThrow(() ->
+                support.invokeDoGet(servlet, support.request, support.response)
+        );
+
+        verify(support.request).getRequestDispatcher("index.jsp");
     }
 
     @Test

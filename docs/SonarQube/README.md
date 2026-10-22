@@ -599,22 +599,34 @@ try (Connection con = ConPool.getConnection();
 
 **Impatto:** Reliability Rating mantenuto a **A**. Rimosso il rischio di `NotSerializableException` a runtime (Tomcat session persistence). Prevenuto il rischio di ReDoS (Denial of Service) tramite regex.
 
-### 6.10 Medium/Low risolte — Accessibilità WCAG 2-A (Overall Code)
+### 6.10 Medium risolte — Accessibilità WCAG 2-A (Overall Code)
 
 | File | Regola | Descrizione | Fix |
 |:---|:---:|:---|:---|
 | `Cart.jsp` | S5254 | Manca l'attributo `lang` nel tag `<html>` | Aggiunto `lang="it"` |
 | `userinfo.jsp` | S5254 | Manca la dichiarazione `<!DOCTYPE>` e `lang` | Aggiunti `<!DOCTYPE html>` e `lang="it-IT"` |
-| `menu-admin.jsp`, `menu.jsp` | S4084 | `<div>` usati come elementi interattivi (`onclick`) | Aggiunti `role="button"`, `tabindex="0"` e gestione evento `onkeydown` per l'accesso da tastiera |
-| `profile-admin.jsp` | S6853 | `<label>` usati come titoli di sezione senza `for` | Sostituiti con `<div class="text-section">` |
-| `profile-user.jsp` | S6853 | `<label>` usati come titoli di sezione senza `for` | Sostituiti con `<div class="text-section">` |
-| `productInfo.jsp` | S6853 | `<label>` usati come titoli di sezione senza `for` | Sostituiti con `<div class="text-section">` |
+| `menu-admin.jsp`, `menu.jsp` | S4084 / S6819 | `<div>` usati come elementi interattivi (`onclick`) | **Sostituiti con tag nativi `<a href>` (per link) e `<button>` (per azioni JS)**, rimossi i ruoli ARIA superflui. |
+| `profile-admin.jsp`, `profile-user.jsp`, `productInfo.jsp` | S6853 | `<label>` usati come titoli di sezione senza `for` | Sostituiti con `<div class="text-section">` |
 | `product.jsp` | S6853 | `<label>` attorno agli input non associati esplicitamente | Separati gli input e aggiunto `for` esplicito; il bottone ora è un `<button>` nativo |
+| `CategoryBean`, `OrderBean`, `OrderProductBean`, `PaymentBean`, `ProductBean`, `ProductCartBean` | S1186 | Costruttori vuoti (Suspicious) | Aggiunto commento esplicativo: "Costruttore vuoto richiesto dalla specifica JavaBeans per l'istanziazione via reflection" |
 
 **Impatto:**
-- **Accessibilità:** Migliorata l'esperienza per utenti con disabilità visive (screen reader) e motorie (navigazione da tastiera).
+- **Accessibilità:** Migliorata l'esperienza per utenti con disabilità visive (screen reader) e motorie (navigazione da tastiera). L'uso di elementi nativi `<button>` e `<a>` garantisce la massima compatibilità cross-browser e cross-device.
 - **Qualità:** Risolti i warning di Consistency/Reliability su file legacy (JSP).
 - **Rating:** Contribuisce a mantenere la Maintainability e la Reliability a **A**.
+
+### 6.11 High risolte — Definizione di costanti (S1192)
+
+| File | Regola | Descrizione | Fix |
+|:---|:---:|:---|:---|
+| `Login.java` | S1192 | Stringhe duplicate (`/WEB-INF/error.jsp`, `alert`, `redirect`, `login.jsp`) | Estratte come costanti `private static final` |
+| `Payment.java` | S1192 | Stringhe duplicate (`/WEB-INF/error.jsp`, `alert`, `redirect`, `total`) | Estratte come costanti `private static final` |
+| `Registration.java` | S1192 | Stringhe duplicate (`/WEB-INF/error.jsp`, `redirect`, `type`) | Estratte come costanti `private static final` |
+| `SetAdmin.java` | S1192 | Stringhe duplicate (`/WEB-INF/error.jsp`, `redirect`, `type`) | Estratte come costanti `private static final` |
+| `Registration.java` | S106 | `System.out.println` in produzione | Rimosso (evita leak di dati nei log) |
+| `SetAdmin.java` | S2259 | NPE su `userAdmin` e `user` | Aggiunti null check espliciti |
+
+**Impatto:** Migliorata la manutenibilità del codice. In caso di modifiche ai percorsi delle JSP o ai nomi degli attributi di sessione, basterà modificare la costante in un unico punto.
 
 ### 6.7 Impatto sull'Overall Code
 

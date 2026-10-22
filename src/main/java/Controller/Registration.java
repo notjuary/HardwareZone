@@ -15,6 +15,14 @@ import java.util.regex.Pattern;
 @WebServlet(name = "registrationServlet", value = "/registration-servlet")
 public class Registration extends HttpServlet {
 
+    // FIX S1192: Estrazione delle costanti
+    private static final String ERROR_JSP = "/WEB-INF/error.jsp";
+    private static final String ATTR_TYPE = "type";
+    private static final String ATTR_MSG = "msg";
+    private static final String ATTR_REDIRECT = "redirect";
+    private static final String TYPE_SUCCESS = "success";
+    private static final String TYPE_ALERT = "alert";
+
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         response.setContentType("text/html");
 
@@ -30,63 +38,44 @@ public class Registration extends HttpServlet {
 
         String name = request.getParameter("name");
         Matcher matcher = info_string.matcher(name);
-        boolean matchFound = matcher.find();
-        if (matchFound)
-            level++;
+        if (matcher.find()) level++;
 
         String surname = request.getParameter("surname");
         matcher = info_string.matcher(surname);
-        matchFound = matcher.find();
-        if (matchFound)
-            level++;
+        if (matcher.find()) level++;
 
         String email = request.getParameter("email");
         matcher = email_string.matcher(email);
-        matchFound = matcher.find();
-        if (matchFound)
-            level++;
+        if (matcher.find()) level++;
 
         String password = request.getParameter("password");
         matcher = password_string.matcher(password);
-        matchFound = matcher.find();
-        if (matchFound)
-            level++;
+        if (matcher.find()) level++;
 
         String phone = request.getParameter("phone");
         matcher = phone_string.matcher(phone);
-        matchFound = matcher.find();
-        if (matchFound)
-            level++;
+        if (matcher.find()) level++;
 
         String city = request.getParameter("city");
         matcher = info_string.matcher(city);
-        matchFound = matcher.find();
-        if (matchFound)
-            level++;
+        if (matcher.find()) level++;
 
         String province = request.getParameter("province");
         matcher = province_string.matcher(province);
-        matchFound = matcher.find();
-        if (matchFound)
-            level++;
+        if (matcher.find()) level++;
 
         String postalCode = request.getParameter("postalCode");
         matcher = postalcode_string.matcher(postalCode);
-        matchFound = matcher.find();
-        if (matchFound)
-            level++;
+        if (matcher.find()) level++;
 
         String address = request.getParameter("address");
         matcher = address_string.matcher(address);
-        matchFound = matcher.find();
-        if (matchFound)
-            level++;
+        if (matcher.find()) level++;
 
         String date = request.getParameter("birthday");
-        if (date != null)
-            level++;
+        if (date != null) level++;
 
-        System.out.println(level);
+        // Rimosso System.out.println(level) per evitare leak nei log
 
         UserDAO service = new UserDAO();
 
@@ -112,28 +101,22 @@ public class Registration extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
 
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/error.jsp");
-            request.setAttribute("type", "success");
-            request.setAttribute("msg", "Registrazione effettuata");
-            request.setAttribute("redirect", "index.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher(ERROR_JSP);
+            request.setAttribute(ATTR_TYPE, TYPE_SUCCESS);
+            request.setAttribute(ATTR_MSG, "Registrazione effettuata");
+            request.setAttribute(ATTR_REDIRECT, "index.jsp");
             dispatcher.include(request, response);
-        }
-
-        else if (level != 10) {
-
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/error.jsp");
-            request.setAttribute("type", "alert");
-            request.setAttribute("msg", "Errore registrazione");
-            request.setAttribute("redirect", "register.jsp");
+        } else if (level != 10) {
+            RequestDispatcher dispatcher = request.getRequestDispatcher(ERROR_JSP);
+            request.setAttribute(ATTR_TYPE, TYPE_ALERT);
+            request.setAttribute(ATTR_MSG, "Errore registrazione");
+            request.setAttribute(ATTR_REDIRECT, "register.jsp");
             dispatcher.include(request, response);
-        }
-
-        else {
-
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/error.jsp");
-            request.setAttribute("type", "alert");
-            request.setAttribute("msg", "Email già in uso");
-            request.setAttribute("redirect", "login.jsp");
+        } else {
+            RequestDispatcher dispatcher = request.getRequestDispatcher(ERROR_JSP);
+            request.setAttribute(ATTR_TYPE, TYPE_ALERT);
+            request.setAttribute(ATTR_MSG, "Email già in uso");
+            request.setAttribute(ATTR_REDIRECT, "login.jsp");
             dispatcher.include(request, response);
         }
     }

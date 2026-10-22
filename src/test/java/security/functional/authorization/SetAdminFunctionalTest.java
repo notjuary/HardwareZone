@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import security.functional.BaseFunctionalTest;
 import security.functional.ServletTestSupport;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
@@ -47,14 +48,23 @@ class SetAdminFunctionalTest extends BaseFunctionalTest {
     }
 
     @Test
-    @DisplayName("SECURITY: SetAdmin con utente non loggato causa NPE (finding)")
-    void testUtenteAnonimo()  {
+    @DisplayName("FIXED: SetAdmin gestisce utente anonimo senza NPE")
+    void testUtenteAnonimo() throws Exception {
+        // Utente non loggato (null)
         when(support.session.getAttribute("user")).thenReturn(null);
 
+        // Mock del dispatcher per la index
+        when(support.request.getRequestDispatcher("index.jsp")).thenReturn(support.dispatcher);
+
         SetAdmin servlet = new SetAdmin();
-        assertThrows(Exception.class, () ->
-                        support.invokeDoGet(servlet, support.request, support.response),
-                "NPE atteso");
+
+        // FIX: non deve più lanciare NPE
+        assertDoesNotThrow(() ->
+                support.invokeDoGet(servlet, support.request, support.response)
+        );
+
+        // Deve reindirizzare alla index.jsp
+        verify(support.request).getRequestDispatcher("index.jsp");
     }
 
     @Test

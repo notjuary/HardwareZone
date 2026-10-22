@@ -7,6 +7,7 @@
     <title>Admin Menu</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/style/nav-menu.css">
     <script src='https://kit.fontawesome.com/c6b30e1924.js' crossorigin='anonymous'></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <script>
         <%
@@ -16,12 +17,11 @@
 
             if (myProfile == null) {
                 name = "Accesso";
-                url = "location.href='login.jsp'";
+                url = "login.jsp";
             } else {
                 name = myProfile.getName();
-                url = "showSubMenu(this)";
+                url = "#"; // Il click è gestito da JS
             }
-
         %>
 
         $(document).ready(function() {
@@ -44,11 +44,9 @@
         }
 
         function showSubMenu(element) {
-
             let elementAttribute = element.getAttribute("data-name");
 
             $(".sub-menu").each(function() {
-
                 if (elementAttribute === (this.getAttribute("data-name")))
                     $(this).slideToggle();
                 else
@@ -57,53 +55,64 @@
         }
 
         function currentPage() {
-
             let currentPage = document.title;
-
             $(".admin-item-menu").each(function() {
-
                 if (currentPage === (this.getAttribute("data-name"))) {
                     $(this).closest("div").addClass("active");
                 }
             });
         }
-
-        // FIX ACCESSIBILITÀ: Permette di attivare i div interattivi con la tastiera
-        function handleKeyPress(event, element) {
-            if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault();
-                element.click();
-            }
-        }
     </script>
+
+    <style>
+        /* FIX per far sembrare i bottoni e i link dei normali div */
+        button.show-menu, button.admin-item-menu, a.admin-item-menu, a.item-submenu {
+            background: none;
+            border: none;
+            padding: 0;
+            margin: 0;
+            font: inherit;
+            color: inherit;
+            cursor: pointer;
+            text-align: inherit;
+            text-decoration: none;
+            display: block; /* o flex a seconda del CSS esistente */
+        }
+    </style>
 
 </head>
 <body>
 
 <div class="navigation-bar">
-    <!-- FIX: Aggiunti role, tabindex e onkeydown -->
-    <div class="show-menu" onclick="showMenu()" role="button" tabindex="0" onkeydown="handleKeyPress(event, this)"><i class="fa-solid fa-bars"></i></div>
+    <!-- FIX: Usato <button> nativo per un'azione JS -->
+    <button type="button" class="show-menu" onclick="showMenu()"><i class="fa-solid fa-bars"></i></button>
+
     <div class="menu">
-        <!-- FIX: Aggiunti role, tabindex e onkeydown -->
-        <div class="admin-item-menu item-logo" onclick="location.href='#'" role="button" tabindex="0" onkeydown="handleKeyPress(event, this)"><img src="${pageContext.request.contextPath}/img/Logo_NoScritta.png" class="logo" alt="logo"></div>
+        <!-- FIX: Usato <a href> nativo per la navigazione -->
+        <a href="${pageContext.request.contextPath}/users-servlet" class="admin-item-menu item-logo"><img src="${pageContext.request.contextPath}/img/Logo_NoScritta.png" class="logo" alt="logo"></a>
 
-        <div class="admin-item-menu" onclick="location.href='${pageContext.request.contextPath}/users-servlet'" data-name="HomePage" role="button" tabindex="0" onkeydown="handleKeyPress(event, this)"><i class="fas fa-users iconMenu"></i>Utenti</div>
+        <a href="${pageContext.request.contextPath}/users-servlet" class="admin-item-menu" data-name="HomePage"><i class="fas fa-users iconMenu"></i>Utenti</a>
 
-        <div class="admin-item-menu" onclick="location.href='${pageContext.request.contextPath}/show-order-user-servlet'" data-name="Ordini" role="button" tabindex="0" onkeydown="handleKeyPress(event, this)"><i class="fa-solid fa-dollar-sign iconMenu"></i>Ordini</div>
+        <a href="${pageContext.request.contextPath}/show-order-user-servlet" class="admin-item-menu" data-name="Ordini"><i class="fa-solid fa-dollar-sign iconMenu"></i>Ordini</a>
 
-        <div class="admin-item-menu" onclick="showSubMenu(this)" style="position: relative" data-name="Prodotti" role="button" tabindex="0" onkeydown="handleKeyPress(event, this)"><i class="fa-solid fa-book-open iconMenu"></i>Prodotti
+        <!-- FIX: Usato <button> per aprire il sottomenu -->
+        <button type="button" class="admin-item-menu" onclick="showSubMenu(this)" style="position: relative" data-name="Prodotti"><i class="fa-solid fa-book-open iconMenu"></i>Prodotti
             <div class="sub-menu" data-name="Prodotti">
-                <div class="item-submenu" onclick="location.href='${pageContext.request.contextPath}/add-product-servlet'" data-name="Prodotti" role="button" tabindex="0" onkeydown="handleKeyPress(event, this)">Aggiungi</div>
-                <div class="item-submenu" onclick="location.href='${pageContext.request.contextPath}/products-servlet'" data-name="Prodotti" role="button" tabindex="0" onkeydown="handleKeyPress(event, this)">Gestione</div>
+                <a href="${pageContext.request.contextPath}/add-product-servlet" class="item-submenu" data-name="Prodotti">Aggiungi</a>
+                <a href="${pageContext.request.contextPath}/products-servlet" class="item-submenu" data-name="Prodotti">Gestione</a>
             </div>
-        </div>
+        </button>
 
-        <div class="admin-item-menu" onclick="<%= url %>" style="position: relative" data-name="Login" role="button" tabindex="0" onkeydown="handleKeyPress(event, this)"><i class="fa-solid fa-user iconMenu"></i><%= name %>
+        <% if (myProfile == null) { %>
+        <a href="${pageContext.request.contextPath}/login.jsp" class="admin-item-menu" data-name="Login"><i class="fa-solid fa-user iconMenu"></i><%= name %></a>
+        <% } else { %>
+        <button type="button" class="admin-item-menu" onclick="showSubMenu(this)" style="position: relative" data-name="Login"><i class="fa-solid fa-user iconMenu"></i><%= name %>
             <div class="sub-menu" data-name="Login">
-                <div class="item-submenu" onclick="location.href='${pageContext.request.contextPath}/user-profile-servlet'" data-name="Login" role="button" tabindex="0" onkeydown="handleKeyPress(event, this)">Profilo</div>
-                <div class="item-submenu" onclick="location.href='${pageContext.request.contextPath}/logout-servlet'" role="button" tabindex="0" onkeydown="handleKeyPress(event, this)">Logout</div>
+                <a href="${pageContext.request.contextPath}/user-profile-servlet" class="item-submenu" data-name="Login">Profilo</a>
+                <a href="${pageContext.request.contextPath}/logout-servlet" class="item-submenu">Logout</a>
             </div>
-        </div>
+        </button>
+        <% } %>
     </div>
 </div>
 

@@ -17,6 +17,12 @@ public class SetStateUser extends HttpServlet {
         HttpSession session = request.getSession();
         UserBean userAdmin = (UserBean) session.getAttribute("user");
 
+        // FIX S2259: Null check per evitare NPE
+        if (userAdmin == null || !userAdmin.isAdmin().equalsIgnoreCase("true")) {
+            request.getRequestDispatcher("index.jsp").include(request, response); // NOSONAR
+            return;
+        }
+
         if (userAdmin.isAdmin().equalsIgnoreCase("true")) {
 
             String state = request.getParameter("active");

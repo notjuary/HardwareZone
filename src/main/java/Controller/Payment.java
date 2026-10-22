@@ -13,6 +13,13 @@ import java.util.regex.Pattern;
 @WebServlet(name = "paymentServlet", value = "/payment-servlet")
 public class Payment extends HttpServlet {
 
+    // FIX S1192: Definizione delle costanti
+    private static final String ERROR_JSP = "/WEB-INF/error.jsp";
+    private static final String TYPE_ALERT = "alert";
+    private static final String TYPE_SUCCESS = "success";
+    private static final String ATTR_REDIRECT = "redirect";
+    private static final String ATTR_TOTAL = "total";
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
@@ -20,22 +27,17 @@ public class Payment extends HttpServlet {
         HttpSession session = request.getSession();
 
         if (session.getAttribute("user") == null) {
-
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/error.jsp");
-            request.setAttribute("type", "alert");
+            RequestDispatcher dispatcher = request.getRequestDispatcher(ERROR_JSP);
+            request.setAttribute("type", TYPE_ALERT);
             request.setAttribute("msg", "Accedi prima di continuare");
-            request.setAttribute("redirect", "login.jsp");
+            request.setAttribute(ATTR_REDIRECT, "login.jsp");
             dispatcher.include(request, response);
-        }
-
-        else {
-
+        } else {
             CartBean cartBean = (CartBean) session.getAttribute("cart");
             ProductDAO serviceProduct = new ProductDAO();
 
             double total = 0;
             for (ProductCartBean productCartBean : cartBean.getCartList()) {
-
                 ProductBean catalogProduct = serviceProduct.doRetrieveById(productCartBean.getId());
 
                 if (catalogProduct.getPrice() == 0)
@@ -44,17 +46,17 @@ public class Payment extends HttpServlet {
                     total = total + ((catalogProduct.getPrice() - (catalogProduct.getPrice() * catalogProduct.getSales() / 100)) * productCartBean.getQuantity());
 
                 if (productCartBean.getQuantity() > catalogProduct.getQuantity()) {
-                    RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/error.jsp");
-                    request.setAttribute("type", "alert");
+                    RequestDispatcher dispatcher = request.getRequestDispatcher(ERROR_JSP);
+                    request.setAttribute("type", TYPE_ALERT);
                     request.setAttribute("msg", "Quantità richiesta di " + catalogProduct.getName() + " non disponibile. Quantità massima: " + catalogProduct.getQuantity());
-                    request.setAttribute("redirect", request.getContextPath() + "/Cart.jsp");
+                    request.setAttribute(ATTR_REDIRECT, request.getContextPath() + "/Cart.jsp");
                     dispatcher.include(request, response);
                     break;
                 }
             }
 
-            request.setAttribute("total", String.format("%.2f", total));
-            session.setAttribute("total", total);
+            request.setAttribute(ATTR_TOTAL, String.format("%.2f", total));
+            session.setAttribute(ATTR_TOTAL, total);
             RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/payment.jsp");
             dispatcher.include(request, response);
         }
@@ -64,8 +66,8 @@ public class Payment extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
 
-        final Pattern number_string =  Pattern.compile("^\\d+$");
-        final Pattern holder_string =  Pattern.compile("^([a-zA-Z\\\\xE0\\xE8\\xE9\\xF9\\xF2\\xEC\\x27]\\s?){2,255}$");
+        final Pattern number_string = Pattern.compile("^\\d+$");
+        final Pattern holder_string = Pattern.compile("^([a-zA-Z\\\\xE0\\xE8\\xE9\\xF9\\xF2\\xEC\\x27]\\s?){2,255}$");
 
         int level = 0;
 
@@ -74,7 +76,7 @@ public class Payment extends HttpServlet {
         String creditCardNumber = request.getParameter("numero-carta");
         Matcher matcher = number_string.matcher(creditCardNumber);
         boolean matchFound = matcher.find();
-        if (creditCardNumber.length() == 16  && matchFound)
+        if (creditCardNumber.length() == 16 && matchFound)
             level++;
 
         String cvv = request.getParameter("CVV");
@@ -101,12 +103,12 @@ public class Payment extends HttpServlet {
             level++;
 
         if (level == 4) {
-            UserBean user = new UserBean();
-            user = (UserBean) session.getAttribute("user");
+            UserBean user = (UserBean) session.getAttribute("user");
 
             OrderBean order = new OrderBean();
             order.setUser(user.getId());
-            order.setTotal((Double) session.getAttribute("total"));
+            // Utilizzo della costante
+            order.setTotal((Double) session.getAttribute(ATTR_TOTAL));
 
             OrderDAO serviceOrder = new OrderDAO();
             int orderId = serviceOrder.doSave(order);
@@ -116,7 +118,6 @@ public class Payment extends HttpServlet {
             ProductDAO serviceProduct = new ProductDAO();
 
             for (ProductCartBean product : cart.getCartList()) {
-
                 OrderProductBean orderProductBean = new OrderProductBean();
                 orderProductBean.setProduct(product.getId());
                 orderProductBean.setQuantity(product.getQuantity());
@@ -148,19 +149,16 @@ public class Payment extends HttpServlet {
             cart.setNumberObject(0);
             session.setAttribute("cart", cart);
 
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/error.jsp");
-            request.setAttribute("type", "success");
+            RequestDispatcher dispatcher = request.getRequestDispatcher(ERROR_JSP);
+            request.setAttribute("type", TYPE_SUCCESS);
             request.setAttribute("msg", "Ordine confermato");
-            request.setAttribute("redirect", request.getContextPath() + "/index.jsp");
+            request.setAttribute(ATTR_REDIRECT, request.getContextPath() + "/index.jsp");
             dispatcher.include(request, response);
-        }
-
-        else {
-
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/error.jsp");
-            request.setAttribute("type", "alert");
+        } else {
+            RequestDispatcher dispatcher = request.getRequestDispatcher(ERROR_JSP);
+            request.setAttribute("type", TYPE_ALERT);
             request.setAttribute("msg", "Errore campi");
-            request.setAttribute("redirect", request.getContextPath() + "/payment-servlet");
+            request.setAttribute(ATTR_REDIRECT, request.getContextPath() + "/payment-servlet");
             dispatcher.include(request, response);
         }
     }

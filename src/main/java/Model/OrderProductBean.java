@@ -1,11 +1,15 @@
 package Model;
 
-public class OrderProductBean {
+import java.io.Serializable;
 
+public class OrderProductBean implements Serializable {
+    private static final long serialVersionUID = 1L;
     private int product, quantity, order;
     private double price;
 
-    public OrderProductBean() {}
+    public OrderProductBean() {
+        // Costruttore vuoto richiesto dalla specifica JavaBeans
+    }
 
     public int getProduct() {
         return product;

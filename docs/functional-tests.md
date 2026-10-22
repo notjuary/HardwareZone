@@ -259,7 +259,7 @@ src/test/java/security/functional/
 | # | Metodo | Cosa verifica |
 |:--|:---|:---|
 | 1 | `testAdminRichiesto` | Promozione solo admin |
-| 2 | `testUtenteAnonimo` | NPE documentato |
+| 2 | `testUtenteAnonimo` | **FIXED** — gestito con null check (nessun NPE) |
 | 3 | `testAdminPromuoveUtente` | Promozione OK |
 | 4 | `testNonPromuoveChiGiaAdmin` | No doppia promozione |
 
@@ -1144,3 +1144,4 @@ Aggiunta dell'interfaccia `Serializable` e del `serialVersionUID` alle classi `U
 | 11 | Boundary bug filtro prezzi                  | CWE-20  |   Media  | `BusinessLogicTest`, `ProductCatalogTest`                                                |  **FIXED**  |
 | 12 | NPE su `user` (AddProduct/EditProduct/Users)| CWE-476 |   Alta   | `AddProductFunctionalTest`, `EditProductFunctionalTest`, `UsersFunctionalTest`           |  **FIXED**  |
 | 13 | Upload non validato (Unrestricted Upload)   | CWE-434 | Critica  | `AddProductFunctionalTest`, `EditProductFunctionalTest`                                  |  **FIXED**  |
+| 14 | NPE su `userAdmin` in SetStateUser | CWE-476 | Alta | `SetStateUserFunctionalTest`, `AdminUserManagementTest` | **FIXED** |

@@ -11,9 +11,14 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-
 @WebServlet(name = "loginServlet", value = "/login-servlet")
 public class Login extends HttpServlet {
+
+    // FIX S1192: Definizione delle costanti
+    private static final String ERROR_JSP = "/WEB-INF/error.jsp";
+    private static final String TYPE_ALERT = "alert";
+    private static final String ATTR_REDIRECT = "redirect";
+    private static final String LOGIN_JSP = "login.jsp";
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         response.setContentType("text/html");
@@ -33,10 +38,7 @@ public class Login extends HttpServlet {
 
             if (user.isAdmin().equalsIgnoreCase("true")) {
                 dispatcher = request.getRequestDispatcher("WEB-INF/admin/admin.jsp");
-            }
-
-            else {
-
+            } else {
                 CartBean cartBean = new CartBean();
                 CartDAO serviceCart = new CartDAO();
 
@@ -47,32 +49,24 @@ public class Login extends HttpServlet {
             }
 
             dispatcher.include(request, response);
-        }
-
-        else if (user == null) {
-
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/error.jsp");
-            request.setAttribute("type", "alert");
+        } else if (user == null) {
+            // Utilizzo delle costanti
+            RequestDispatcher dispatcher = request.getRequestDispatcher(ERROR_JSP);
+            request.setAttribute("type", TYPE_ALERT);
             request.setAttribute("msg", "Email o password errati");
-            request.setAttribute("redirect", "login.jsp");
+            request.setAttribute(ATTR_REDIRECT, LOGIN_JSP);
             dispatcher.include(request, response);
-        }
-
-        else if (user.isActive().equalsIgnoreCase("false")) {
-
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/error.jsp");
-            request.setAttribute("type", "alert");
+        } else if (user.isActive().equalsIgnoreCase("false")) {
+            RequestDispatcher dispatcher = request.getRequestDispatcher(ERROR_JSP);
+            request.setAttribute("type", TYPE_ALERT);
             request.setAttribute("msg", "Account disabilitato");
-            request.setAttribute("redirect", "login.jsp");
+            request.setAttribute(ATTR_REDIRECT, LOGIN_JSP);
             dispatcher.include(request, response);
-        }
-
-        else {
-
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/error.jsp");
-            request.setAttribute("type", "alert");
+        } else {
+            RequestDispatcher dispatcher = request.getRequestDispatcher(ERROR_JSP);
+            request.setAttribute("type", TYPE_ALERT);
             request.setAttribute("msg", "Errore imprevisto");
-            request.setAttribute("redirect", "login.jsp");
+            request.setAttribute(ATTR_REDIRECT, LOGIN_JSP);
             dispatcher.include(request, response);
         }
     }
