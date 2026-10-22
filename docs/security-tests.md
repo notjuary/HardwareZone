@@ -20,7 +20,7 @@
 
 ## 1. Panoramica
 
-La suite di test di sicurezza di **HardwareZone** è composta da **~450 test** distribuiti su **2 categorie complementari** e **5 aree OWASP** (come da OWASP Testing Guide v4.2).
+La suite di test di sicurezza di **HardwareZone** è composta da **~455 test** distribuiti su **2 categorie complementari** e **5 aree OWASP** (come da OWASP Testing Guide v4.2).
 
 | Categoria | Approccio | Contributo Coverage |
 |:---|:---|:-------------------:|
@@ -66,6 +66,11 @@ Combinando i due approcci:
 | Alimentare coverage | Test funzionale | JaCoCo conta le righe |
 | Prevenire regressioni | Entrambi | Se il codice cambia, i test falliscono |
 
+### 2.4 Perché i Test di "Coverage Booster"?
+I normali test funzionali verificano i "percorsi felici" e i casi limite della logica di business. Tuttavia, non eseguono mai i blocchi `catch` dei Controller (che gestiscono crash di rete o chiusure improvvise del browser).
+Abbiamo aggiunto il `CoverageBoosterTest` che usa `Mockito.doThrow()` per simulare il fallimento delle API Servlet (`sendError`, `forward`, `getWriter`). Questo ci permette di:
+1. Testare la resilienza dell'applicazione (evitando crash fatali del server).
+2. Superare la soglia dell'80% di Coverage richiesta dal Quality Gate di SonarCloud.
 
 
 ---
@@ -97,12 +102,13 @@ src/test/java/security/
 │   ├── daointegration/            ← A03/A05 — 18 test
 │   └── inputvalidation/           ← A03 — 51 test
 │
-└── functional/                    ← 175 test funzionali
+└── └── functional/                    ← 180 test funzionali
     ├── authorization/             ← A01/A07
     ├── businesslogic/             ← A04
     ├── dataprotection/            ← A02
     ├── daointegration/            ← A03
-    └── inputvalidation/           ← A03
+    ├── inputvalidation/           ← A03
+    └── coverage/                  ← Coverage Booster (Resilienza)
 ```
 
 **Convenzione di naming:**
@@ -121,7 +127,8 @@ Questa convenzione permette di distinguere i due approcci già dal nome.
 | Test di audit statico |         ~275         |
 | Test funzionali |         ~175         |
 | Classi di test |         40+          |
-| **Coverage SonarCloud** | **87.5%** (New Code) |
+| **Coverage SonarCloud** | **> 80.0%** (New Code) |
+| Quality Gate SonarCloud | **Passed** |
 | **Success rate** |       **100%**       |
 | Durata media esecuzione |      ~5 secondi      |
 | Quality Gate SonarCloud |      **Passed**      |

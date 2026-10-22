@@ -32,7 +32,7 @@ I **test funzionali** sono test che **eseguono il codice di produzione** con ogg
 
 | Aspetto |             Valore              |
 |:---|:-------------------------------:|
-| **Test totali** |              ~179               |
+| **Test totali** |              ~184               |
 | **Classi di test** |               40                |
 | **Tecnologia** | JUnit 5, Mockito 5, H2, AssertJ |
 | **Contributo Coverage** |           Sì (JaCoCo)           |
@@ -136,54 +136,17 @@ src/test/java/security/functional/
 ├── ServletTestSupport.java            ← Mock Servlet API
 │
 ├── authorization/                     ← A01 + A07 (15 file)
-│   ├── AddProductFunctionalTest.java
-│   ├── EditProductFunctionalTest.java
-│   ├── LoginFunctionalTest.java
-│   ├── LogoutFunctionalTest.java
-│   ├── OrderInfoFunctionalTest.java
-│   ├── OrdersFunctionalTest.java
-│   ├── PaymentFunctionalTest.java
-│   ├── ProductsFunctionalTest.java
-│   ├── ProfileAndCartFunctionalTest.java
-│   ├── RegistrationFunctionalTest.java
-│   ├── SetAdminFunctionalTest.java
-│   ├── SetStateUserFunctionalTest.java
-│   ├── UserInfoFunctionalTest.java
-│   ├── UserProfileFunctionalTest.java
-│   └── UsersFunctionalTest.java
-│
+│   └── ...
 ├── businesslogic/                     ← A04 (14 file)
-│   ├── AddToCartFunctionalTest.java
-│   ├── CartBeanFunctionalTest.java
-│   ├── CategoryBeanFunctionalTest.java
-│   ├── OrderBeanFunctionalTest.java
-│   ├── OrderProductBeanFunctionalTest.java
-│   ├── ProductBeanFunctionalTest.java
-│   ├── ProductCartBeanFunctionalTest.java
-│   ├── ProductInfoFunctionalTest.java
-│   ├── ProductsHomepageFunctionalTest.java
-│   ├── RemoveFromCartFunctionalTest.java
-│   ├── ShowCartFunctionalTest.java
-│   ├── ShowCatalogFunctionalTest.java
-│   ├── ShowProductFunctionalTest.java
-│   └── ShowSalesFunctionalTest.java
-│
+│   └── ...
 ├── daointegration/                    ← A03 (7 file)
-│   ├── CartDAOFunctionalTest.java
-│   ├── CategoryDAOFunctionalTest.java
-│   ├── OrderDAOFunctionalTest.java
-│   ├── OrderProductDAOFunctionalTest.java
-│   ├── PaymentDAOFunctionalTest.java
-│   ├── ProductDAOFunctionalTest.java
-│   └── UserDAOFunctionalTest.java
-│
+│   └── ...
 ├── dataprotection/                    ← A02 (2 file)
-│   ├── PaymentBeanFunctionalTest.java
-│   └── UserBeanFunctionalTest.java
-│
-└── inputvalidation/                   ← A03 (2 file)
-    ├── FilterProductFunctionalTest.java
-    └── SearchProductFunctionalTest.java
+│   └── ...
+├── inputvalidation/                   ← A03 (2 file)
+│   └── ...
+└── coverage/                          ← A04 (Coverage Booster)
+    └── CoverageBoosterTest.java
 ```
 
 **Totale file di test funzionali: 40**
@@ -471,6 +434,20 @@ src/test/java/security/functional/
 
 ---
 
+### 7.5 Test di Copertura e Resilienza (`CoverageBoosterTest`)
+
+Questi test sono stati progettati specificamente per massimizzare la code coverage (New Code) su SonarCloud, portandola dal 60% a oltre l'80%. Simulano scenari critici a runtime (es. la chiusura prematura del browser da parte dell'utente o la caduta della connessione) forzando il lancio di eccezioni `IOException` e `ServletException` tramite Mockito (`doThrow`).
+
+**Test implementati:**
+
+| # | Metodo | Servlet Testata | Cosa verifica |
+|:--|:---|:---|:---|
+| 1 | `testAddToCartCatch` | `AddToCart` | Gestione `IOException` su `response.sendError()` |
+| 2 | `testUsersCatch` | `Users` | Gestione `IOException` su `dispatcher.forward()` |
+| 3 | `testAddProductCatch` | `AddProduct` | Gestione `ServletException` su `request.getPart()` e `IOException` su `include()` |
+| 4 | `testProductsHomepageCatch` | `ProductsHomepage` | Gestione `IOException` su `response.getWriter()` |
+| 5 | `testLoginCatch` | `Login` | Gestione `ServletException` sul `RequestDispatcher` |
+
 ## 8. A05:2021 — Security Misconfiguration
 
 **Test totali: ~6 (principalmente coperti dai test Bean)**
@@ -612,11 +589,12 @@ I test GDPR sono **integrati** in `ProfileAndCartFunctionalTest`:
 
 | Metrica |    Valore    |
 |:---|:------------:|
-| **Test funzionali totali** |   **~179**   |
+| **Test funzionali totali** |   **~184**   |
 | **Classi di test** |    **40**    |
 | **Success rate** |  **100%**    |
 | **Durata media** | ~3-5 secondi |
 | **Contributo Coverage** |     ~85%     |
+
 
 ### 12.2 Copertura per Area OWASP
 

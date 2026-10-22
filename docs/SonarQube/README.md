@@ -650,6 +650,13 @@ La regola S1192 segnala la duplicazione di stringhe letterali, che rende il codi
 | `UserBean.java`, `PaymentBean.java` | S1110 | Parentesi inutili nelle espressioni di assegnazione o concatenazione | Rimosse |
 | `nav-menu.css`, `profile.css`, `general.css`, `chiSiamo.css` | S1119, S1874 | Uso di `!important`, selettori duplicati, contrasto colori non conforme | Rimosso `!important`, uniti i duplicati, scurito il colore del testo per rispettare WCAG 2-A |
 
+---
+### 6.14 Test aggiunti — Raggiungimento Coverage (Overall Code)
+
+| File | Cosa risolve | Dettaglio |
+|:---|:---|:---|
+| `CoverageBoosterTest.java` | Coverage < 80% sul New Code (Quality Gate Failed) | Aggiunti 5 test mirati a coprire i blocchi `catch` delle Servlet tramite Mockito (`doThrow`), portando la coverage oltre la soglia dell'80%. |
+
 ### 6.7 Impatto sull'Overall Code
 
 | Categoria | Prima | Dopo | Δ |

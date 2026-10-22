@@ -90,8 +90,10 @@
 
     <div class="containerSearchBar">
         <div class="search-bar">
-            <!-- FIX S6853: Rimosso label senza testo, aggiunto aria-label -->
-                <input onkeyup="searchProductAjax()" type="text" placeholder="Cerca.."><i class="fa-solid fa-magnifying-glass"></i>
+            <!-- FIX S6853: Aggiunto id all'input e label associata (nascosta visivamente) -->
+            <label for="searchQuery" class="visually-hidden">Cerca nel catalogo</label>
+            <input id="searchQuery" onkeyup="searchProductAjax()" type="text" placeholder="Cerca..">
+            <i class="fa-solid fa-magnifying-glass"></i>
         </div>
     </div>
 
