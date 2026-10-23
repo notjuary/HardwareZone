@@ -23,6 +23,7 @@
         <sonar.coverage.exclusions>
             **/Model/*Bean.java,
             **/Model/*DAO.java
+            **/Model/DataAccessException.java
         </sonar.coverage.exclusions>
     </properties>
 
