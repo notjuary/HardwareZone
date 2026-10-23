@@ -115,19 +115,17 @@ class EditProductFunctionalTest extends BaseFunctionalTest {
         ServletContext mockContext = mock(ServletContext.class);
         when(mockContext.getRealPath("")).thenReturn(System.getProperty("java.io.tmpdir"));
 
-        // 5. Esecuzione
-        EditProduct servlet = new EditProduct();
-
-        // Iniettiamo il ServletContext finto nel Servlet
+        // FIX FONDAMENTALE: Usa spy() per intercettare getServletContext()
+        EditProduct servlet = spy(new EditProduct());
         doReturn(mockContext).when(servlet).getServletContext();
 
+        // 5. Esecuzione
         support.invokeDoPost(servlet, support.request, support.response);
 
-        // 6. Verifiche
-        // Verifica che il file sia stato scritto
+        // 6. Verifica che il file sia stato scritto
         verify(mockPart).write(anyString());
 
-        // Verifica che il prodotto sia stato aggiornato nel DB
+        // Verifica che il prodotto sia stato salvato (usando il DB H2)
         ProductDAO dao = new ProductDAO();
         ProductBean modifiedProduct = dao.doRetrieveById(1);
         assertThat(modifiedProduct.getName()).isEqualTo("CPU Modificata");
