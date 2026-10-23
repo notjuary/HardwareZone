@@ -5,6 +5,7 @@ import Model.ProductBean;
 import Model.ProductDAO;
 import Model.UserBean;
 import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Part;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -145,5 +146,63 @@ class AddProductFunctionalTest extends BaseFunctionalTest {
         ProductDAO dao = new ProductDAO();
         ProductBean p = dao.doRetrieveById(1); // Assicurati che l'ID sia corretto
         assertThat(p.getImage()).isEqualTo("./img/products/nophoto.png");
+    }
+
+    @Test
+    @DisplayName("Coverage: AddProduct gestisce errore su getPart (ServletException)")
+    void testAddProductGetPartException() throws Exception {
+        UserBean admin = new UserBean();
+        admin.setAdmin("true");
+        when(support.session.getAttribute("user")).thenReturn(admin);
+
+        // Parametri validi
+        when(support.request.getParameter("name")).thenReturn("CPU");
+        when(support.request.getParameter("description")).thenReturn("Desc");
+        when(support.request.getParameter("price")).thenReturn("10.0");
+        when(support.request.getParameter("quantity")).thenReturn("1");
+        when(support.request.getParameter("sales")).thenReturn("0");
+        when(support.request.getParameter("category")).thenReturn("CPU");
+
+        // FORZIAMO l'errore su getPart (copre il blocco catch)
+        when(support.request.getPart("image")).thenThrow(new ServletException("Errore simulato"));
+
+        AddProduct servlet = new AddProduct();
+        support.invokeDoPost(servlet, support.request, support.response);
+
+        // Verifica che mostri la pagina di errore
+        verify(support.request).getRequestDispatcher("/WEB-INF/error.jsp");
+    }
+
+    @Test
+    @DisplayName("Coverage: AddProduct salva prodotto se categoria esiste già")
+    void testAddProductCategoryAlreadyExists() throws Exception {
+        UserBean admin = new UserBean();
+        admin.setAdmin("true");
+        when(support.session.getAttribute("user")).thenReturn(admin);
+
+
+
+        when(support.request.getParameter("name")).thenReturn("Altro Processore");
+        when(support.request.getParameter("description")).thenReturn("Descrizione");
+        when(support.request.getParameter("price")).thenReturn("150.0");
+        when(support.request.getParameter("quantity")).thenReturn("5");
+        when(support.request.getParameter("sales")).thenReturn("0");
+        when(support.request.getParameter("category")).thenReturn("CPU"); // Categoria esistente
+
+        Part mockPart = mock(Part.class);
+        when(mockPart.getSubmittedFileName()).thenReturn("test.jpg");
+        when(support.request.getPart("image")).thenReturn(mockPart);
+
+        ServletContext mockContext = mock(ServletContext.class);
+        when(mockContext.getRealPath("")).thenReturn(System.getProperty("java.io.tmpdir"));
+
+        AddProduct servlet = spy(new AddProduct());
+        doReturn(mockContext).when(servlet).getServletContext();
+
+        support.invokeDoPost(servlet, support.request, support.response);
+
+        // Verifica che non ci siano errori (il prodotto è stato salvato)
+        ProductDAO dao = new ProductDAO();
+        assertThat(dao.isAlreadyRegistered("Altro Processore", "Descrizione")).isTrue();
     }
 }

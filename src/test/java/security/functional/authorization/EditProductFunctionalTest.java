@@ -5,6 +5,7 @@ import Model.ProductBean;
 import Model.ProductDAO;
 import Model.UserBean;
 import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Part;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -134,5 +135,57 @@ class EditProductFunctionalTest extends BaseFunctionalTest {
 
         // Verifica che ci sia il redirect finale
         verify(support.response).sendRedirect("products-servlet");
+    }
+
+    @Test
+    @DisplayName("Coverage: EditProduct gestisce errore su getPart (ServletException)")
+    void testEditProductGetPartException() throws Exception {
+        UserBean admin = new UserBean();
+        admin.setAdmin("true");
+        when(support.session.getAttribute("user")).thenReturn(admin);
+        when(support.request.getParameter("id")).thenReturn("1");
+        when(support.request.getParameter("name")).thenReturn("CPU Mod");
+        when(support.request.getParameter("description")).thenReturn("Desc");
+        when(support.request.getParameter("price")).thenReturn("10.0");
+        when(support.request.getParameter("quantity")).thenReturn("1");
+        when(support.request.getParameter("sales")).thenReturn("0");
+        when(support.request.getParameter("category")).thenReturn("CPU");
+
+        // Forziamo l'eccezione su getPart
+        when(support.request.getPart("image")).thenThrow(new ServletException("Errore"));
+
+        EditProduct servlet = new EditProduct();
+        support.invokeDoPost(servlet, support.request, support.response);
+
+        verify(support.request).getRequestDispatcher("/WEB-INF/error.jsp");
+    }
+
+    @Test
+    @DisplayName("Coverage: EditProduct mantiene immagine se nessun file caricato")
+    void testEditProductNoImageUpload() throws Exception {
+        UserBean admin = new UserBean();
+        admin.setAdmin("true");
+        when(support.session.getAttribute("user")).thenReturn(admin);
+
+        when(support.request.getParameter("id")).thenReturn("1");
+        when(support.request.getParameter("name")).thenReturn("CPU senza img");
+        when(support.request.getParameter("description")).thenReturn("Desc");
+        when(support.request.getParameter("price")).thenReturn("10.0");
+        when(support.request.getParameter("quantity")).thenReturn("1");
+        when(support.request.getParameter("sales")).thenReturn("0");
+        when(support.request.getParameter("category")).thenReturn("CPU");
+
+        // Simula il caso in cui non viene caricato alcun file
+        Part mockPart = mock(Part.class);
+        when(mockPart.getSubmittedFileName()).thenReturn(""); // Stringa vuota
+        when(support.request.getPart("image")).thenReturn(mockPart);
+
+        EditProduct servlet = new EditProduct();
+        support.invokeDoPost(servlet, support.request, support.response);
+
+        // Verifica che il prodotto sia stato modificato mantenendo l'immagine originale (che nel setup è '/img/ryzen.png')
+        ProductDAO dao = new ProductDAO();
+        ProductBean p = dao.doRetrieveById(1);
+        assertThat(p.getImage()).isEqualTo("/img/ryzen.png");
     }
 }
