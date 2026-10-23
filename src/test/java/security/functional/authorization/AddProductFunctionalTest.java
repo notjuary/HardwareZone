@@ -1,6 +1,7 @@
 package security.functional.authorization;
 
 import Controller.AddProduct;
+import Model.ProductBean;
 import Model.ProductDAO;
 import Model.UserBean;
 import jakarta.servlet.ServletContext;
@@ -115,5 +116,34 @@ class AddProductFunctionalTest extends BaseFunctionalTest {
         // Verifica che il prodotto sia stato salvato (usando il DB H2)
         ProductDAO dao = new ProductDAO();
         assertThat(dao.isAlreadyRegistered("CPU Test", "Descrizione CPU Test")).isTrue();
+    }
+
+    @Test
+    @DisplayName("Coverage: AddProduct gestisce file non valido (estensione errata)")
+    void testHandleImageUploadInvalidExtension() throws Exception {
+        UserBean admin = new UserBean();
+        admin.setAdmin("true");
+        when(support.session.getAttribute("user")).thenReturn(admin);
+
+        // Parametri validi
+        when(support.request.getParameter("name")).thenReturn("CPU");
+        when(support.request.getParameter("description")).thenReturn("Desc");
+        when(support.request.getParameter("price")).thenReturn("10.0");
+        when(support.request.getParameter("quantity")).thenReturn("1");
+        when(support.request.getParameter("sales")).thenReturn("0");
+        when(support.request.getParameter("category")).thenReturn("CPU");
+
+        // File con estensione non valida
+        Part mockPart = mock(Part.class);
+        when(mockPart.getSubmittedFileName()).thenReturn("test.txt");
+        when(support.request.getPart("image")).thenReturn(mockPart);
+
+        AddProduct servlet = new AddProduct();
+        support.invokeDoPost(servlet, support.request, support.response);
+
+        // Verifica che non venga scritto nulla e che il prodotto abbia l'immagine di default
+        ProductDAO dao = new ProductDAO();
+        ProductBean p = dao.doRetrieveById(1); // Assicurati che l'ID sia corretto
+        assertThat(p.getImage()).isEqualTo("./img/products/nophoto.png");
     }
 }
