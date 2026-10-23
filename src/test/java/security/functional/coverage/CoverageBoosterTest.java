@@ -4,6 +4,7 @@ import Controller.AddToCart;
 import Controller.Login;
 import Controller.ProductsHomepage;
 import Controller.*;
+import Model.DataAccessException;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -145,5 +147,17 @@ public class CoverageBoosterTest {
 
         // FIX: Usiamo service()
         assertThrows(Exception.class, () -> servlet.service(request, response));
+    }
+
+    @Test
+    @DisplayName("Coverage: DataAccessException istanziata correttamente")
+    void testDataAccessException() {
+        DataAccessException ex1 = new DataAccessException("Messaggio di errore");
+        DataAccessException ex2 = new DataAccessException(new RuntimeException("Causa"));
+        DataAccessException ex3 = new DataAccessException("Messaggio", new RuntimeException("Causa"));
+
+        assertThat(ex1.getMessage()).isEqualTo("Messaggio di errore");
+        assertThat(ex2.getCause()).isInstanceOf(RuntimeException.class);
+        assertThat(ex3.getMessage()).isEqualTo("Messaggio");
     }
 }

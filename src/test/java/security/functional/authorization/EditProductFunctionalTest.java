@@ -1,12 +1,18 @@
 package security.functional.authorization;
 
 import Controller.EditProduct;
+import Model.ProductBean;
+import Model.ProductDAO;
+import Model.UserBean;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.Part;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import security.functional.BaseFunctionalTest;
 import security.functional.ServletTestSupport;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.Mockito.*;
 
@@ -81,5 +87,54 @@ class EditProductFunctionalTest extends BaseFunctionalTest {
 
         // Verifica che venga mostrata la pagina di errore (grazie all'early return)
         verify(support.request).getRequestDispatcher("/WEB-INF/error.jsp");
+    }
+
+    @Test
+    @DisplayName("Coverage: EditProduct modifica prodotto e carica immagine correttamente")
+    void testEditProductUploadSuccess() throws Exception {
+        // 1. Setup utente Admin
+        UserBean admin = new UserBean();
+        admin.setAdmin("true");
+        when(support.session.getAttribute("user")).thenReturn(admin);
+
+        // 2. Mock dei parametri validi (ID = 1, che abbiamo inserito nel setUp)
+        when(support.request.getParameter("id")).thenReturn("1");
+        when(support.request.getParameter("name")).thenReturn("CPU Modificata");
+        when(support.request.getParameter("description")).thenReturn("Nuova Descrizione");
+        when(support.request.getParameter("price")).thenReturn("299.99");
+        when(support.request.getParameter("quantity")).thenReturn("20");
+        when(support.request.getParameter("sales")).thenReturn("10");
+        when(support.request.getParameter("category")).thenReturn("CPU");
+
+        // 3. Mock del File Upload (Part)
+        Part mockPart = mock(Part.class);
+        when(mockPart.getSubmittedFileName()).thenReturn("nuova_immagine.jpg");
+        when(support.request.getPart("image")).thenReturn(mockPart);
+
+        // 4. Mock del ServletContext per far funzionare part.write()
+        ServletContext mockContext = mock(ServletContext.class);
+        when(mockContext.getRealPath("")).thenReturn(System.getProperty("java.io.tmpdir"));
+
+        // 5. Esecuzione
+        EditProduct servlet = new EditProduct();
+
+        // Iniettiamo il ServletContext finto nel Servlet
+        doReturn(mockContext).when(servlet).getServletContext();
+
+        support.invokeDoPost(servlet, support.request, support.response);
+
+        // 6. Verifiche
+        // Verifica che il file sia stato scritto
+        verify(mockPart).write(anyString());
+
+        // Verifica che il prodotto sia stato aggiornato nel DB
+        ProductDAO dao = new ProductDAO();
+        ProductBean modifiedProduct = dao.doRetrieveById(1);
+        assertThat(modifiedProduct.getName()).isEqualTo("CPU Modificata");
+        assertThat(modifiedProduct.getPrice()).isEqualTo(299.99);
+        assertThat(modifiedProduct.getImage()).contains("nuova_immagine.jpg");
+
+        // Verifica che ci sia il redirect finale
+        verify(support.response).sendRedirect("products-servlet");
     }
 }

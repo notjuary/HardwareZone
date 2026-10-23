@@ -1,12 +1,17 @@
 package security.functional.authorization;
 
 import Controller.AddProduct;
+import Model.ProductDAO;
+import Model.UserBean;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.Part;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import security.functional.BaseFunctionalTest;
 import security.functional.ServletTestSupport;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 
@@ -70,5 +75,45 @@ class AddProductFunctionalTest extends BaseFunctionalTest {
 
         // Deve reindirizzare alla index.jsp
         verify(support.request).getRequestDispatcher("index.jsp");
+    }
+
+    @Test
+    @DisplayName("Coverage: AddProduct carica immagine e salva categoria correttamente")
+    void testAddProductUploadSuccess() throws Exception {
+        // 1. Setup utente Admin
+        UserBean admin = new UserBean();
+        admin.setAdmin("true");
+        when(support.session.getAttribute("user")).thenReturn(admin);
+
+        // 2. Mock dei parametri validi
+        when(support.request.getParameter("name")).thenReturn("CPU Test");
+        when(support.request.getParameter("description")).thenReturn("Descrizione CPU Test");
+        when(support.request.getParameter("price")).thenReturn("199.99");
+        when(support.request.getParameter("quantity")).thenReturn("10");
+        when(support.request.getParameter("sales")).thenReturn("0");
+        when(support.request.getParameter("category")).thenReturn("NuovaCategoria");
+
+        // 3. Mock del File Upload (Part)
+        Part mockPart = mock(Part.class);
+        when(mockPart.getSubmittedFileName()).thenReturn("test.jpg");
+        when(support.request.getPart("image")).thenReturn(mockPart);
+
+        // 4. Mock del ServletContext (per getRealPath)
+        ServletContext mockContext = mock(ServletContext.class);
+        when(mockContext.getRealPath("")).thenReturn(System.getProperty("java.io.tmpdir"));
+
+        // FIX: Usiamo spy() sulla Servlet per forzare getServletContext()
+        AddProduct servlet = spy(new AddProduct());
+        doReturn(mockContext).when(servlet).getServletContext();
+
+        // 5. Esecuzione
+        support.invokeDoPost(servlet, support.request, support.response);
+
+        // 6. Verifica che il file sia stato scritto
+        verify(mockPart).write(anyString());
+
+        // Verifica che il prodotto sia stato salvato (usando il DB H2)
+        ProductDAO dao = new ProductDAO();
+        assertThat(dao.isAlreadyRegistered("CPU Test", "Descrizione CPU Test")).isTrue();
     }
 }
