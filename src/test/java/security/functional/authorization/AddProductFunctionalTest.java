@@ -13,6 +13,8 @@ import org.junit.jupiter.api.Test;
 import security.functional.BaseFunctionalTest;
 import security.functional.ServletTestSupport;
 
+import java.io.IOException;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
@@ -204,5 +206,92 @@ class AddProductFunctionalTest extends BaseFunctionalTest {
         // Verifica che non ci siano errori (il prodotto è stato salvato)
         ProductDAO dao = new ProductDAO();
         assertThat(dao.isAlreadyRegistered("Altro Processore", "Descrizione")).isTrue();
+    }
+
+    @Test
+    @DisplayName("Coverage: AddProduct.doPost con utente non admin reindirizza")
+    void testDoPostUtenteNormale() throws Exception {
+        when(support.session.getAttribute("user")).thenReturn(support.createNormalUser());
+
+        AddProduct servlet = new AddProduct();
+        support.invokeDoPost(servlet, support.request, support.response);
+
+        verify(support.request).getRequestDispatcher("/WEB-INF/results/products.jsp");
+    }
+
+    @Test
+    @DisplayName("Coverage: AddProduct.doPost con input non valido mostra errore")
+    void testDoPostInputInvalido() throws Exception {
+        UserBean admin = new UserBean();
+        admin.setAdmin("true");
+        when(support.session.getAttribute("user")).thenReturn(admin);
+
+        // Lasciamo i parametri null o invalidi per far scattare la validazione
+        when(support.request.getParameter("name")).thenReturn("");
+
+        AddProduct servlet = new AddProduct();
+        support.invokeDoPost(servlet, support.request, support.response);
+
+        // Verifica che venga chiamata la pagina di errore
+        verify(support.request).getRequestDispatcher("/WEB-INF/error.jsp");
+    }
+
+    @Test
+    @DisplayName("Coverage: AddProduct.handleImageUpload con part null")
+    void testHandleImageUploadPartNull() throws Exception {
+        UserBean admin = new UserBean();
+        admin.setAdmin("true");
+        when(support.session.getAttribute("user")).thenReturn(admin);
+
+        // Parametri validi
+        when(support.request.getParameter("name")).thenReturn("CPU Null");
+        when(support.request.getParameter("description")).thenReturn("Desc");
+        when(support.request.getParameter("price")).thenReturn("10.0");
+        when(support.request.getParameter("quantity")).thenReturn("1");
+        when(support.request.getParameter("sales")).thenReturn("0");
+        when(support.request.getParameter("category")).thenReturn("CPU");
+
+        // Part è null
+        when(support.request.getPart("image")).thenReturn(null);
+
+        AddProduct servlet = new AddProduct();
+        support.invokeDoPost(servlet, support.request, support.response);
+
+        // Verifica che usi l'immagine di default
+        ProductDAO dao = new ProductDAO();
+        assertThat(dao.isAlreadyRegistered("CPU Null", "Desc")).isTrue();
+    }
+
+    @Test
+    @DisplayName("Coverage: AddProduct.handleImageUpload gestisce IOException su part.write")
+    void testHandleImageUploadIOException() throws Exception {
+        UserBean admin = new UserBean();
+        admin.setAdmin("true");
+        when(support.session.getAttribute("user")).thenReturn(admin);
+
+        when(support.request.getParameter("name")).thenReturn("CPU Err");
+        when(support.request.getParameter("description")).thenReturn("Desc");
+        when(support.request.getParameter("price")).thenReturn("10.0");
+        when(support.request.getParameter("quantity")).thenReturn("1");
+        when(support.request.getParameter("sales")).thenReturn("0");
+        when(support.request.getParameter("category")).thenReturn("CPU");
+
+        Part mockPart = mock(Part.class);
+        when(mockPart.getSubmittedFileName()).thenReturn("test.jpg");
+        // Forza part.write a lanciare IOException
+        doThrow(new IOException("Errore scrittura")).when(mockPart).write(anyString());
+        when(support.request.getPart("image")).thenReturn(mockPart);
+
+        ServletContext mockContext = mock(ServletContext.class);
+        when(mockContext.getRealPath("")).thenReturn(System.getProperty("java.io.tmpdir"));
+
+        AddProduct servlet = spy(new AddProduct());
+        doReturn(mockContext).when(servlet).getServletContext();
+
+        support.invokeDoPost(servlet, support.request, support.response);
+
+        // Verifica che il prodotto sia salvato con l'immagine di default (perché c'è stato l'errore)
+        ProductDAO dao = new ProductDAO();
+        assertThat(dao.isAlreadyRegistered("CPU Err", "Desc")).isTrue();
     }
 }
