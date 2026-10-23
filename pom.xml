@@ -168,9 +168,15 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.14</version>
+                <configuration>
+                    <excludes>
+                        <!-- Ignora i DAO e i Bean dal calcolo della coverage -->
+                        <exclude>**/Model/*DAO.class</exclude>
+                        <exclude>**/Model/*Bean.class</exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
-                        <id>prepare-agent</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
